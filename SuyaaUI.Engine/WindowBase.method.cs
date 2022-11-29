@@ -13,7 +13,7 @@ namespace SuyaaUI
         /// </summary>
         public void Show()
         {
-
+            NativeWindow.Show();
         }
 
     }

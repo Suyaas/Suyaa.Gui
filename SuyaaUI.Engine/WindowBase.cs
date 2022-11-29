@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SuyaaUI.Engine.Blocks;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,7 +9,7 @@ namespace SuyaaUI
     /// 基类窗口
     /// </summary>
     /// <typeparam name="TWindow"></typeparam>
-    public partial class WindowBase<TWindow> where TWindow : INativeWindow, new()
+    public partial class WindowBase<TWindow> where TWindow : INativeWindow, IBlock, new()
     {
         /// <summary>
         /// 获取原生窗口
@@ -20,7 +21,8 @@ namespace SuyaaUI
         /// </summary>
         public WindowBase()
         {
-            NativeWindow = new TWindow();
+            var win = NativeWindow = new TWindow();
+            win.Create(win.Left, win.Top, win.Width, win.Height);
         }
     }
 }

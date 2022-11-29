@@ -11,4 +11,10 @@
     <ProjectReference Include="..\SuyaaUI.Windows\SuyaaUI.Windows.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="app.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

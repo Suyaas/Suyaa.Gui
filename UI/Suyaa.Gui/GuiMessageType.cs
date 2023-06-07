@@ -16,8 +16,12 @@ namespace Suyaa.Gui
         /// </summary>
         None = 0,
         /// <summary>
+        /// 关闭
+        /// </summary>
+        Close = 0x0ff,
+        /// <summary>
         /// 绘制
         /// </summary>
-        Paint = 0x01,
+        Paint = 0x101,
     }
 }

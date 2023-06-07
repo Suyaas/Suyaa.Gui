@@ -8,21 +8,14 @@ using System.Threading.Tasks;
 namespace Suyaa.Gui.Messages
 {
     /// <summary>
-    /// 绘制消息
+    /// 关闭消息
     /// </summary>
-    public class PaintMessage : Message
+    public class CloseMessage : Message
     {
-        /// <summary>
-        /// 画板
-        /// </summary>
-        public SKCanvas Canvas { get; }
-
         /// <summary>
         /// 消息
         /// </summary>
         /// <param name="handle"></param>
-        public PaintMessage(long handle, SKCanvas canvas) : base(GuiMessageType.Close, handle) {
-            this.Canvas = canvas;
-        }
+        public CloseMessage(long handle) : base(GuiMessageType.Close, handle) { }
     }
 }

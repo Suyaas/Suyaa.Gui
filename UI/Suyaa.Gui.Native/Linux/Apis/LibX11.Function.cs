@@ -33,6 +33,7 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// XRootWindow
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="s"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern IntPtr XRootWindow(IntPtr display, short s);
@@ -41,6 +42,7 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// XBlackPixel
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="s"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern uint XBlackPixel(IntPtr display, short s);
@@ -49,6 +51,7 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// XWhitePixel
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="s"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern uint XWhitePixel(IntPtr display, short s);
@@ -57,6 +60,14 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 创建一个窗口
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="parent"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="borderWidth"></param>
+        /// <param name="border"></param>
+        /// <param name="background"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern IntPtr XCreateSimpleWindow(IntPtr display, IntPtr parent, short x, short y, ushort width, ushort height, ushort borderWidth, uint border, uint background);
@@ -65,6 +76,8 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 事件监听
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="window"></param>
+        /// <param name="mask"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern short XSelectInput(IntPtr display, IntPtr window, int mask);
@@ -73,6 +86,7 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 显示窗口
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="window"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern short XMapWindow(IntPtr display, IntPtr window);
@@ -81,14 +95,17 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 事件监听
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="evt"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern short XNextEvent(IntPtr display, ref XEvent evt);
 
         /// <summary>
-        /// 将字符串列表转化为TextProperty
+        /// XStringListToTextProperty
         /// </summary>
-        /// <param name="display"></param>
+        /// <param name="str"></param>
+        /// <param name="count"></param>
+        /// <param name="textProperty"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern short XStringListToTextProperty(ref string str, short count, ref XTextProperty textProperty);
@@ -96,7 +113,9 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// <summary>
         /// 将TextProperty转化为字符串列表
         /// </summary>
-        /// <param name="display"></param>
+        /// <param name="textProperty"></param>
+        /// <param name="str"></param>
+        /// <param name="count"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern short XTextPropertyToStringList(ref XTextProperty textProperty, ref string[] str, ref short count);
@@ -105,14 +124,14 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 设置标题
         /// </summary>
         /// <param name="display"></param>
-        /// <returns></returns>
+        /// <param name="window"></param>
+        /// <param name="textProperty"></param>
         [DllImport(_libName)]
         public static extern void XSetWMName(IntPtr display, IntPtr window, ref XTextProperty textProperty);
 
         /// <summary>
         /// 设置支持本地化
         /// </summary>
-        /// <param name="display"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern bool XSupportsLocale();
@@ -121,7 +140,10 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 将字符串列表转化为TextProperty
         /// </summary>
         /// <param name="display"></param>
-        /// <returns></returns>
+        /// <param name="str"></param>
+        /// <param name="count"></param>
+        /// <param name="style"></param>
+        /// <param name="textProperty"></param>
         [DllImport(_libName)]
         public static extern void XmbTextListToTextProperty(IntPtr display, ref string str, short count, XICCEncodingStyle style, ref XTextProperty textProperty);
 
@@ -129,7 +151,10 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 将字符串列表转化为TextProperty
         /// </summary>
         /// <param name="display"></param>
-        /// <returns></returns>
+        /// <param name="str"></param>
+        /// <param name="count"></param>
+        /// <param name="style"></param>
+        /// <param name="textProperty"></param>
         [DllImport(_libName)]
         public static extern void Xutf8TextListToTextProperty(IntPtr display, ref string str, short count, XICCEncodingStyle style, ref XTextProperty textProperty);
 
@@ -137,6 +162,10 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 创建Pixmap
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="window"></param>
+        /// <param name="pixels"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern IntPtr XCreateBitmapFromData(IntPtr display, IntPtr window, ref byte[] pixels, ushort width, ushort height);
@@ -151,7 +180,7 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// <summary>
         /// 申请Hints
         /// </summary>
-        /// <param name="data"></param>
+        /// <param name="hints"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern int XFree(ref XWMHints hints);
@@ -160,6 +189,8 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 设置Hints
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="window"></param>
+        /// <param name="hints"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern short XSetWMHints(IntPtr display, IntPtr window, ref XWMHints hints);
@@ -168,6 +199,7 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 获取Hints
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="window"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern XWMHints XGetWMHints(IntPtr display, IntPtr window);
@@ -184,6 +216,10 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 创建一个Pixmap
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="target"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="depth"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern IntPtr XCreatePixmap(IntPtr display, IntPtr target, ushort width, ushort height, ushort depth);
@@ -211,6 +247,15 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 创建一个Pixmap
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="visual"></param>
+        /// <param name="depth"></param>
+        /// <param name="format"></param>
+        /// <param name="offset"></param>
+        /// <param name="data"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="bitmap_pad"></param>
+        /// <param name="bytes_per_line"></param>
         /// <returns></returns>
         [DllImport(_libName, CallingConvention = CallingConvention.Cdecl)]
         public static extern _XImage XCreateImage(
@@ -230,6 +275,15 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 创建一个Pixmap
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="visual"></param>
+        /// <param name="depth"></param>
+        /// <param name="format"></param>
+        /// <param name="offset"></param>
+        /// <param name="data"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="bitmap_pad"></param>
+        /// <param name="bytes_per_line"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern XImage XCreateImage(
@@ -246,9 +300,10 @@ namespace Suyaa.Gui.Native.Linux.Apis
             );
 
         /// <summary>
-        /// 获取默认的GCs
+        /// 获取默认的GC
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="screen"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern IntPtr XDefaultGC(IntPtr display, short screen);
@@ -257,6 +312,7 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 获取默认的Visual
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="screen"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern IntPtr XDefaultVisual(IntPtr display, short screen);
@@ -265,6 +321,7 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 获取默认的Depth
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="screen"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern short XDefaultDepth(IntPtr display, short screen);
@@ -273,6 +330,15 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 绘制XImage
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="target"></param>
+        /// <param name="gc"></param>
+        /// <param name="image"></param>
+        /// <param name="scrX"></param>
+        /// <param name="srcY"></param>
+        /// <param name="destX"></param>
+        /// <param name="destY"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern short XPutImage(IntPtr display, IntPtr target, IntPtr gc, ref XImage image, short scrX, short srcY, short destX, short destY, ushort width, ushort height);
@@ -281,6 +347,15 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 绘制XImage
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="target"></param>
+        /// <param name="gc"></param>
+        /// <param name="image"></param>
+        /// <param name="scrX"></param>
+        /// <param name="srcY"></param>
+        /// <param name="destX"></param>
+        /// <param name="destY"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern short XPutImage(IntPtr display, IntPtr target, IntPtr gc, IntPtr image, short scrX, short srcY, short destX, short destY, ushort width, ushort height);

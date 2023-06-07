@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Suyaa.Gui.Native.Win32.Apis
+namespace Suyaa.Gui.Native.Win32
 {
     /// <summary>
     /// 库集合

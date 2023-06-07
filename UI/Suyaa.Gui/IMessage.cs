@@ -19,6 +19,6 @@ namespace Suyaa.Gui
         /// <summary>
         /// 消息类型
         /// </summary>
-        GuiMessageType Message { get; }
+        GuiMessageType MessageType { get; }
     }
 }

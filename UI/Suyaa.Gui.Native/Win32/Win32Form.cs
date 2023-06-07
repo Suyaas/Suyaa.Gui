@@ -85,14 +85,14 @@ namespace Suyaa.Gui.Native.Win32
             User32.WM wm = (User32.WM)msg;
             Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
             User32.SetWindowLong(hwnd, User32.GWL.WNDPROC, _defWindowProc);
-            switch (msg)
+            switch (wm)
             {
                 // 创建
-                case WM_CREATE: break;
+                case User32.WM.CREATE: break;
                 // 绘制界面
-                case WM_PAINT: WinProcPaint(); break;
-                case WM_DESTROY:
-                    PostQuitMessage(0);
+                case User32.WM.PAINT: WinProcPaint(); break;
+                case User32.WM.DESTROY:
+                    User32.PostQuitMessage(0);
                     break;
             }
             var res = User32.DefWindowProc(hwnd, msg, wParam, lParam);
@@ -158,7 +158,7 @@ namespace Suyaa.Gui.Native.Win32
 
             wc.style = 0;
             wc.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_windProc);
-            wc.hInstance = GetModuleHandle(null);
+            wc.hInstance = Kernel32.GetModuleHandle(null);
             wc.hbrBackground = (IntPtr)6;
             wc.lpszClassName = nameof(Win32Form);
             wc.cbClsExtra = 0;
@@ -203,12 +203,12 @@ namespace Suyaa.Gui.Native.Win32
             User32.RegisterClass(wc);
             // 创建并显示窗口
             IntPtr hwnd;
-            hwnd = CreateWindowEx(0,
+            hwnd = User32.CreateWindowEx(0,
               wc.lpszClassName,
               this.Title,
-              (int)WS_STYLE.WS_OVERLAPPEDWINDOW,
+              (int)User32.WS_STYLE.WS_OVERLAPPEDWINDOW,
               (int)left, (int)top, (int)width, (int)height,
-              IntPtr.Zero, IntPtr.Zero, GetModuleHandle(null), IntPtr.Zero);
+              IntPtr.Zero, IntPtr.Zero, Kernel32.GetModuleHandle(null), IntPtr.Zero);
 
             this.Hwnd = hwnd;
             Debug.WriteLine($"[Win32Form] Create 0x{hwnd.ToString("X2")}");
@@ -230,8 +230,8 @@ namespace Suyaa.Gui.Native.Win32
                 this.Initialize();
             }
             IntPtr hwnd = this.Hwnd;
-            ShowWindow(hwnd, 1);
-            UpdateWindow(hwnd);
+            User32.ShowWindow(hwnd, 1);
+            User32.UpdateWindow(hwnd);
         }
 
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using Suyaa.Gui;
+using Suyaa.Gui.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -181,6 +182,12 @@ namespace Suyaa.Gui
         /// </summary>
         public static void PostMessage(IMessage msg)
         {
+            switch (msg)
+            {
+                case CloseMessage closeMessage:
+
+                    break;
+            }
             var formHandle = GetFormHanldeByControlHanlde(msg.Handle);
             var form = GetForm(formHandle);
             form.PostMessage(msg);

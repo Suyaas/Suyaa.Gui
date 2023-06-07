@@ -73,6 +73,9 @@ namespace Suyaa.Gui.Native.Linux
             GC.SuppressFinalize(this);
         }
 
+        /// <summary>
+        /// 初始化
+        /// </summary>
         public void Initialize()
         {
             // 获取宽高
@@ -266,17 +269,29 @@ namespace Suyaa.Gui.Native.Linux
             }
         }
 
+        /// <summary>
+        /// 提交消息
+        /// </summary>
+        /// <param name="msg"></param>
         public void PostMessage(IMessage msg)
         {
             //throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// 发送消息
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
         public bool SendMessage(IMessage msg)
         {
             //throw new NotImplementedException();
             return true;
         }
 
+        /// <summary>
+        /// 显示窗口
+        /// </summary>
         public void Show()
         {
             /* 显示窗口 */

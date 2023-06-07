@@ -20,7 +20,6 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// <summary>
         /// 测试接口，获取标准整型字节数
         /// </summary>
-        /// <param name="display"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern short SizeOfInt();
@@ -29,6 +28,15 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 创建一个XImage
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="visual"></param>
+        /// <param name="depth"></param>
+        /// <param name="format"></param>
+        /// <param name="offset"></param>
+        /// <param name="data"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        /// <param name="bitmap_pad"></param>
+        /// <param name="bytes_per_line"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern IntPtr XCreateImage2(
@@ -47,7 +55,7 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// <summary>
         /// 创建一个XImage
         /// </summary>
-        /// <param name="display"></param>
+        /// <param name="image"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern uint GetXImageWidth(IntPtr image);
@@ -56,6 +64,10 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 创建Pixmap
         /// </summary>
         /// <param name="display"></param>
+        /// <param name="window"></param>
+        /// <param name="pixels"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
         /// <returns></returns>
         [DllImport(_libName)]
         public static extern IntPtr XCreateBitmapFromData2(IntPtr display, IntPtr window, IntPtr pixels, uint width, uint height);

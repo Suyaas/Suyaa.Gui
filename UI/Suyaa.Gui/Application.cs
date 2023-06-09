@@ -15,8 +15,6 @@ namespace Suyaa.Gui
     {
         // 所有窗体
         private static List<IForm> _forms = new List<IForm>();
-        // 所有控件关系
-        private static Dictionary<long, long> _controls = new Dictionary<long, long>();
         // 应用信息
         private static IApplication? _application;
         // 默认窗体
@@ -63,25 +61,12 @@ namespace Suyaa.Gui
         }
 
         /// <summary>
-        /// 注册控件
-        /// </summary>
-        /// <param name="control">组件</param>
-        /// <param name="form">窗体</param>
-        public static void RegControl(IControl control, IForm? form)
-        {
-            long formHandle = 0;
-            if (form != null) formHandle = form.Handle;
-            _controls[control.Handle] = formHandle;
-        }
-
-        /// <summary>
         /// 注册窗体
         /// </summary>
         /// <param name="form"></param>
         public static void RegForm(IForm form)
         {
             _forms.Add(form);
-            _controls[form.Handle] = form.Handle;
         }
 
         /// <summary>
@@ -103,48 +88,8 @@ namespace Suyaa.Gui
         /// <summary>
         /// 获取窗体
         /// </summary>
-        public static IForm GetForm(IControl control)
-        {
-            var form = GetFormByControl(control);
-            if (form is null) throw new GuiException($"Control handle '{control.Handle}' not found form.");
-            return form;
-        }
-
-        /// <summary>
-        /// 获取窗体
-        /// </summary>
         public static IForm? GetFormByHandle(long handle)
             => _forms.Where(d => d.Handle == handle).FirstOrDefault();
-
-        /// <summary>
-        /// 获取窗体
-        /// </summary>
-        public static IForm? GetFormByControl(IControl control)
-        {
-            if (!_controls.ContainsKey(control.Handle)) return null;
-            long formHandle = _controls[control.Handle];
-            if (formHandle <= 0) return null;
-            return GetFormByHandle(formHandle);
-        }
-
-        /// <summary>
-        /// 获取窗体句柄
-        /// </summary>
-        public static long GetFormHanldeByControl(IControl control)
-        {
-            return GetFormHanldeByControlHanlde(control.Handle);
-        }
-
-        /// <summary>
-        /// 获取窗体句柄
-        /// </summary>
-        public static long GetFormHanldeByControlHanlde(long handle)
-        {
-            if (!_controls.ContainsKey(handle)) return 0;
-            long formHandle = _controls[handle];
-            if (formHandle <= 0) return 0;
-            return formHandle;
-        }
 
         /// <summary>
         /// 移除窗体
@@ -172,9 +117,12 @@ namespace Suyaa.Gui
         /// </summary>
         public static bool SendMessage(IMessage msg)
         {
-            var formHandle = GetFormHanldeByControlHanlde(msg.Handle);
-            var form = GetForm(formHandle);
-            return form.SendMessage(msg);
+            // 分发消息
+            foreach (var form in _forms)
+            {
+                if (!form.SendMessage(msg)) return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -184,13 +132,20 @@ namespace Suyaa.Gui
         {
             switch (msg)
             {
-                case CloseMessage closeMessage:
-
-                    break;
+                // 关闭消息
+                case CloseMessage _:
+                    if (_currentForm is null) throw new GuiException($"No current form found.");
+                    if (msg.Handle == _currentForm.Handle)
+                    {
+                        Environment.Exit(0);
+                    }
+                    return;
             }
-            var formHandle = GetFormHanldeByControlHanlde(msg.Handle);
-            var form = GetForm(formHandle);
-            form.PostMessage(msg);
+            // 分发消息
+            foreach (var form in _forms)
+            {
+                form.PostMessage(msg);
+            }
         }
     }
 }

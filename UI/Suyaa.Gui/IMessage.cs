@@ -9,7 +9,7 @@ namespace Suyaa.Gui
     /// <summary>
     /// 消息
     /// </summary>
-    public interface IMessage
+    public interface IMessage : IDisposable
     {
         /// <summary>
         /// 唯一句柄

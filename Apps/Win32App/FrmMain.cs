@@ -1,6 +1,9 @@
 ﻿using Forms;
 using SkiaSharp;
+using Suyaa.Gui.Attributes;
+using Suyaa.Gui.Controls;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Forms;
 using Suyaa.Gui.Native.Win32;
 
 namespace Win32App
@@ -8,7 +11,8 @@ namespace Win32App
     /// <summary>
     /// 主窗体
     /// </summary>
-    public class FrmMain : Form<Win32Form>
+    [Styles(typeof(FormStyle))]
+    public partial class FrmMain : Form
     {
         /// <summary>
         /// 主窗体
@@ -17,9 +21,15 @@ namespace Win32App
         {
             this.Title = "Win32App 测试";
             this.Styles
+                .SetStyles<Css.MainFormSize>()
                 .Set<float>(StyleType.Width, 800)
                 .Set<float>(StyleType.Height, 500)
                 .Set(StyleType.UseCache, true);
+
+            // 添加控件
+            Block block = new Block();
+            block.Styles.SetStyles<Css.TestBlockStyle>();
+            this.Controls.Add(block);
         }
 
         /// <summary>

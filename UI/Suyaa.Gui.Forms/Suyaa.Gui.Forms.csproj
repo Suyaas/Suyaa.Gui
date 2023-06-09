@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Suyaa.Gui.Widgets\Suyaa.Gui.Widgets.csproj" />
+    <ProjectReference Include="..\Suyaa.Gui.Widgets\Suyaa.Gui.Controls.csproj" />
   </ItemGroup>
 
 </Project>

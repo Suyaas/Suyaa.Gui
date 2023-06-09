@@ -31,5 +31,13 @@ namespace Suyaa.Gui.Messages
             this.Handle = handle;
             this.MessageType = messageType;
         }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
     }
 }

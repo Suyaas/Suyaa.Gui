@@ -14,6 +14,11 @@ namespace Suyaa.Gui
         /// <summary>
         /// 关联窗体
         /// </summary>
-        IForm? Form { get; }
+        IForm Form { get; }
+
+        /// <summary>
+        /// 父控件
+        /// </summary>
+        IControl Parent { get; }
     }
 }

@@ -19,6 +19,30 @@ namespace Suyaa.Gui.Native.Win32
         // 是否循环处理消息
         private bool _continueLoop = false;
 
+        /// <summary>
+        /// 窗体句柄信息
+        /// </summary>
+        public Dictionary<IntPtr, long> Handles { get; }
+
+        /// <summary>
+        /// Win32应用
+        /// </summary>
+        public Win32Application()
+        {
+            this.Handles = new Dictionary<IntPtr, long>();
+        }
+
+        /// <summary>
+        /// 根据hwnd获取窗口句柄
+        /// </summary>
+        /// <param name="hwnd"></param>
+        /// <returns></returns>
+        public long GetHandleByHwnd(IntPtr hwnd)
+        {
+            if (this.Handles.ContainsKey(hwnd)) return this.Handles[hwnd];
+            return 0;
+        }
+
         private bool PreTranslateMessage(User32.MSG msg)
         {
             User32.WM wm = (User32.WM)msg.message;

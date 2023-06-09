@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Suyaa.Gui.Native", "UI\Suya
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Suyaa.Gui", "UI\Suyaa.Gui\Suyaa.Gui.csproj", "{8E763E2F-1E59-4E9E-B79B-C7C67E111368}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Suyaa.Gui.Widgets", "UI\Suyaa.Gui.Widgets\Suyaa.Gui.Widgets.csproj", "{4CBDF397-7F5C-4EED-84D0-B04B5847D629}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Suyaa.Gui.Controls", "UI\Suyaa.Gui.Widgets\Suyaa.Gui.Controls.csproj", "{4CBDF397-7F5C-4EED-84D0-B04B5847D629}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Suyaa.Gui.Forms", "UI\Suyaa.Gui.Forms\Suyaa.Gui.Forms.csproj", "{6A8848F3-21B7-491B-8B4A-9944C5409E79}"
 EndProject

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SkiaSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +26,7 @@ namespace Suyaa.Gui.Drawing
         [StyleValue(typeof(bool))]
         UseCache = 0x11,
         #endregion
-        #region 二维样式
+        #region 二维样式_0x100
         /// <summary>
         /// 上边距
         /// </summary>
@@ -56,6 +57,70 @@ namespace Suyaa.Gui.Drawing
         /// </summary>
         [StyleValue(typeof(float))]
         Height = 0x112,
+        /// <summary>
+        /// 内边距（统一）
+        /// </summary>
+        [StyleValue(typeof(float))]
+        Padding = 0x120,
+        /// <summary>
+        /// 内上边距
+        /// </summary>
+        [StyleValue(typeof(float))]
+        PaddingTop = 0x121,
+        /// <summary>
+        /// 内右边距
+        /// </summary>
+        [StyleValue(typeof(float))]
+        PaddingRight = 0x122,
+        /// <summary>
+        /// 内下边距
+        /// </summary>
+        [StyleValue(typeof(float))]
+        PaddingBottom = 0x123,
+        /// <summary>
+        /// 内左边距
+        /// </summary>
+        [StyleValue(typeof(float))]
+        PaddingLeft = 0x124,
+        /// <summary>
+        /// 背景颜色
+        /// </summary>
+        [StyleValue(typeof(SKColor))]
+        BackgroundColor = 0x131,
+        #endregion
+        #region 边框相关样式_0x200
+        /// <summary>
+        /// 边框尺寸
+        /// </summary>
+        [StyleValue(typeof(float))]
+        BorderSize = 0x201,
+        /// <summary>
+        /// 边框类型
+        /// </summary>
+        [StyleValue(typeof(float))]
+        BorderStyle = 0x202,
+        /// <summary>
+        /// 边框颜色
+        /// </summary>
+        [StyleValue(typeof(SKColor))]
+        BorderColor = 0x203,
+        #endregion
+        #region 文本样式_0x300
+        /// <summary>
+        /// 文本颜色
+        /// </summary>
+        [StyleValue(typeof(SKColor))]
+        TextColor = 0x301,
+        /// <summary>
+        /// 文本字体
+        /// </summary>
+        [StyleValue(typeof(string))]
+        TextFont = 0x302,
+        /// <summary>
+        /// 文本字号
+        /// </summary>
+        [StyleValue(typeof(float))]
+        TextSize = 0x303,
         #endregion
     }
 }

@@ -2,9 +2,10 @@
 using SkiaSharp;
 using Suyaa;
 using Suyaa.Gui;
+using Suyaa.Gui.Controls;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Forms;
 using Suyaa.Gui.Messages;
-using Suyaa.Gui.Widgets;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,7 +18,7 @@ namespace Forms
     /// <summary>
     /// 窗体
     /// </summary>
-    public abstract partial class FormBase : IForm
+    public abstract partial class FormBase : IForm<Control>
     {
         /// <summary>
         /// 原生窗体
@@ -45,6 +46,16 @@ namespace Forms
         public string Title { get => this.NativeForm.Title; set => this.NativeForm.Title = value; }
 
         /// <summary>
+        /// 工作区域
+        /// </summary>
+        public Workarea Workarea { get; }
+
+        /// <summary>
+        /// 控件集合
+        /// </summary>
+        public IControlContainer<Control> Controls => this.Workarea.Controls;
+
+        /// <summary>
         /// 窗体
         /// </summary>
         /// <param name="nativeForm"></param>
@@ -54,6 +65,9 @@ namespace Forms
             NativeForm = nativeForm;
             // 注册窗体
             Application.RegForm(this);
+            // 初始化工作区域
+            this.Workarea = new Workarea(this);
+            // 应用反射特性
         }
 
         /// <summary>
@@ -66,6 +80,8 @@ namespace Forms
             this.NativeForm = type.CreateNativeForm();
             // 注册窗体
             Application.RegForm(this);
+            // 初始化工作区域
+            this.Workarea = new Workarea(this);
         }
 
         // 处理消息
@@ -75,7 +91,8 @@ namespace Forms
             switch (msg)
             {
                 case PaintMessage pm: // 处理绘制命令
-                    this.OnPaint(pm.Canvas);
+                    // 重绘界面
+                    this.RePaint(pm.Canvas);
                     break;
             }
             return true;
@@ -127,18 +144,5 @@ namespace Forms
             // 触发加载事件
             this.OnLoad();
         }
-    }
-
-    /// <summary>
-    /// 窗体
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public abstract class Form<T> : FormBase
-        where T : INativeForm, new()
-    {
-        /// <summary>
-        /// 窗体
-        /// </summary>
-        public Form() : base(typeof(T)) { }
     }
 }

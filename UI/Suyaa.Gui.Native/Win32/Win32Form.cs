@@ -20,7 +20,7 @@ namespace Suyaa.Gui.Native.Win32
         // 标题
         private string _title = string.Empty;
         // 默认线程操作对象
-        private IntPtr _defWindowProc = IntPtr.Zero;
+        private static IntPtr _defWindowProc = IntPtr.Zero;
         private readonly User32.WNDPROC _windProc;
 
         /// <summary>
@@ -40,39 +40,59 @@ namespace Suyaa.Gui.Native.Win32
 
         #endregion
 
-        #region 私有函数
+        #region 消息处理函数
+
+        // 获取Win32Form
+        private static Win32Form GetWin32FormByHwnd(IntPtr hwnd)
+        {
+            Win32Application win32 = (Win32Application)Application.GetCurrent();
+            long handle = win32.GetHandleByHwnd(hwnd);
+            var form = Application.GetFormByHandle(handle);
+            if (form is null) throw new GuiException($"Native form '0x{hwnd.ToString("x").PadLeft(12, '0')}' not found.");
+            return (Win32Form)form.NativeForm;
+        }
 
         // 接收到绘制消息
-        private void WinProcPaint()
+        private static void WinProcPaint(IntPtr hwnd)
         {
-            IntPtr hwnd = this.Hwnd;
+            var form = GetWin32FormByHwnd(hwnd);
+            //IntPtr hwnd = this.Hwnd;
             // 获取 是否使用缓存 样式
-            var useCache = this.Styles.Get<bool>(StyleType.UseCache);
-            // 获取宽高
-            var width = this.Styles.Get<float>(StyleType.Width);
-            var height = this.Styles.Get<float>(StyleType.Height);
+            var useCache = form.Styles.Get<bool>(StyleType.UseCache);
             // 判断是否使用缓存
             if (useCache)
             {
                 // 判断是否有缓存
-                if (this.CacheBitmap is null)
+                if (form.CacheBitmap is null)
                 {
-                    this.CacheBitmap = new SKBitmap((int)width, (int)height);
-                    using (SKCanvas cvs = new SKCanvas(this.CacheBitmap))
+                    // 获取宽高
+                    var width = form.Styles.Get<float>(StyleType.Width);
+                    var height = form.Styles.Get<float>(StyleType.Height);
+                    form.CacheBitmap = new SKBitmap((int)width, (int)height);
+                    using (SKCanvas cvs = new SKCanvas(form.CacheBitmap))
                     {
-                        Application.PostMessage(new PaintMessage(this.Handle, cvs));
+                        using (PaintMessage msg = new(form.Handle, cvs))
+                        {
+                            Application.PostMessage(msg);
+                        }
                     }
                 }
-                this.CacheBitmap.BitBltToHwnd(hwnd);
+                form.CacheBitmap.BitBltToHwnd(hwnd);
             }
             else
             {
+                // 获取宽高
+                var width = form.Styles.Get<float>(StyleType.Width);
+                var height = form.Styles.Get<float>(StyleType.Height);
                 // 直接绘制
                 using (SKBitmap bmp = new SKBitmap((int)width, (int)height))
                 {
                     using (SKCanvas cvs = new SKCanvas(bmp))
                     {
-                        Application.PostMessage(new PaintMessage(this.Handle, cvs));
+                        using (PaintMessage msg = new(form.Handle, cvs))
+                        {
+                            Application.PostMessage(msg);
+                        }
                     }
                     bmp.BitBltToHwnd(hwnd);
                 }
@@ -80,7 +100,7 @@ namespace Suyaa.Gui.Native.Win32
         }
 
         // 窗口过程
-        private int WinProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
+        private static int WinProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam)
         {
             User32.WM wm = (User32.WM)msg;
             Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
@@ -90,9 +110,11 @@ namespace Suyaa.Gui.Native.Win32
                 // 创建
                 case User32.WM.CREATE: break;
                 // 绘制界面
-                case User32.WM.PAINT: WinProcPaint(); break;
+                case User32.WM.PAINT: WinProcPaint(hwnd); break;
                 case User32.WM.DESTROY:
-                    User32.PostQuitMessage(0);
+                    //User32.PostQuitMessage(0);
+                    Win32Application win32 = (Win32Application)Application.GetCurrent();
+                    Application.PostMessage(new CloseMessage(win32.GetHandleByHwnd(hwnd)));
                     break;
             }
             var res = User32.DefWindowProc(hwnd, msg, wParam, lParam);
@@ -212,6 +234,10 @@ namespace Suyaa.Gui.Native.Win32
 
             this.Hwnd = hwnd;
             Debug.WriteLine($"[Win32Form] Create 0x{hwnd.ToString("X2")}");
+
+            // 注册窗体关联
+            Win32Application win32 = (Win32Application)Application.GetCurrent();
+            win32.Handles[hwnd] = this.Handle;
 
             // 显示
             if (this.Styles.Get<bool>(StyleType.Visible))

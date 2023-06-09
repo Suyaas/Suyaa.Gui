@@ -25,6 +25,15 @@ namespace Suyaa.Gui.Drawing
         }
 
         /// <summary>
+        /// 设置样式设置集合
+        /// </summary>
+        /// <returns></returns>
+        public Styles SetStyles<T>()
+        {
+            return this;
+        }
+
+        /// <summary>
         /// 设置样式
         /// </summary>
         /// <param name="style"></param>

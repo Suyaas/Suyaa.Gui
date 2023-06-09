@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Suyaa.Gui.Forms\Suyaa.Gui.Forms.csproj" />
+    <ProjectReference Include="..\Suyaa.Gui\Suyaa.Gui.csproj" />
   </ItemGroup>
 
 </Project>

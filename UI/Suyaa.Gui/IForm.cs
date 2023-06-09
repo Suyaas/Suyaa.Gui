@@ -1,4 +1,5 @@
-﻿using Suyaa.Gui;
+﻿using Forms;
+using Suyaa.Gui;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,21 +11,23 @@ namespace Suyaa.Gui
     /// <summary>
     /// 窗口
     /// </summary>
-    public interface IForm : IWidget, IDisposable
+    public interface IForm: INativeForm
     {
         /// <summary>
-        /// 窗口标题
+        /// 原生窗体
         /// </summary>
-        string Title { get; set; } 
+        INativeForm NativeForm { get; }
+    }
 
+    /// <summary>
+    /// 窗口
+    /// </summary>
+    public interface IForm<T> : IForm
+        where T : IControl
+    {
         /// <summary>
-        /// 初始化
+        /// 控件集合
         /// </summary>
-        void Initialize();
-
-        /// <summary>
-        /// 显示
-        /// </summary>
-        void Show();
+        IControlContainer<T> Controls { get; }
     }
 }

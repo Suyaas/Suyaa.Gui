@@ -13,29 +13,11 @@ namespace Suyaa.Gui.Messages
     public class ResizeMessage : Message
     {
         /// <summary>
-        /// 宽度
-        /// </summary>
-        public float Width { get; }
-
-        /// <summary>
-        /// 高度
-        /// </summary>
-        public float Height { get; }
-
-        /// <summary>
-        /// 缩放比例
-        /// </summary>
-        public float Scale { get; }
-
-        /// <summary>
         /// 消息
         /// </summary>
         /// <param name="handle"></param>
-        public ResizeMessage(long handle, float width, float height, float scale) : base(GuiMessageType.Close, handle)
+        public ResizeMessage(long handle) : base(GuiMessageType.Close, handle)
         {
-            this.Width = width;
-            this.Height = height;
-            this.Scale = scale;
         }
     }
 }

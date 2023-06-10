@@ -50,7 +50,7 @@ namespace Suyaa.Gui.Attributes
         /// </summary>
         /// <param name="style"></param>
         /// <param name="value"></param>
-        public OffsetAttribute(AlignType xAlign, float x, AlignType yAlign, float y) : base(StyleType.None)
+        public OffsetAttribute(float x, float y, AlignType xAlign, AlignType yAlign) : base(StyleType.None)
         {
             this.X = x;
             this.Y = y;

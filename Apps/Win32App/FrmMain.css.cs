@@ -14,7 +14,7 @@ namespace Win32App
         /// 窗口样式
         /// </summary>
         [Size(800, 500)]
-        [Offset(AlignType.Center, 0, AlignType.Center, -50)]
+        [Offset(0, -50, AlignType.Center, AlignType.Center)]
         [BackgroundColor(0xff0094ff)]
         [UserCache(true)]
         class FormStyle { }
@@ -22,9 +22,9 @@ namespace Win32App
         /// <summary>
         /// 块样式
         /// </summary>
-        [Size(50, UnitType.Percentage, 100, UnitType.Pixel)]
-        [Offset(20, 20)]
-        [BackgroundColor(0xff009900)]
+        [Size(50, 100, UnitType.Percentage, UnitType.Pixel)]
+        [Offset(0, 20, AlignType.Center, AlignType.Normal)]
+        [BackgroundColor(0xff003300)]
         class TestBlockStyle { }
 
         /// <summary>
@@ -39,7 +39,7 @@ namespace Win32App
                     .Set<float>(StyleType.Height, 120)
                     .Set<float>(StyleType.X, 50)
                     .Set<float>(StyleType.Y, 50)
-                    .Set(StyleType.BackgroundColor, new SKColor(0xff990000));
+                    .Set(StyleType.BackgroundColor, new SKColor(0x99990000));
             }
         }
     }

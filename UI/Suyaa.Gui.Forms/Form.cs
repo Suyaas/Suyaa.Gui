@@ -2,6 +2,7 @@
 using SkiaSharp;
 using Suyaa.Gui.Attributes;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,9 +47,41 @@ namespace Suyaa.Gui.Forms
         }
 
         /// <summary>
+        /// 消息处理
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        protected override bool OnMessage(IMessage msg)
+        {
+            // 处理消息
+            switch (msg)
+            {
+                // 初始化
+                case InitMessage _:
+                    this.Workarea.Resize();
+                    break;
+                // 重置大小
+                case ResizeMessage _:
+                    this.Workarea.Resize();
+                    //this.Refresh();
+                    break;
+                // 绘制
+                case PaintMessage pm:
+                    // 重绘工作区域
+                    using (PaintMessage msgSink = new(this.Workarea.Handle, pm.Canvas, pm.Rectangle, pm.Scale))
+                    {
+                        this.Workarea.PostMessage(msgSink);
+                    }
+                    break;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// 标准窗体
         /// </summary>
-        public Form() {
+        public Form()
+        {
             // 应用反射特性
             this.ApplyStyles();
         }

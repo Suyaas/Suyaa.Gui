@@ -2,6 +2,8 @@
 using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Helpers;
 using Suyaa.Gui.Messages;
+using static System.Formats.Asn1.AsnWriter;
+using Suyaa.Gui.Native.Win32.Apis;
 
 namespace Suyaa.Gui.Controls
 {
@@ -32,6 +34,8 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public Control()
         {
+            // 设置Z轴深度
+            this.ZIndex = 0;
             // 初始化样式表
             this.Styles = new Styles(this);
             // 生成新的唯一句柄
@@ -94,60 +98,113 @@ namespace Suyaa.Gui.Controls
         /// <summary>
         /// 绘制中事件
         /// </summary>
-        protected virtual void OnPainting(SKCanvas cvs, Rectangle rect) { }
+        protected virtual void OnPainting(SKCanvas cvs, Rectangle rect, float scale) { }
 
         /// <summary>
         /// 绘制结束事件
         /// </summary>
-        protected virtual void OnPainted(SKCanvas cvs, Rectangle rect) { }
+        protected virtual void OnPainted(SKCanvas cvs, Rectangle rect, float scale) { }
 
         /// <summary>
         /// 绘制预处理事件
         /// </summary>
-        private void OnPaintMessage(SKBitmap bitmap)
+        private void OnPaintMessage(SKBitmap bitmap, float scale)
         {
             using (SKCanvas cvs = new SKCanvas(bitmap))
             {
                 cvs.DrawStyles(this.Styles);
                 var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-                this.OnPainting(cvs, rect);
-                this.OnPainted(cvs, rect);
+                this.OnPainting(cvs, rect, scale);
+                this.OnPainted(cvs, rect, scale);
             }
         }
 
         // 处理绘制消息
         private void OnPaintMessage(PaintMessage pm)
         {
+            // 跳过不需要绘制的情况
+            if (pm.Rectangle.Width <= 0 || pm.Rectangle.Height <= 0) return;
             // 获取 是否使用缓存 样式
             var useCache = this.Styles.Get<bool>(StyleType.UseCache);
-            // 获取 边距 样式
-            var left = this.Styles.Get<float>(StyleType.X);
-            var top = this.Styles.Get<float>(StyleType.Y);
+            var rect = pm.Rectangle;
+
+            #region 处理尺寸
+            var width = this.Styles.Get<float>(StyleType.Width);
+            var height = this.Styles.Get<float>(StyleType.Height);
+            var widthUnit = this.Styles.Get<UnitType>(StyleType.WidthUnit);
+            var heightUnit = this.Styles.Get<UnitType>(StyleType.HeightUnit);
+            if (widthUnit == UnitType.Percentage)
+            {
+                width = rect.Width * (width / 100);
+            }
+            else
+            {
+                width = width / pm.Scale;
+            }
+            if (heightUnit == UnitType.Percentage)
+            {
+                height = rect.Height * (height / 100);
+            }
+            else
+            {
+                height = height / pm.Scale;
+            }
+            #endregion
+
+            #region 处理对齐
+            var x = this.Styles.Get<float>(StyleType.X);
+            var y = this.Styles.Get<float>(StyleType.Y);
+            var left = x;
+            var top = y;
+            var xAlign = this.Styles.Get<AlignType>(StyleType.XAlign);
+            var yAlign = this.Styles.Get<AlignType>(StyleType.YAlign);
+            switch (xAlign)
+            {
+                case AlignType.Center:
+                    left = (rect.Right - width) / 2 + x;
+                    break;
+                case AlignType.Opposite:
+                    left = rect.Right - width - x;
+                    break;
+            }
+            switch (yAlign)
+            {
+                case AlignType.Center:
+                    top = (rect.Bottom - height) / 2 + y;
+                    break;
+                case AlignType.Opposite:
+                    top = rect.Bottom - height - y;
+                    break;
+            }
+            #endregion
+
             // 判断是否使用缓存
             if (useCache)
             {
+                if (this.CacheBitmap != null)
+                {
+                    if (this.CacheBitmap.Width != width || this.CacheBitmap.Height != height)
+                    {
+                        this.CacheBitmap.Dispose();
+                        this.CacheBitmap = null;
+                    }
+                }
                 // 判断是否有缓存
                 if (this.CacheBitmap is null)
                 {
-                    // 获取宽高
-                    var width = this.Styles.Get<float>(StyleType.Width);
-                    var height = this.Styles.Get<float>(StyleType.Height);
-                    if (width <= 0 || height <= 0) return;
-                    this.CacheBitmap = new SKBitmap((int)width, (int)height);
-                    OnPaintMessage(this.CacheBitmap);
+
+                    this.CacheBitmap = new SKBitmap((int)pm.Rectangle.Width, (int)pm.Rectangle.Height);
+                    OnPaintMessage(this.CacheBitmap, pm.Scale);
                 }
                 pm.Canvas.DrawBitmap(this.CacheBitmap, left, top);
             }
             else
             {
-                // 获取宽高
-                var width = this.Styles.Get<float>(StyleType.Width);
-                var height = this.Styles.Get<float>(StyleType.Height);
                 if (width <= 0 || height <= 0) return;
                 // 直接绘制
                 using (SKBitmap bmp = new SKBitmap((int)width, (int)height))
                 {
-                    OnPaintMessage(bmp);
+                    OnPaintMessage(bmp, pm.Scale);
                     pm.Canvas.DrawBitmap(bmp, left, top);
                 }
             }

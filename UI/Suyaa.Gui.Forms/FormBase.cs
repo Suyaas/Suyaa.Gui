@@ -83,27 +83,12 @@ namespace Forms
             Application.RegForm(this);
         }
 
-        // 处理消息
-        private bool MessageProc(IMessage msg)
-        {
-            // 处理消息
-            switch (msg)
-            {
-                // 初始化
-                case InitMessage _:
-                    this.Workarea.Resize();
-                    break;
-                // 绘制
-                case PaintMessage pm:
-                    // 重绘工作区域
-                    using (PaintMessage msgSink = new(this.Workarea.Handle, pm.Canvas, pm.Rectangle))
-                    {
-                        this.Workarea.PostMessage(msgSink);
-                    }
-                    break;
-            }
-            return true;
-        }
+        /// <summary>
+        /// 处理消息
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        protected abstract bool OnMessage(IMessage msg);
 
         /// <summary>
         /// 发送消息
@@ -112,7 +97,7 @@ namespace Forms
         {
             if (msg.Handle == this.Handle)
             {
-                return MessageProc(msg);
+                return this.OnMessage(msg);
             }
             else
             {
@@ -127,7 +112,7 @@ namespace Forms
         {
             if (msg.Handle == this.Handle)
             {
-                MessageProc(msg);
+                this.OnMessage(msg);
             }
             else
             {

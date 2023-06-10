@@ -50,7 +50,7 @@ namespace Suyaa.Gui.Attributes
         /// </summary>
         /// <param name="style"></param>
         /// <param name="value"></param>
-        public SizeAttribute(float width, UnitType widthUnit, float height, UnitType heightUnit) : base(StyleType.None)
+        public SizeAttribute(float width, float height, UnitType widthUnit, UnitType heightUnit) : base(StyleType.None)
         {
             this.WidthUnit = widthUnit;
             this.HeightUnit = heightUnit;

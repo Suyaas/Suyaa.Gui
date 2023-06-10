@@ -24,13 +24,22 @@ namespace Suyaa.Gui.Messages
         public Rectangle Rectangle { get; }
 
         /// <summary>
+        /// 缩放比例
+        /// </summary>
+        public float Scale { get; }
+
+        /// <summary>
         /// 消息
         /// </summary>
         /// <param name="handle"></param>
-        public PaintMessage(long handle, SKCanvas canvas, Rectangle rectangle) : base(GuiMessageType.Close, handle)
+        /// <param name="canvas"></param>
+        /// <param name="rectangle"></param>
+        /// <param name="scale"></param>
+        public PaintMessage(long handle, SKCanvas canvas, Rectangle rectangle, float scale) : base(GuiMessageType.Close, handle)
         {
             this.Canvas = canvas;
             this.Rectangle = rectangle;
+            Scale = scale;
         }
     }
 }

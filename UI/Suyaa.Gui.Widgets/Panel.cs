@@ -2,6 +2,7 @@
 using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Helpers;
 using Suyaa.Gui.Messages;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace Suyaa.Gui.Controls
 {
@@ -28,14 +29,15 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         /// <param name="cvs"></param>
         /// <param name="rect"></param>
-        protected override void OnPainted(SKCanvas cvs, Rectangle rect)
+        /// <param name="scale"></param>
+        protected override void OnPainted(SKCanvas cvs, Rectangle rect, float scale)
         {
-            base.OnPainted(cvs, rect);
-            // 依次绘制子控件
-            foreach (Control c in Controls)
+            base.OnPainted(cvs, rect, scale);
+            // 按照Z轴深度和创建先后依次绘制子控件
+            foreach (Control c in Controls.OrderBy(d => d.ZIndex).ThenBy(d => d.Handle).ToList())
             {
                 // 发送绘制消息
-                using (PaintMessage msg = new(c.Handle, cvs, rect))
+                using (PaintMessage msg = new(c.Handle, cvs, rect, scale))
                 {
                     c.PostMessage(msg);
                 }

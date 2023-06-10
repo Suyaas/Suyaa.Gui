@@ -2,6 +2,7 @@
 using SkiaSharp;
 using Suyaa;
 using Suyaa.Gui;
+using Suyaa.Gui.Attributes;
 using Suyaa.Gui.Controls;
 using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Forms;
@@ -61,27 +62,25 @@ namespace Forms
         /// <param name="nativeForm"></param>
         public FormBase(INativeForm nativeForm)
         {
+            // 初始化工作区域
+            this.Workarea = new Workarea(this);
             // 设置原生窗体
             NativeForm = nativeForm;
             // 注册窗体
             Application.RegForm(this);
-            // 初始化工作区域
-            this.Workarea = new Workarea(this);
-            // 应用反射特性
         }
 
         /// <summary>
         /// 窗体
         /// </summary>
-        /// <param name="type"></param>
-        public FormBase(Type type)
+        public FormBase()
         {
-            // 创建原生窗口
-            this.NativeForm = type.CreateNativeForm();
-            // 注册窗体
-            Application.RegForm(this);
             // 初始化工作区域
             this.Workarea = new Workarea(this);
+            // 创建原生窗口
+            this.NativeForm = sy.Gui.CreateNativeForm();
+            // 注册窗体
+            Application.RegForm(this);
         }
 
         // 处理消息
@@ -90,9 +89,17 @@ namespace Forms
             // 处理消息
             switch (msg)
             {
-                case PaintMessage pm: // 处理绘制命令
-                    // 重绘界面
-                    this.RePaint(pm.Canvas);
+                // 初始化
+                case InitMessage _:
+                    this.Workarea.Resize();
+                    break;
+                // 绘制
+                case PaintMessage pm:
+                    // 重绘工作区域
+                    using (PaintMessage msgSink = new(this.Workarea.Handle, pm.Canvas, pm.Rectangle))
+                    {
+                        this.Workarea.PostMessage(msgSink);
+                    }
                     break;
             }
             return true;
@@ -103,7 +110,14 @@ namespace Forms
         /// </summary>
         public bool SendMessage(IMessage msg)
         {
-            return MessageProc(msg);
+            if (msg.Handle == this.Handle)
+            {
+                return MessageProc(msg);
+            }
+            else
+            {
+                return this.Workarea.SendMessage(msg);
+            }
         }
 
         /// <summary>
@@ -111,7 +125,14 @@ namespace Forms
         /// </summary>
         public void PostMessage(IMessage msg)
         {
-            MessageProc(msg);
+            if (msg.Handle == this.Handle)
+            {
+                MessageProc(msg);
+            }
+            else
+            {
+                this.Workarea.PostMessage(msg);
+            }
         }
 
         /// <summary>
@@ -144,5 +165,11 @@ namespace Forms
             // 触发加载事件
             this.OnLoad();
         }
+
+        /// <summary>
+        /// 刷新显示
+        /// </summary>
+        public void Refresh()
+            => this.NativeForm.Refresh();
     }
 }

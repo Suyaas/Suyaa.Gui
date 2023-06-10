@@ -9,7 +9,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// PostQuitMessage
         /// </summary>
         /// <param name="nExitCode"></param>
-        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
-        public static extern void PostQuitMessage(int nExitCode);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial void PostQuitMessage(int nExitCode);
     }
 }

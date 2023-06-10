@@ -2,9 +2,12 @@
 using SkiaSharp;
 using Suyaa;
 using Suyaa.Gui;
+using Suyaa.Gui.Attributes;
+using Suyaa.Gui.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,14 +19,7 @@ namespace Forms
         // 界面重绘
         private void RePaint(SKCanvas canvas)
         {
-
-            this.OnPaint(canvas);
-        }
-
-        // 生效样式特性
-        private void ApplyStyle()
-        {
-            var type = this.GetType();
+            //this.OnWorkareaPaint(canvas);
         }
     }
 }

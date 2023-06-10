@@ -1,5 +1,7 @@
 ﻿using SkiaSharp;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Helpers;
+using Suyaa.Gui.Messages;
 
 namespace Suyaa.Gui.Controls
 {
@@ -14,12 +16,24 @@ namespace Suyaa.Gui.Controls
         private IControl? _parent;
 
         /// <summary>
+        /// 创建一个控件
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T Create<T>()
+            where T : Control
+        {
+            //return typeof(T).Create<T>();
+            return Activator.CreateInstance<T>();
+        }
+
+        /// <summary>
         /// 组件基类
         /// </summary>
         public Control()
         {
             // 初始化样式表
-            this.Styles = new Styles();
+            this.Styles = new Styles(this);
             // 生成新的唯一句柄
             this.Handle = Application.GetNewHandle();
         }
@@ -73,11 +87,71 @@ namespace Suyaa.Gui.Controls
         public SKBitmap? CacheBitmap { get; protected set; }
 
         /// <summary>
+        /// 绘制事件
+        /// </summary>
+        protected virtual void OnPaint(SKCanvas cvs, Rectangle rect) { }
+
+        // 处理绘制消息
+        private void OnPaintMessage(PaintMessage pm)
+        {
+            // 获取 是否使用缓存 样式
+            var useCache = this.Styles.Get<bool>(StyleType.UseCache);
+            // 获取 边距 样式
+            var left = this.Styles.Get<float>(StyleType.X);
+            var top = this.Styles.Get<float>(StyleType.Y);
+            // 判断是否使用缓存
+            if (useCache)
+            {
+                // 判断是否有缓存
+                if (this.CacheBitmap is null)
+                {
+                    // 获取宽高
+                    var width = this.Styles.Get<float>(StyleType.Width);
+                    var height = this.Styles.Get<float>(StyleType.Height);
+                    if (width <= 0 || height <= 0) return;
+                    this.CacheBitmap = new SKBitmap((int)width, (int)height);
+                    using (SKCanvas cvs = new SKCanvas(this.CacheBitmap))
+                    {
+                        cvs.DrawStyles(this.Styles);
+                        this.OnPaint(cvs, new Rectangle(0, 0, width, height));
+                    }
+                }
+                pm.Canvas.DrawBitmap(this.CacheBitmap, left, top);
+            }
+            else
+            {
+                // 获取宽高
+                var width = this.Styles.Get<float>(StyleType.Width);
+                var height = this.Styles.Get<float>(StyleType.Height);
+                if (width <= 0 || height <= 0) return;
+                // 直接绘制
+                using (SKBitmap bmp = new SKBitmap((int)width, (int)height))
+                {
+                    using (SKCanvas cvs = new SKCanvas(bmp))
+                    {
+                        cvs.DrawStyles(this.Styles);
+                        this.OnPaint(cvs, new Rectangle(0, 0, width, height));
+                    }
+                    pm.Canvas.DrawBitmap(bmp, left, top);
+                }
+            }
+        }
+
+        /// <summary>
         /// 消息事件
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        protected virtual bool OnMessage(IMessage msg) { return true; }
+        protected virtual bool OnMessage(IMessage msg)
+        {
+            switch (msg)
+            {
+                case PaintMessage pm:
+                    OnPaintMessage(pm);
+                    return true;
+            }
+            return true;
+        }
 
         /// <summary>
         /// 消息发送事件
@@ -124,6 +198,25 @@ namespace Suyaa.Gui.Controls
             {
                 this.OnPostMessage(msg);
             }
+        }
+
+        /// <summary>
+        /// 刷新显示
+        /// </summary>
+        public void Refresh()
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 使用样式
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public Control UseStyles(Action<Styles> action)
+        {
+            action(this.Styles);
+            return this;
         }
     }
 }

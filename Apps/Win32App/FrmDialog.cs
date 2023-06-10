@@ -19,9 +19,9 @@ namespace Win32App
         }
 
         // 绘制事件
-        protected override void OnPaint(SKCanvas canvas)
+        protected override void OnWorkareaPaint(SKCanvas canvas)
         {
-            base.OnPaint(canvas);
+            base.OnWorkareaPaint(canvas);
 
             SKCanvas cvs = canvas;
             cvs.Clear(SKColors.Gray);

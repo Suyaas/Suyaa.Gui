@@ -209,5 +209,19 @@ namespace Suyaa.Gui.Native.Win32.Apis
             /// </summary>
             WHITENESS = 0x00FF0062, /* dest = WHITE*/
         };
+
+        /// <summary>
+        /// 获取Dpi比例
+        /// </summary>
+        /// <returns></returns>
+        public static float GetDpiScale()
+        {
+            // 计算dpi比例
+            IntPtr screen = User32.GetDC(0);
+            int t = Gdi32.GetDeviceCaps(screen, Gdi32.DESKTOPHORZRES);
+            int d = Gdi32.GetDeviceCaps(screen, Gdi32.HORZRES);
+            User32.ReleaseDC(0, screen);
+            return (float)t / d;
+        }
     }
 }

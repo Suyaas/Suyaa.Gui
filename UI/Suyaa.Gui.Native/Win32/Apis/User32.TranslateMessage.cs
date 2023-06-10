@@ -16,7 +16,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// </summary>
         /// <param name="msg"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL TranslateMessage(ref MSG msg);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial BOOL TranslateMessage(ref MSG msg);
     }
 }

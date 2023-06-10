@@ -10,7 +10,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// </summary>
         /// <param name="wc"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
-        public static extern IntPtr RegisterClass(WNDCLASS wc);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial IntPtr RegisterClassW(ref WNDCLASS wc);
     }
 }

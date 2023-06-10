@@ -15,7 +15,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="hSection"></param>
         /// <param name="dwOffset"></param>
         /// <returns></returns>
-        [DllImport(Libraries.Gdi32, EntryPoint = "CreateDIBSection")]
-        public static extern IntPtr CreateDIBSection(IntPtr hdc, ref BitmapInfo pbmi, uint iUsage, out IntPtr ppvBits, IntPtr hSection, uint dwOffset);
+        [LibraryImport(Libraries.Gdi32, EntryPoint = "CreateDIBSection")]
+        public static partial IntPtr CreateDIBSection(IntPtr hdc, ref BitmapInfo pbmi, uint iUsage, out IntPtr ppvBits, IntPtr hSection, uint dwOffset);
     }
 }

@@ -30,7 +30,7 @@ namespace Suyaa.Gui.Native.Linux
             // 申请句柄
             this.Handle = Application.GetNewHandle();
             // 初始化样式表
-            this.Styles = new Styles();
+            this.Styles = new Styles(this);
             this.Styles.Set<float>(StyleType.Width, 300);
             this.Styles.Set<float>(StyleType.Height, 300);
         }
@@ -79,8 +79,8 @@ namespace Suyaa.Gui.Native.Linux
         public void Initialize()
         {
             // 获取宽高
-            var top = this.Styles.Get<float>(StyleType.Top);
-            var left = this.Styles.Get<float>(StyleType.Left);
+            var top = this.Styles.Get<float>(StyleType.X);
+            var left = this.Styles.Get<float>(StyleType.X);
             var width = this.Styles.Get<float>(StyleType.Width);
             var height = this.Styles.Get<float>(StyleType.Height);
 
@@ -274,6 +274,14 @@ namespace Suyaa.Gui.Native.Linux
         /// </summary>
         /// <param name="msg"></param>
         public void PostMessage(IMessage msg)
+        {
+            //throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 重新显示
+        /// </summary>
+        public void Refresh()
         {
             //throw new NotImplementedException();
         }

@@ -15,8 +15,8 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="msgMax"></param>
         /// <param name="remove"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
-        public static extern bool PeekMessage(
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial BOOL PeekMessage(
             ref MSG msg,
             IntPtr hwnd = default,
             uint msgMin = 0,
@@ -32,8 +32,8 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="msgMax"></param>
         /// <param name="remove"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL PeekMessageA(
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial BOOL PeekMessageA(
             ref MSG msg,
             IntPtr hwnd = default,
             WM msgMin = (WM)0,
@@ -49,8 +49,8 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="msgMax"></param>
         /// <param name="remove"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL PeekMessageW(
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial BOOL PeekMessageW(
             ref MSG msg,
             IntPtr hwnd = default,
             WM msgMin = (WM)0,

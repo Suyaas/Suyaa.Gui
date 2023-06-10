@@ -16,6 +16,10 @@ namespace Suyaa.Gui
         /// </summary>
         None = 0,
         /// <summary>
+        /// 初始化
+        /// </summary>
+        Init = 0x001,
+        /// <summary>
         /// 关闭
         /// </summary>
         Close = 0x0ff,
@@ -23,5 +27,9 @@ namespace Suyaa.Gui
         /// 绘制
         /// </summary>
         Paint = 0x101,
+        /// <summary>
+        /// 重置大小
+        /// </summary>
+        Resize = 0x201,
     }
 }

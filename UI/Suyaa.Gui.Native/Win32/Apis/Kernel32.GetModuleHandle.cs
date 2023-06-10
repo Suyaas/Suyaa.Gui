@@ -10,7 +10,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// </summary>
         /// <param name="moduleName"></param>
         /// <returns></returns>
-        [DllImport(Libraries.Kernel32, CharSet = CharSet.Auto)]
-        public static extern IntPtr GetModuleHandle(string? moduleName);
+        [LibraryImport(Libraries.Kernel32, SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
+        public unsafe static partial IntPtr GetModuleHandleW(string? moduleName);
     }
 }

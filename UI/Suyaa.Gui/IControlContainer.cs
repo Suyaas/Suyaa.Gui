@@ -9,10 +9,15 @@ using System.Threading.Tasks;
 namespace Suyaa.Gui
 {
     /// <summary>
-    /// 组件集合
+    /// 控件集合
     /// </summary>
     public interface IControlContainer<T> : IList<T>
-        where T : IControl
+        where T : IWidget
     {
+        /// <summary>
+        /// 批量添加控件
+        /// </summary>
+        /// <param name="items"></param>
+        void AddRange(params T[] items);
     }
 }

@@ -22,7 +22,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="wParam"></param>
         /// <param name="lParam"></param>
         /// <returns></returns>
-        public delegate int WNDPROC(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+        public delegate IntPtr WNDPROC(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
 
         /// <summary>
         /// Win32 Message
@@ -1192,53 +1192,53 @@ namespace Suyaa.Gui.Native.Win32.Apis
             ID = (-12),
         }
 
-        /// <summary>
-        /// WNDCLASS
-        /// </summary>
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Auto)]
-        public class WNDCLASS
-        {
-            /// <summary>
-            /// style
-            /// </summary>
-            public int style = 0;
-            /// <summary>
-            /// lpfnWndProc
-            /// </summary>
-            public IntPtr lpfnWndProc = IntPtr.Zero;
-            /// <summary>
-            /// cbClsExtra
-            /// </summary>
-            public int cbClsExtra = 0;
-            /// <summary>
-            /// cbWndExtra
-            /// </summary>
-            public int cbWndExtra = 0;
-            /// <summary>
-            /// hInstance
-            /// </summary>
-            public IntPtr hInstance = IntPtr.Zero;
-            /// <summary>
-            /// hIcon
-            /// </summary>
-            public IntPtr hIcon = IntPtr.Zero;
-            /// <summary>
-            /// hCursor
-            /// </summary>
-            public IntPtr hCursor = IntPtr.Zero;
-            /// <summary>
-            /// hbrBackground
-            /// </summary>
-            public IntPtr hbrBackground = IntPtr.Zero;
-            /// <summary>
-            /// lpszMenuName
-            /// </summary>
-            public string? lpszMenuName = null;
-            /// <summary>
-            /// lpszClassName
-            /// </summary>
-            public string? lpszClassName = null;
-        }
+        ///// <summary>
+        ///// WNDCLASS
+        ///// </summary>
+        //[StructLayout(LayoutKind.Sequential)]
+        //public struct WNDCLASS
+        //{
+        //    /// <summary>
+        //    /// style
+        //    /// </summary>
+        //    public int style;
+        //    /// <summary>
+        //    /// lpfnWndProc
+        //    /// </summary>
+        //    public IntPtr lpfnWndProc;
+        //    /// <summary>
+        //    /// cbClsExtra
+        //    /// </summary>
+        //    public int cbClsExtra;
+        //    /// <summary>
+        //    /// cbWndExtra
+        //    /// </summary>
+        //    public int cbWndExtra;
+        //    /// <summary>
+        //    /// hInstance
+        //    /// </summary>
+        //    public IntPtr hInstance;
+        //    /// <summary>
+        //    /// hIcon
+        //    /// </summary>
+        //    public IntPtr hIcon;
+        //    /// <summary>
+        //    /// hCursor
+        //    /// </summary>
+        //    public IntPtr hCursor;
+        //    /// <summary>
+        //    /// hbrBackground
+        //    /// </summary>
+        //    public IntPtr hbrBackground;
+        //    /// <summary>
+        //    /// lpszMenuName
+        //    /// </summary>
+        //    public string? lpszMenuName;
+        //    /// <summary>
+        //    /// lpszClassName
+        //    /// </summary>
+        //    public string? lpszClassName;
+        //}
 
         /// <summary>
         /// WS_STYLE
@@ -1280,6 +1280,215 @@ namespace Suyaa.Gui.Native.Win32.Apis
                              WS_MINIMIZEBOX |
                              WS_MAXIMIZEBOX),
         }
+
+        #region SPI
+        /// <summary>
+        /// SPI
+        /// </summary>
+        public enum SPI : uint
+        {
+            /// <summary>
+            /// GETBORDER
+            /// </summary>
+            GETBORDER = 0x0005,
+            /// <summary>
+            /// GETKEYBOARDSPEED
+            /// </summary>
+            GETKEYBOARDSPEED = 0x000A,
+            /// <summary>
+            /// ICONHORIZONTALSPACING
+            /// </summary>
+            ICONHORIZONTALSPACING = 0x000D,
+            /// <summary>
+            /// SETSCREENSAVEACTIVE
+            /// </summary>
+            SETSCREENSAVEACTIVE = 0x0011,
+            /// <summary>
+            /// SETDESKWALLPAPER
+            /// </summary>
+            SETDESKWALLPAPER = 0x0014,
+            /// <summary>
+            /// GETKEYBOARDDELAY
+            /// </summary>
+            GETKEYBOARDDELAY = 0x0016,
+            /// <summary>
+            /// SETKEYBOARDDELAY
+            /// </summary>
+            SETKEYBOARDDELAY = 0x0017,
+            /// <summary>
+            /// ICONVERTICALSPACING
+            /// </summary>
+            ICONVERTICALSPACING = 0x0018,
+            /// <summary>
+            /// GETICONTITLEWRAP
+            /// </summary>
+            GETICONTITLEWRAP = 0x0019,
+            /// <summary>
+            /// GETMENUDROPALIGNMENT
+            /// </summary>
+            GETMENUDROPALIGNMENT = 0x001B,
+            /// <summary>
+            /// SETMENUDROPALIGNMENT
+            /// </summary>
+            SETMENUDROPALIGNMENT = 0x001C,
+            /// <summary>
+            /// SETDOUBLECLICKTIME
+            /// </summary>
+            SETDOUBLECLICKTIME = 0x0020,
+            /// <summary>
+            /// GETDRAGFULLWINDOWS
+            /// </summary>
+            GETDRAGFULLWINDOWS = 0x0026,
+            /// <summary>
+            /// GETNONCLIENTMETRICS
+            /// </summary>
+            GETNONCLIENTMETRICS = 0x0029,
+            /// <summary>
+            /// GETICONMETRICS
+            /// </summary>
+            GETICONMETRICS = 0x002D,
+            /// <summary>
+            /// GETWORKAREA
+            /// </summary>
+            GETWORKAREA = 0x0030,
+            /// <summary>
+            /// GETHIGHCONTRAST
+            /// </summary>
+            GETHIGHCONTRAST = 0x0042,
+            /// <summary>
+            /// SETHIGHCONTRAST
+            /// </summary>
+            SETHIGHCONTRAST = 0x0043,
+            /// <summary>
+            /// GETKEYBOARDPREF
+            /// </summary>
+            GETKEYBOARDPREF = 0x0044,
+            /// <summary>
+            /// GETANIMATION
+            /// </summary>
+            GETANIMATION = 0x0048,
+            /// <summary>
+            /// GETFONTSMOOTHING
+            /// </summary>
+            GETFONTSMOOTHING = 0x004A,
+            /// <summary>
+            /// SETLOWPOWERACTIVE
+            /// </summary>
+            SETLOWPOWERACTIVE = 0x0055,
+            /// <summary>
+            /// GETDEFAULTINPUTLANG
+            /// </summary>
+            GETDEFAULTINPUTLANG = 0x0059,
+            /// <summary>
+            /// GETSNAPTODEFBUTTON
+            /// </summary>
+            GETSNAPTODEFBUTTON = 0x005F,
+            /// <summary>
+            /// GETMOUSEHOVERWIDTH
+            /// </summary>
+            GETMOUSEHOVERWIDTH = 0x0062,
+            /// <summary>
+            /// GETMOUSEHOVERHEIGHT
+            /// </summary>
+            GETMOUSEHOVERHEIGHT = 0x0064,
+            /// <summary>
+            /// GETMOUSEHOVERTIME
+            /// </summary>
+            GETMOUSEHOVERTIME = 0x0066,
+            /// <summary>
+            /// GETWHEELSCROLLLINES
+            /// </summary>
+            GETWHEELSCROLLLINES = 0x0068,
+            /// <summary>
+            /// GETMENUSHOWDELAY
+            /// </summary>
+            GETMENUSHOWDELAY = 0x006A,
+            /// <summary>
+            /// GETMOUSESPEED
+            /// </summary>
+            GETMOUSESPEED = 0x0070,
+            /// <summary>
+            /// GETACTIVEWINDOWTRACKING
+            /// </summary>
+            GETACTIVEWINDOWTRACKING = 0x1000,
+            /// <summary>
+            /// GETMENUANIMATION
+            /// </summary>
+            GETMENUANIMATION = 0x1002,
+            /// <summary>
+            /// GETCOMBOBOXANIMATION
+            /// </summary>
+            GETCOMBOBOXANIMATION = 0x1004,
+            /// <summary>
+            /// GETLISTBOXSMOOTHSCROLLING
+            /// </summary>
+            GETLISTBOXSMOOTHSCROLLING = 0x1006,
+            /// <summary>
+            /// GETGRADIENTCAPTIONS
+            /// </summary>
+            GETGRADIENTCAPTIONS = 0x1008,
+            /// <summary>
+            /// GETKEYBOARDCUES
+            /// </summary>
+            GETKEYBOARDCUES = 0x100A,
+            /// <summary>
+            /// SETKEYBOARDCUES
+            /// </summary>
+            SETKEYBOARDCUES = 0x100B,
+            /// <summary>
+            /// GETHOTTRACKING
+            /// </summary>
+            GETHOTTRACKING = 0x100E,
+            /// <summary>
+            /// GETMENUFADE
+            /// </summary>
+            GETMENUFADE = 0x1012,
+            /// <summary>
+            /// GETSELECTIONFADE
+            /// </summary>
+            GETSELECTIONFADE = 0x1014,
+            /// <summary>
+            /// GETTOOLTIPANIMATION
+            /// </summary>
+            GETTOOLTIPANIMATION = 0x1016,
+            /// <summary>
+            /// GETFLATMENU
+            /// </summary>
+            GETFLATMENU = 0x1022,
+            /// <summary>
+            /// GETDROPSHADOW
+            /// </summary>
+            GETDROPSHADOW = 0x1024,
+            /// <summary>
+            /// GETUIEFFECTS
+            /// </summary>
+            GETUIEFFECTS = 0x103E,
+            /// <summary>
+            /// GETCLIENTAREAANIMATION
+            /// </summary>
+            GETCLIENTAREAANIMATION = 0x1042,
+            /// <summary>
+            /// SETCLIENTAREAANIMATION
+            /// </summary>
+            SETCLIENTAREAANIMATION = 0x1043,
+            /// <summary>
+            /// GETACTIVEWNDTRKTIMEOUT
+            /// </summary>
+            GETACTIVEWNDTRKTIMEOUT = 0x2002,
+            /// <summary>
+            /// GETCARETWIDTH
+            /// </summary>
+            GETCARETWIDTH = 0x2006,
+            /// <summary>
+            /// GETFONTSMOOTHINGTYPE
+            /// </summary>
+            GETFONTSMOOTHINGTYPE = 0x200A,
+            /// <summary>
+            /// GETFONTSMOOTHINGCONTRAST
+            /// </summary>
+            GETFONTSMOOTHINGCONTRAST = 0x200C,
+        }
+        #endregion
     }
 
 

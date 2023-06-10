@@ -7,8 +7,44 @@ using System.Threading.Tasks;
 
 namespace Suyaa.Gui.Drawing
 {
-    // 样式类型
-    public enum StyleType : uint
+    /// <summary>
+    /// 对齐方式
+    /// </summary>
+    public enum AlignType : int
+    {
+        /// <summary>
+        /// 常规 左对齐或上对齐
+        /// </summary>
+        Normal = 0,
+        /// <summary>
+        /// 居中
+        /// </summary>
+        Center = 1,
+        /// <summary>
+        /// 相反 右对齐或下对齐
+        /// </summary>
+        Opposite = 2,
+    }
+
+    /// <summary>
+    /// 单位类型
+    /// </summary>
+    public enum UnitType : int
+    {
+        /// <summary>
+        /// 像素
+        /// </summary>
+        Pixel = 0,
+        /// <summary>
+        /// 百分比
+        /// </summary>
+        Percentage = 1,
+    }
+
+    /// <summary>
+    /// 样式类型
+    /// </summary>
+    public enum StyleType : int
     {
         #region 基础样式
         /// <summary>
@@ -28,25 +64,25 @@ namespace Suyaa.Gui.Drawing
         #endregion
         #region 二维样式_0x100
         /// <summary>
-        /// 上边距
+        /// 水平偏移
         /// </summary>
         [StyleValue(typeof(float))]
-        Top = 0x101,
+        X = 0x101,
         /// <summary>
-        /// 右边距
+        /// 垂直偏移
         /// </summary>
         [StyleValue(typeof(float))]
-        Right = 0x102,
+        Y = 0x102,
         /// <summary>
-        /// 下边距
+        /// 水平对齐方式
         /// </summary>
-        [StyleValue(typeof(float))]
-        Bottom = 0x103,
+        [StyleValue(typeof(AlignType))]
+        XAlign = 0x103,
         /// <summary>
-        /// 左边距
+        /// 垂直对齐方式
         /// </summary>
-        [StyleValue(typeof(float))]
-        Left = 0x104,
+        [StyleValue(typeof(AlignType))]
+        YAlign = 0x104,
         /// <summary>
         /// 宽度
         /// </summary>
@@ -57,6 +93,16 @@ namespace Suyaa.Gui.Drawing
         /// </summary>
         [StyleValue(typeof(float))]
         Height = 0x112,
+        /// <summary>
+        /// 宽度单位
+        /// </summary>
+        [StyleValue(typeof(UnitType))]
+        WidthUnit = 0x113,
+        /// <summary>
+        /// 高度单位
+        /// </summary>
+        [StyleValue(typeof(UnitType))]
+        HeightUnit = 0x114,
         /// <summary>
         /// 内边距（统一）
         /// </summary>

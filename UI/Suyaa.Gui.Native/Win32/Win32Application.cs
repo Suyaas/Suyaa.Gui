@@ -96,7 +96,7 @@ namespace Suyaa.Gui.Native.Win32
             // 显示默认窗体
             //Application.ShowCurrentForm();
             // 进入消息循环
-            //User32.MSG msg = new User32.MSG();
+            User32.MSG msg = new User32.MSG();
             _continueLoop = true;
             //bool unicodeWindow = true;
 
@@ -112,13 +112,13 @@ namespace Suyaa.Gui.Native.Win32
                 //        Exit();
                 //        continue;
                 //    }
-                User32.GetMessage(out User32.MSG msg, IntPtr.Zero, 0, 0);
+                User32.GetMessageW(ref msg, IntPtr.Zero, 0, 0);
                 if (msg.message <= 0) continue;
                 // 处理消息
                 if (!PreTranslateMessage(msg))
                 {
                     User32.TranslateMessage(ref msg);
-                    User32.DispatchMessage(ref msg);
+                    User32.DispatchMessageW(ref msg);
                 }
                 //}
 

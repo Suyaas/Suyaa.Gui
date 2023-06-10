@@ -14,8 +14,8 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="nIndex"></param>
         /// <param name="dwNewLong"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true)]
-        private static extern IntPtr SetWindowLongW(IntPtr hWnd, GWL nIndex, nint dwNewLong);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        private static partial IntPtr SetWindowLongW(IntPtr hWnd, GWL nIndex, nint dwNewLong);
 
         /// <summary>
         /// SetWindowLongPtrW
@@ -24,8 +24,8 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="nIndex"></param>
         /// <param name="dwNewLong"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32, SetLastError = true, ExactSpelling = true)]
-        public static extern IntPtr SetWindowLongPtrW(IntPtr hWnd, GWL nIndex, nint dwNewLong);
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial IntPtr SetWindowLongPtrW(IntPtr hWnd, GWL nIndex, nint dwNewLong);
 
         /// <summary>
         /// SetWindowLong

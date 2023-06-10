@@ -10,7 +10,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// </summary>
         /// <param name="hWnd"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32, EntryPoint = "GetDC", CharSet = CharSet.Auto)]
-        public extern static IntPtr GetDC(IntPtr hWnd);
+        [LibraryImport(Libraries.User32, EntryPoint = "GetDC", SetLastError = true)]
+        public static partial IntPtr GetDC(IntPtr hWnd);
     }
 }

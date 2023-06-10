@@ -24,5 +24,14 @@ namespace Suyaa.Gui.Attributes
         {
             this.Value = value;
         }
+
+        /// <summary>
+        /// 特性生效
+        /// </summary>
+        /// <param name="styles"></param>
+        protected override void OnApply(Styles styles)
+        {
+            styles.Set(this.Style, this.Value);
+        }
     }
 }

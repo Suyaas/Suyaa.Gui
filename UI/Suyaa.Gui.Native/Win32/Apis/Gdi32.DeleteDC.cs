@@ -10,7 +10,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// </summary>
         /// <param name="hdc"></param>
         /// <returns></returns>
-        [DllImport(Libraries.Gdi32)]
-        public static extern int DeleteDC(IntPtr hdc);
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial int DeleteDC(IntPtr hdc);
     }
 }

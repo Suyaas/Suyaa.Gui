@@ -8,15 +8,15 @@ using System.Threading.Tasks;
 namespace Suyaa.Gui.Attributes
 {
     /// <summary>
-    /// 高度
+    /// 是否使用缓存
     /// </summary>
-    public class HeightAttribute : ValueStyleAttribute<float>
+    public class UserCacheAttribute : ValueStyleAttribute<bool>
     {
         /// <summary>
-        /// 高度
+        /// 是否使用缓存
         /// </summary>
         /// <param name="value"></param>
-        public HeightAttribute(float value) : base(StyleType.Height, value)
+        public UserCacheAttribute(bool value) : base(StyleType.UseCache, value)
         {
         }
     }

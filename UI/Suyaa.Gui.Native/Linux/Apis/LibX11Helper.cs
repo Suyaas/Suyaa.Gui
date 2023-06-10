@@ -10,7 +10,7 @@ namespace Suyaa.Gui.Native.Linux.Apis
     /// <summary>
     /// libX11Helper
     /// </summary>
-    public static class LibX11Helper
+    public static partial class LibX11Helper
     {
         /// <summary>
         /// 库名称
@@ -21,8 +21,8 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// 测试接口，获取标准整型字节数
         /// </summary>
         /// <returns></returns>
-        [DllImport(_libName)]
-        public static extern short SizeOfInt();
+        [LibraryImport(_libName)]
+        public static partial short SizeOfInt();
 
         /// <summary>
         /// 创建一个XImage
@@ -38,8 +38,8 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// <param name="bitmap_pad"></param>
         /// <param name="bytes_per_line"></param>
         /// <returns></returns>
-        [DllImport(_libName)]
-        public static extern IntPtr XCreateImage2(
+        [LibraryImport(_libName)]
+        public static partial IntPtr XCreateImage2(
             IntPtr display,
             IntPtr visual,
             uint depth,
@@ -57,8 +57,8 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// </summary>
         /// <param name="image"></param>
         /// <returns></returns>
-        [DllImport(_libName)]
-        public static extern uint GetXImageWidth(IntPtr image);
+        [LibraryImport(_libName)]
+        public static partial uint GetXImageWidth(IntPtr image);
 
         /// <summary>
         /// 创建Pixmap
@@ -69,8 +69,8 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        [DllImport(_libName)]
-        public static extern IntPtr XCreateBitmapFromData2(IntPtr display, IntPtr window, IntPtr pixels, uint width, uint height);
+        [LibraryImport(_libName)]
+        public static partial IntPtr XCreateBitmapFromData2(IntPtr display, IntPtr window, IntPtr pixels, uint width, uint height);
 
         /// <summary>
         /// 创建窗体
@@ -80,8 +80,8 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// <param name="width"></param>
         /// <param name="height"></param>
         /// <returns></returns>
-        [DllImport(_libName)]
-        public static extern IntPtr XCreateWindow2(IntPtr display, int screen, uint width, uint height);
+        [LibraryImport(_libName)]
+        public static partial IntPtr XCreateWindow2(IntPtr display, int screen, uint width, uint height);
 
         /// <summary>
         /// 设置窗口图标
@@ -91,21 +91,21 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// <param name="icon"></param>
         /// <param name="icon_length"></param>
         /// <returns></returns>
-        [DllImport(_libName)]
-        public static extern int SetWindowIcon(IntPtr display, IntPtr window, IntPtr icon, int icon_length);
+        [LibraryImport(_libName)]
+        public static partial int SetWindowIcon(IntPtr display, IntPtr window, IntPtr icon, int icon_length);
 
         /// <summary>
         /// 创建一个事件指针
         /// </summary>
         /// <returns></returns>
-        [DllImport(_libName)]
-        public static extern IntPtr CreateXEvent();
+        [LibraryImport(_libName)]
+        public static partial IntPtr CreateXEvent();
 
         /// <summary>
         /// 获取触发的事件类型
         /// </summary>
         /// <returns></returns>
-        [DllImport(_libName)]
-        public static extern int GetXNextEventType(IntPtr display, IntPtr evt);
+        [LibraryImport(_libName)]
+        public static partial int GetXNextEventType(IntPtr display, IntPtr evt);
     }
 }

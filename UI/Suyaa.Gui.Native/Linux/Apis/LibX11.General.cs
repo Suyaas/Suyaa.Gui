@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using Suyaa.Gui.Native.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,10 +36,10 @@ namespace Suyaa.Gui.Native.Linux.Apis
         /// <param name="display"></param>
         /// <param name="window"></param>
         /// <param name="title"></param>
-        public static void SetWindowTitle(IntPtr display, IntPtr window, string title)
+        public unsafe static void SetWindowTitle(IntPtr display, IntPtr window, string title)
         {
             XTextProperty textProperty = new XTextProperty();
-            Xutf8TextListToTextProperty(display, ref title, 1, LibX11.XICCEncodingStyle.XCompoundTextStyle, ref textProperty);
+            Xutf8TextListToTextProperty(display, title.AsPtr(), 1, LibX11.XICCEncodingStyle.XCompoundTextStyle, ref textProperty);
             XSetWMName(display, window, ref textProperty);
         }
 

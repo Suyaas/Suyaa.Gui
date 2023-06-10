@@ -50,49 +50,82 @@ namespace Suyaa.Gui.Controls
         }
 
         /// <summary>
+        /// 批量添加控件
+        /// </summary>
+        /// <param name="controls"></param>
+        public void AddRange(params Control[] controls)
+        {
+            foreach (var control in controls) Add(control);
+        }
+
+        /// <summary>
         /// 清理控件
         /// </summary>
         public void Clear()
             => _controls.Clear();
 
-        public bool Contains(Control item)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// 判断控件是否存在
+        /// </summary>
+        /// <param name="control"></param>
+        /// <returns></returns>
+        public bool Contains(Control control)
+            => _controls.Contains(control);
 
+        /// <summary>
+        /// 复制到数组
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="arrayIndex"></param>
         public void CopyTo(Control[] array, int arrayIndex)
-        {
-            throw new NotImplementedException();
-        }
+            => _controls.CopyTo(array, arrayIndex);
 
+        /// <summary>
+        /// 获取枚举器
+        /// </summary>
+        /// <returns></returns>
         public IEnumerator<Control> GetEnumerator()
+            => _controls.GetEnumerator();
+
+        /// <summary>
+        /// 获取索引
+        /// </summary>
+        /// <param name="control"></param>
+        /// <returns></returns>
+        public int IndexOf(Control control)
+            => _controls.IndexOf(control);
+
+        /// <summary>
+        /// 插入一个控件
+        /// </summary>
+        /// <param name="index"></param>
+        /// <param name="control"></param>
+        public void Insert(int index, Control control)
         {
-            throw new NotImplementedException();
+            _controls.Insert(index, control);
+            control.Parent = _parent;
         }
 
-        public int IndexOf(Control item)
-        {
-            throw new NotImplementedException();
-        }
+        /// <summary>
+        /// 移除控件
+        /// </summary>
+        /// <param name="control"></param>
+        /// <returns></returns>
+        public bool Remove(Control control)
+            => _controls.Remove(control);
 
-        public void Insert(int index, Control item)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool Remove(Control item)
-        {
-            throw new NotImplementedException();
-        }
-
+        /// <summary>
+        /// 移除控件
+        /// </summary>
+        /// <param name="index"></param>
         public void RemoveAt(int index)
-        {
-            throw new NotImplementedException();
-        }
+            => _controls.RemoveAt(index);
 
+        /// <summary>
+        /// 获取枚举器
+        /// </summary>
+        /// <returns></returns>
         IEnumerator IEnumerable.GetEnumerator()
-        {
-            throw new NotImplementedException();
-        }
+            => _controls.GetEnumerator();
     }
 }

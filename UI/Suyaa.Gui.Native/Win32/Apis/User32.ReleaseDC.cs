@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using static Suyaa.Gui.Native.Win32.Apis.Enums;
 
 namespace Suyaa.Gui.Native.Win32.Apis
 {
@@ -11,7 +12,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="hwnd"></param>
         /// <param name="hdc"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32)]
-        public static extern bool ReleaseDC(IntPtr hwnd, IntPtr hdc);
+        [LibraryImport(Libraries.User32)]
+        public static partial BOOL ReleaseDC(IntPtr hwnd, IntPtr hdc);
     }
 }

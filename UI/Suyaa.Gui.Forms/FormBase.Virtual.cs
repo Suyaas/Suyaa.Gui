@@ -21,7 +21,7 @@ namespace Forms
         /// <summary>
         /// 绘制事件
         /// </summary>
-        protected virtual void OnPaint(SKCanvas canvas) { }
+        protected virtual void OnWorkareaPaint(SKCanvas canvas) { }
 
         /// <summary>
         /// 显示事件

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using static Suyaa.Gui.Native.Win32.Apis.Enums;
 
 namespace Suyaa.Gui.Native.Win32.Apis
 {
@@ -10,7 +11,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// </summary>
         /// <param name="hdc"></param>
         /// <returns></returns>
-        [DllImport(Libraries.Gdi32)]
-        public static extern bool DeleteObject(IntPtr hdc);
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial BOOL DeleteObject(IntPtr hdc);
     }
 }

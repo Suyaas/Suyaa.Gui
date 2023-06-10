@@ -418,15 +418,15 @@ namespace Suyaa.Gui.Win32Native
         ///// <param name="wParam"></param>
         ///// <param name="lParam"></param>
         ///// <returns></returns>
-        //[DllImport("user32.dll", CharSet = CharSet.Auto)]
-        //public static extern int PostMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+        //[LibraryImport("user32.dll", CharSet = CharSet.Auto)]
+        //public static partial int PostMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
         ///// <summary>
         ///// GetModuleHandle
         ///// </summary>
         ///// <param name="moduleName"></param>
         ///// <returns></returns>
-        //[DllImport("kernel32.dll", CharSet = CharSet.Auto)]
-        //public static extern IntPtr GetModuleHandle(string? moduleName);
+        //[LibraryImport("kernel32.dll", CharSet = CharSet.Auto)]
+        //public static partial IntPtr GetModuleHandle(string? moduleName);
 
         ///// <summary>
         ///// CreateWindowEx
@@ -444,39 +444,39 @@ namespace Suyaa.Gui.Win32Native
         ///// <param name="hInst"></param>
         ///// <param name="pvParam"></param>
         ///// <returns></returns>
-        //[DllImport("user32.dll", CharSet = CharSet.Auto)]
-        //public static extern IntPtr CreateWindowEx(int dwExStyle, string lpszClassName, string lpszWindowName, int style, int x, int y, int width, int height, IntPtr hWndParent, IntPtr hMenu, IntPtr hInst, IntPtr pvParam);
-        ////public static extern IntPtr CreateWindowEx(int dwExStyle, string lpszClassName, string lpszWindowName, int style, int x, int y, int width, int height, IntPtr hWndParent, IntPtr hMenu, IntPtr hInst, [MarshalAs(UnmanagedType.AsAny)] object pvParam);
+        //[LibraryImport("user32.dll", CharSet = CharSet.Auto)]
+        //public static partial IntPtr CreateWindowEx(int dwExStyle, string lpszClassName, string lpszWindowName, int style, int x, int y, int width, int height, IntPtr hWndParent, IntPtr hMenu, IntPtr hInst, IntPtr pvParam);
+        ////public static partial IntPtr CreateWindowEx(int dwExStyle, string lpszClassName, string lpszWindowName, int style, int x, int y, int width, int height, IntPtr hWndParent, IntPtr hMenu, IntPtr hInst, [MarshalAs(UnmanagedType.AsAny)] object pvParam);
         ///// <summary>
         ///// ShowWindow
         ///// </summary>
         ///// <param name="hWnd"></param>
         ///// <param name="nCmdShow"></param>
         ///// <returns></returns>
-        //[DllImport("user32.dll", CharSet = CharSet.Auto)]
-        //public static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        //[LibraryImport("user32.dll", CharSet = CharSet.Auto)]
+        //public static partial bool ShowWindow(IntPtr hWnd, int nCmdShow);
         ///// <summary>
         ///// UpdateWindow
         ///// </summary>
         ///// <param name="hWnd"></param>
         ///// <returns></returns>
-        //[DllImport("user32.dll", CharSet = CharSet.Auto)]
-        //public static extern bool UpdateWindow(IntPtr hWnd);
+        //[LibraryImport("user32.dll", CharSet = CharSet.Auto)]
+        //public static partial bool UpdateWindow(IntPtr hWnd);
 
         ///// <summary>
         ///// TranslateMessage
         ///// </summary>
         ///// <param name="msg"></param>
         ///// <returns></returns>
-        //[DllImport("user32.dll", CharSet = CharSet.Auto)]
-        //public static extern bool TranslateMessage(ref MSG msg);
+        //[LibraryImport("user32.dll", CharSet = CharSet.Auto)]
+        //public static partial bool TranslateMessage(ref MSG msg);
 
         ///// <summary>
         ///// PostQuitMessage
         ///// </summary>
         ///// <param name="nExitCode"></param>
-        //[DllImport("user32.dll", CharSet = CharSet.Auto)]
-        //public static extern void PostQuitMessage(int nExitCode);
+        //[LibraryImport("user32.dll", CharSet = CharSet.Auto)]
+        //public static partial void PostQuitMessage(int nExitCode);
 
         ///// <summary>
         ///// BitBlt
@@ -492,7 +492,7 @@ namespace Suyaa.Gui.Win32Native
         ///// <param name="dwRop"></param>
         ///// <returns></returns>
         //[System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        //public static extern int BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, UInt32 dwRop);
+        //public static partial int BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, UInt32 dwRop);
         ///// <summary>
         ///// CreateDIBSection
         ///// </summary>
@@ -503,17 +503,17 @@ namespace Suyaa.Gui.Win32Native
         ///// <param name="hSection"></param>
         ///// <param name="dwOffset"></param>
         ///// <returns></returns>
-        //[DllImport("gdi32.dll", EntryPoint = "CreateDIBSection")]
-        //public static extern IntPtr CreateDIBSection(IntPtr hdc, ref BitmapInfo pbmi, uint iUsage, out IntPtr ppvBits, IntPtr hSection, uint dwOffset);
+        //[LibraryImport("gdi32.dll", EntryPoint = "CreateDIBSection")]
+        //public static partial IntPtr CreateDIBSection(IntPtr hdc, ref BitmapInfo pbmi, uint iUsage, out IntPtr ppvBits, IntPtr hSection, uint dwOffset);
         ///// <summary>
         ///// GetDC
         ///// </summary>
         ///// <param name="hWnd"></param>
         ///// <returns></returns>
-        //[DllImport("User32.dll", EntryPoint = "GetDC")]
+        //[LibraryImport("User32.dll", EntryPoint = "GetDC")]
         //public extern static IntPtr GetDC(IntPtr hWnd);
 
-        ////[DllImport("User32.dll", EntryPoint = "ReleaseDC")]
+        ////[LibraryImport("User32.dll", EntryPoint = "ReleaseDC")]
         ////private extern static int ReleaseDC(IntPtr hWnd, IntPtr hDC);
 
         ///// <summary>
@@ -525,14 +525,14 @@ namespace Suyaa.Gui.Win32Native
         ///// <param name="lpInitData"></param>
         ///// <returns></returns>
         //[System.Runtime.InteropServices.DllImportAttribute("gdi32.dll")]
-        //public static extern IntPtr CreateDC(string lpszDriver, string lpszDevice, string lpszOutput, int lpInitData);
+        //public static partial IntPtr CreateDC(string lpszDriver, string lpszDevice, string lpszOutput, int lpInitData);
         ///// <summary>
         ///// CreateCompatibleDC
         ///// </summary>
         ///// <param name="hdc"></param>
         ///// <returns></returns>
         //[System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        //public static extern IntPtr CreateCompatibleDC(IntPtr hdc);
+        //public static partial IntPtr CreateCompatibleDC(IntPtr hdc);
         ///// <summary>
         ///// 转换为本地的图像资源
         ///// </summary>
@@ -541,7 +541,7 @@ namespace Suyaa.Gui.Win32Native
         ///// <param name="nHeight"></param>
         ///// <returns></returns>
         //[System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        //public static extern IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
+        //public static partial IntPtr CreateCompatibleBitmap(IntPtr hdc, int nWidth, int nHeight);
         ///// <summary>
         ///// SelectObject
         ///// </summary>
@@ -549,21 +549,21 @@ namespace Suyaa.Gui.Win32Native
         ///// <param name="hgdiobj"></param>
         ///// <returns></returns>
         //[System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        //public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
+        //public static partial IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
         ///// <summary>
         ///// DeleteDC
         ///// </summary>
         ///// <param name="hdc"></param>
         ///// <returns></returns>
         //[System.Runtime.InteropServices.DllImport("gdi32.dll")]
-        //public static extern int DeleteDC(IntPtr hdc);
+        //public static partial int DeleteDC(IntPtr hdc);
 
         ///// <summary>
         ///// 释放用过的画笔等资源
         ///// </summary>
         ///// <param name="hdc"></param>
         ///// <returns></returns>
-        //[DllImport("gdi32.dll")]
-        //public static extern bool DeleteObject(IntPtr hdc);
+        //[LibraryImport("gdi32.dll")]
+        //public static partial bool DeleteObject(IntPtr hdc);
     }
 }

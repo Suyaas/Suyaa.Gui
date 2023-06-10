@@ -26,5 +26,17 @@ namespace Suyaa.Gui.Attributes
         {
             this.Style = style;
         }
+
+        /// <summary>
+        /// 特性生效事件
+        /// </summary>
+        /// <param name="styles"></param>
+        protected abstract void OnApply(Styles styles);
+
+        /// <summary>
+        /// 特性生效
+        /// </summary>
+        /// <param name="styles"></param>
+        public void Apply(Styles styles) => this.OnApply(styles);
     }
 }

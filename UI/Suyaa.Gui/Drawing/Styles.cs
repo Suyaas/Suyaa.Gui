@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Suyaa.Gui.Attributes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -12,6 +13,9 @@ namespace Suyaa.Gui.Drawing
     /// </summary>
     public class Styles : Dictionary<StyleType, object>
     {
+        // 组件
+        private readonly IWidget _widget;
+
         // 检测值类型
         private void CheckValueType(StyleType style, Type type)
         {
@@ -28,8 +32,48 @@ namespace Suyaa.Gui.Drawing
         /// 设置样式设置集合
         /// </summary>
         /// <returns></returns>
+        public Styles SetStyles(Type type)
+        {
+            // 获取所有样式特性
+            var styleAttrs = type.GetCustomAttributes<StyleAttribute>(true);
+            foreach (var styleAttr in styleAttrs)
+            {
+                // 生效样式
+                styleAttr.Apply(this);
+            }
+            // 兼容IStyles接口
+            if (type.HasInterface<IStyles>())
+            {
+                var obj = Activator.CreateInstance(type, new object[0]);
+                //type.Create<IStyles>();
+                if (obj is null) return this;
+                ((IStyles)obj).Apply(this);
+            }
+            return this;
+        }
+
+        /// <summary>
+        /// 设置样式设置集合
+        /// </summary>
+        /// <returns></returns>
         public Styles SetStyles<T>()
         {
+            Type type = typeof(T);
+            // 获取所有样式特性
+            var styleAttrs = type.GetCustomAttributes<StyleAttribute>(true);
+            foreach (var styleAttr in styleAttrs)
+            {
+                // 生效样式
+                styleAttr.Apply(this);
+            }
+            // 兼容IStyles接口
+            if (type.HasInterface<IStyles>())
+            {
+                var obj = Activator.CreateInstance<T>();
+                //type.Create<IStyles>();
+                if (obj is null) return this;
+                ((IStyles)obj).Apply(this);
+            }
             return this;
         }
 
@@ -106,18 +150,34 @@ namespace Suyaa.Gui.Drawing
         }
 
         /// <summary>
+        /// 生效样式
+        /// </summary>
+        public void Apply()
+        {
+            _widget.Refresh();
+        }
+
+        /// <summary>
         /// 样式列表
         /// </summary>
-        public Styles()
+        public Styles(IWidget widget)
         {
+            // 所属组件
+            _widget = widget;
             // 可见性
             Set(StyleType.Visible, true);
             // 是否启用缓存
             Set(StyleType.UseCache, false);
+            // 对齐方式
+            Set(StyleType.XAlign, AlignType.Normal);
+            Set(StyleType.YAlign, AlignType.Normal);
+            // 显示单位
+            Set(StyleType.WidthUnit, UnitType.Pixel);
+            Set(StyleType.HeightUnit, UnitType.Pixel);
             // 上边距
-            Set<float>(StyleType.Top, 0);
+            Set<float>(StyleType.X, 0);
             // 左边距
-            Set<float>(StyleType.Left, 0);
+            Set<float>(StyleType.Y, 0);
             // 宽度
             Set<float>(StyleType.Width, 0);
             // 高度

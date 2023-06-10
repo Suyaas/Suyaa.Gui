@@ -33,15 +33,8 @@ namespace Suyaa.Gui
         #endregion
 
         /// <summary>
-        /// 发送消息
+        /// 刷新
         /// </summary>
-        bool SendMessage(IMessage msg);
-
-        /// <summary>
-        /// 提交消息
-        /// </summary>
-        void PostMessage(IMessage msg);
-
-
+        void Refresh();
     }
 }

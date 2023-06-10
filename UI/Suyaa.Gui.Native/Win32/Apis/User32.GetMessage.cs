@@ -14,8 +14,8 @@ namespace Suyaa.Gui.Native.Win32.Apis
         ///// <param name="minFilter"></param>
         ///// <param name="maxFilter"></param>
         ///// <returns></returns>
-        //[DllImport(Libraries.User32, CharSet = CharSet.Auto)]
-        //public static extern bool GetMessage(
+        //[LibraryImport(Libraries.User32, CharSet = CharSet.Auto)]
+        //public static partial bool GetMessage(
         //    ref MSG msg,
         //    IntPtr hwnd = default,
         //    int minFilter = 0,
@@ -29,8 +29,8 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="minFilter"></param>
         /// <param name="maxFilter"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32, CharSet = CharSet.Auto)]
-        public static extern bool GetMessage(
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial BOOL GetMessage(
             out MSG msg,
             IntPtr hwnd = default,
             int minFilter = 0,
@@ -44,8 +44,8 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="wMsgFilterMin"></param>
         /// <param name="wMsgFilterMax"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL GetMessageA(
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial BOOL GetMessageA(
             ref MSG lpMsg,
             IntPtr hWnd = default,
             uint wMsgFilterMin = 0,
@@ -59,8 +59,8 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="wMsgFilterMin"></param>
         /// <param name="wMsgFilterMax"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern BOOL GetMessageW(
+        [LibraryImport(Libraries.User32, SetLastError = true)]
+        public static partial BOOL GetMessageW(
             ref MSG lpMsg,
             IntPtr hWnd = default,
             uint wMsgFilterMin = 0,

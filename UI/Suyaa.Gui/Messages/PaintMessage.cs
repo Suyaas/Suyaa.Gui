@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using Suyaa.Gui.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,11 +19,18 @@ namespace Suyaa.Gui.Messages
         public SKCanvas Canvas { get; }
 
         /// <summary>
+        /// 矩形区域
+        /// </summary>
+        public Rectangle Rectangle { get; }
+
+        /// <summary>
         /// 消息
         /// </summary>
         /// <param name="handle"></param>
-        public PaintMessage(long handle, SKCanvas canvas) : base(GuiMessageType.Close, handle) {
+        public PaintMessage(long handle, SKCanvas canvas, Rectangle rectangle) : base(GuiMessageType.Close, handle)
+        {
             this.Canvas = canvas;
+            this.Rectangle = rectangle;
         }
     }
 }

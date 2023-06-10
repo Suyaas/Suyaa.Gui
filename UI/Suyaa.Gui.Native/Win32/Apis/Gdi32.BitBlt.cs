@@ -18,7 +18,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="nYSrc"></param>
         /// <param name="dwRop"></param>
         /// <returns></returns>
-        [DllImport(Libraries.Gdi32)]
-        public static extern int BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, UInt32 dwRop);
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial int BitBlt(IntPtr hdcDest, int nXDest, int nYDest, int nWidth, int nHeight, IntPtr hdcSrc, int nXSrc, int nYSrc, TernaryRasterOperations dwRop);
     }
 }

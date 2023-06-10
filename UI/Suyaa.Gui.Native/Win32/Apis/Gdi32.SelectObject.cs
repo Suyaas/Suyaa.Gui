@@ -11,7 +11,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// <param name="hdc"></param>
         /// <param name="hgdiobj"></param>
         /// <returns></returns>
-        [DllImport(Libraries.Gdi32)]
-        public static extern IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
+        [LibraryImport(Libraries.Gdi32)]
+        public static partial IntPtr SelectObject(IntPtr hdc, IntPtr hgdiobj);
     }
 }

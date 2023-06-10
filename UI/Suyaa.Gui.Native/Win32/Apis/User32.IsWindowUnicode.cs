@@ -11,8 +11,8 @@ namespace Suyaa.Gui.Native.Win32.Apis
         /// </summary>
         /// <param name="hWnd"></param>
         /// <returns></returns>
-        [DllImport(Libraries.User32)]
-        public static extern BOOL IsWindowUnicode(IntPtr hWnd);
+        [LibraryImport(Libraries.User32)]
+        public static partial BOOL IsWindowUnicode(IntPtr hWnd);
         ///// <summary>
         ///// 判断窗口字符集是否为Unicode
         ///// </summary>

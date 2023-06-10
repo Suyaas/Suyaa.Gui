@@ -17,6 +17,16 @@ namespace Suyaa.Gui
         /// 原生窗体
         /// </summary>
         INativeForm NativeForm { get; }
+
+        /// <summary>
+        /// 发送消息
+        /// </summary>
+        bool SendMessage(IMessage msg);
+
+        /// <summary>
+        /// 提交消息
+        /// </summary>
+        void PostMessage(IMessage msg);
     }
 
     /// <summary>

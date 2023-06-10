@@ -17,9 +17,14 @@ namespace Suyaa.Gui
         IForm Form { get; }
 
         /// <summary>
+        /// Z轴索引
+        /// </summary>
+        int ZIndex { get; }
+
+        /// <summary>
         /// 父控件
         /// </summary>
-        IControl Parent { get; }
+        IContainerControl Parent { get; }
 
         /// <summary>
         /// 发送消息

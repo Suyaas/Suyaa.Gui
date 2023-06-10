@@ -11,7 +11,7 @@ namespace Suyaa.Gui
     /// <summary>
     /// 窗口
     /// </summary>
-    public interface IForm: INativeForm
+    public interface IForm : INativeForm
     {
         /// <summary>
         /// 原生窗体
@@ -27,17 +27,10 @@ namespace Suyaa.Gui
         /// 提交消息
         /// </summary>
         void PostMessage(IMessage msg);
-    }
 
-    /// <summary>
-    /// 窗口
-    /// </summary>
-    public interface IForm<T> : IForm
-        where T : IControl
-    {
         /// <summary>
         /// 控件集合
         /// </summary>
-        IControlContainer<T> Controls { get; }
+        IControlCollection<IControl> Controls { get; }
     }
 }

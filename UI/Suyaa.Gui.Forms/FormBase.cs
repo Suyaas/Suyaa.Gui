@@ -19,7 +19,7 @@ namespace Forms
     /// <summary>
     /// 窗体
     /// </summary>
-    public abstract partial class FormBase : IForm<Control>
+    public abstract partial class FormBase : IForm
     {
         /// <summary>
         /// 原生窗体
@@ -54,7 +54,7 @@ namespace Forms
         /// <summary>
         /// 控件集合
         /// </summary>
-        public IControlContainer<Control> Controls => this.Workarea.Controls;
+        public IControlCollection<IControl> Controls => this.Workarea.Controls;
 
         /// <summary>
         /// 窗体

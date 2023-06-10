@@ -41,11 +41,11 @@ namespace Suyaa.Gui.Forms
         /// </summary>
         /// <param name="cvs"></param>
         /// <param name="rect"></param>
-        protected override void OnPaint(SKCanvas cvs, Rectangle rect)
+        protected override void OnPainting(SKCanvas cvs, Rectangle rect)
         {
             var form = (FormBase)this.Form;
             form.WorkareaRepaint(cvs);
-            base.OnPaint(cvs, rect);
+            base.OnPainting(cvs, rect);
         }
     }
 }

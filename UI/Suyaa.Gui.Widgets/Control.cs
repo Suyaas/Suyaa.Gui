@@ -13,7 +13,7 @@ namespace Suyaa.Gui.Controls
         // 关联窗体
         private IForm? _form;
         // 关联窗体
-        private IControl? _parent;
+        private IContainerControl? _parent;
 
         /// <summary>
         /// 创建一个控件
@@ -67,7 +67,7 @@ namespace Suyaa.Gui.Controls
         /// <summary>
         /// 父对象
         /// </summary>
-        public IControl Parent
+        public IContainerControl Parent
         {
             get => _parent.Fixed();
             internal protected set
@@ -87,9 +87,33 @@ namespace Suyaa.Gui.Controls
         public SKBitmap? CacheBitmap { get; protected set; }
 
         /// <summary>
-        /// 绘制事件
+        /// Z轴深度
         /// </summary>
-        protected virtual void OnPaint(SKCanvas cvs, Rectangle rect) { }
+        public int ZIndex { get; internal protected set; }
+
+        /// <summary>
+        /// 绘制中事件
+        /// </summary>
+        protected virtual void OnPainting(SKCanvas cvs, Rectangle rect) { }
+
+        /// <summary>
+        /// 绘制结束事件
+        /// </summary>
+        protected virtual void OnPainted(SKCanvas cvs, Rectangle rect) { }
+
+        /// <summary>
+        /// 绘制预处理事件
+        /// </summary>
+        private void OnPaintMessage(SKBitmap bitmap)
+        {
+            using (SKCanvas cvs = new SKCanvas(bitmap))
+            {
+                cvs.DrawStyles(this.Styles);
+                var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                this.OnPainting(cvs, rect);
+                this.OnPainted(cvs, rect);
+            }
+        }
 
         // 处理绘制消息
         private void OnPaintMessage(PaintMessage pm)
@@ -110,11 +134,7 @@ namespace Suyaa.Gui.Controls
                     var height = this.Styles.Get<float>(StyleType.Height);
                     if (width <= 0 || height <= 0) return;
                     this.CacheBitmap = new SKBitmap((int)width, (int)height);
-                    using (SKCanvas cvs = new SKCanvas(this.CacheBitmap))
-                    {
-                        cvs.DrawStyles(this.Styles);
-                        this.OnPaint(cvs, new Rectangle(0, 0, width, height));
-                    }
+                    OnPaintMessage(this.CacheBitmap);
                 }
                 pm.Canvas.DrawBitmap(this.CacheBitmap, left, top);
             }
@@ -127,11 +147,7 @@ namespace Suyaa.Gui.Controls
                 // 直接绘制
                 using (SKBitmap bmp = new SKBitmap((int)width, (int)height))
                 {
-                    using (SKCanvas cvs = new SKCanvas(bmp))
-                    {
-                        cvs.DrawStyles(this.Styles);
-                        this.OnPaint(cvs, new Rectangle(0, 0, width, height));
-                    }
+                    OnPaintMessage(bmp);
                     pm.Canvas.DrawBitmap(bmp, left, top);
                 }
             }

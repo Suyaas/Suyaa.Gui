@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Helpers;
 using Suyaa.Gui.Messages;
 
 namespace Suyaa.Gui.Controls
@@ -7,12 +8,12 @@ namespace Suyaa.Gui.Controls
     /// <summary>
     /// 面板
     /// </summary>
-    public class Panel : Block
+    public class Panel : Block, IContainerControl
     {
         /// <summary>
         /// 子控件集合
         /// </summary>
-        public ControlContainer Controls { get; set; }
+        public IControlCollection<IControl> Controls { get; }
 
         /// <summary>
         /// 面板
@@ -23,14 +24,14 @@ namespace Suyaa.Gui.Controls
         }
 
         /// <summary>
-        /// 绘制界面
+        /// 绘制结束事件
         /// </summary>
         /// <param name="cvs"></param>
         /// <param name="rect"></param>
-        protected override void OnPaint(SKCanvas cvs, Rectangle rect)
+        protected override void OnPainted(SKCanvas cvs, Rectangle rect)
         {
-            base.OnPaint(cvs, rect);
-            // 依次绘制cvs
+            base.OnPainted(cvs, rect);
+            // 依次绘制子控件
             foreach (Control c in Controls)
             {
                 // 发送绘制消息

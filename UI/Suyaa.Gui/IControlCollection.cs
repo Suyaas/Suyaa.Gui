@@ -11,7 +11,7 @@ namespace Suyaa.Gui
     /// <summary>
     /// 控件集合
     /// </summary>
-    public interface IControlContainer<T> : IList<T>
+    public interface IControlCollection<T> : IList<T>
         where T : IWidget
     {
         /// <summary>

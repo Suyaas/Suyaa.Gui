@@ -5,21 +5,21 @@ namespace Suyaa.Gui.Controls
     /// <summary>
     /// 控件容器
     /// </summary>
-    public class ControlContainer : IControlContainer<Control>
+    public class ControlContainer : IControlCollection<IControl>
     {
         // 控件集合
-        private readonly List<Control> _controls;
+        private readonly List<IControl> _controls;
         // 父控件
-        private readonly Control _parent;
+        private readonly IContainerControl _parent;
 
         /// <summary>
         /// 控件容器
         /// </summary>
         /// <param name="control"></param>
-        public ControlContainer(Control control)
+        public ControlContainer(IContainerControl control)
         {
             _parent = control;
-            _controls = new List<Control>();
+            _controls = new List<IControl>();
         }
 
         /// <summary>
@@ -27,7 +27,7 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public Control this[int index] { get => _controls[index]; set => _controls[index] = value; }
+        public IControl this[int index] { get => _controls[index]; set => _controls[index] = value; }
 
         /// <summary>
         /// 获取控件数量
@@ -43,17 +43,17 @@ namespace Suyaa.Gui.Controls
         /// 添加控件
         /// </summary>
         /// <param name="control"></param>
-        public void Add(Control control)
+        public void Add(IControl control)
         {
             _controls.Add(control);
-            control.Parent = _parent;
+            ((Control)control).Parent = _parent;
         }
 
         /// <summary>
         /// 批量添加控件
         /// </summary>
         /// <param name="controls"></param>
-        public void AddRange(params Control[] controls)
+        public void AddRange(params IControl[] controls)
         {
             foreach (var control in controls) Add(control);
         }
@@ -69,7 +69,7 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         /// <param name="control"></param>
         /// <returns></returns>
-        public bool Contains(Control control)
+        public bool Contains(IControl control)
             => _controls.Contains(control);
 
         /// <summary>
@@ -77,14 +77,14 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         /// <param name="array"></param>
         /// <param name="arrayIndex"></param>
-        public void CopyTo(Control[] array, int arrayIndex)
+        public void CopyTo(IControl[] array, int arrayIndex)
             => _controls.CopyTo(array, arrayIndex);
 
         /// <summary>
         /// 获取枚举器
         /// </summary>
         /// <returns></returns>
-        public IEnumerator<Control> GetEnumerator()
+        public IEnumerator<IControl> GetEnumerator()
             => _controls.GetEnumerator();
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         /// <param name="control"></param>
         /// <returns></returns>
-        public int IndexOf(Control control)
+        public int IndexOf(IControl control)
             => _controls.IndexOf(control);
 
         /// <summary>
@@ -100,10 +100,10 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         /// <param name="index"></param>
         /// <param name="control"></param>
-        public void Insert(int index, Control control)
+        public void Insert(int index, IControl control)
         {
             _controls.Insert(index, control);
-            control.Parent = _parent;
+            ((Control)control).Parent = _parent;
         }
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         /// <param name="control"></param>
         /// <returns></returns>
-        public bool Remove(Control control)
+        public bool Remove(IControl control)
             => _controls.Remove(control);
 
         /// <summary>

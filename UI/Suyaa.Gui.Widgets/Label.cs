@@ -1,6 +1,7 @@
 ﻿using SkiaSharp;
 using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Messages;
+using Suyaa.Gui.Native.Win32.Apis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,8 +25,11 @@ namespace Suyaa.Gui.Controls
         {
             // 判断可用性
             if (!this.IsVaild) return;
+            // 计算dpi比例
+            var scale = Gdi32.GetDpiScale();
             using (SKPaint paint = new SKPaint(this.Font))
             {
+                paint.TextSize = this.FontSize;
                 paint.GetFontMetrics(out SKFontMetrics metrics);
                 var width = paint.MeasureText(_content);
                 this.UseStyles(d => d

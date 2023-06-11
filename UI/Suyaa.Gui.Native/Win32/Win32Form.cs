@@ -99,18 +99,18 @@ namespace Suyaa.Gui.Native.Win32
             {
                 width = rect.Width * (width / 100);
             }
-            else
-            {
-                width = width / scale;
-            }
+            //else
+            //{
+            //    width = width / scale;
+            //}
             if (heightUnit == UnitType.Percentage)
             {
                 height = rect.Height * (height / 100);
             }
-            else
-            {
-                height = height / scale;
-            }
+            //else
+            //{
+            //    height = height / scale;
+            //}
             #endregion
 
             #region 处理对齐

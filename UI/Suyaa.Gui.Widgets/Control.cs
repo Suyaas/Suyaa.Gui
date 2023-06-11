@@ -220,18 +220,20 @@ namespace Suyaa.Gui.Controls
             {
                 width = rect.Width * (width / 100);
             }
-            else
-            {
-                width = width / pm.Scale;
-            }
+            //else
+            //{
+            //    width = width / pm.Scale;
+            //}
             if (heightUnit == UnitType.Percentage)
             {
                 height = rect.Height * (height / 100);
             }
-            else
-            {
-                height = height / pm.Scale;
-            }
+            //else
+            //{
+            //    height = height / pm.Scale;
+            //}
+            var drawWidth = width;
+            var drawHeight = height;
             #endregion
 
             #region 处理对齐
@@ -266,7 +268,7 @@ namespace Suyaa.Gui.Controls
             {
                 if (this.CacheBitmap != null)
                 {
-                    if (this.CacheBitmap.Width != width || this.CacheBitmap.Height != height || _refresh)
+                    if (this.CacheBitmap.Width != drawWidth || this.CacheBitmap.Height != drawHeight || _refresh)
                     {
                         this.CacheBitmap.Dispose();
                         this.CacheBitmap = null;
@@ -275,20 +277,32 @@ namespace Suyaa.Gui.Controls
                 // 判断是否有缓存
                 if (this.CacheBitmap is null)
                 {
-
-                    this.CacheBitmap = new SKBitmap((int)width, (int)height);
+                    //this.CacheBitmap = new SKBitmap((int)(width * pm.Scale), (int)(height * pm.Scale));
+                    this.CacheBitmap = new SKBitmap((int)drawWidth, (int)drawHeight);
                     OnPaintMessage(this.CacheBitmap, pm.Scale);
                 }
-                pm.Canvas.DrawBitmap(this.CacheBitmap, left, top);
+                using (SKPaint paint = new SKPaint())
+                {
+                    paint.FilterQuality = SKFilterQuality.High;
+                    pm.Canvas.DrawBitmap(this.CacheBitmap, left, top, paint);
+                    //pm.Canvas.DrawBitmap(this.CacheBitmap, new SKRect(left, top, left + width, top + height), paint);
+                }
             }
             else
             {
                 if (width <= 0 || height <= 0) return;
                 // 直接绘制
-                using (SKBitmap bmp = new SKBitmap((int)width, (int)height))
+                //using (SKBitmap bmp = new SKBitmap((int)(width * pm.Scale), (int)(height * pm.Scale)))
+               
+                using (SKBitmap bmp = new SKBitmap((int)drawWidth, (int)drawHeight))
                 {
                     OnPaintMessage(bmp, pm.Scale);
-                    pm.Canvas.DrawBitmap(bmp, left, top);
+                    using (SKPaint paint = new SKPaint())
+                    {
+                        paint.FilterQuality = SKFilterQuality.High;
+                        pm.Canvas.DrawBitmap(bmp, left, top, paint);
+                        //pm.Canvas.DrawBitmap(bmp, new SKRect(left, top, left + width, top + height), paint);
+                    }
                 }
             }
             // 设置显示区域

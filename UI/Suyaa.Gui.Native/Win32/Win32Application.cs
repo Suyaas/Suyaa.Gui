@@ -89,6 +89,7 @@ namespace Suyaa.Gui.Native.Win32
         /// </summary>
         public void Run(IForm form)
         {
+            // SetProcessDPIAware 防止UI变大
             // 设置默认窗体
             Application.SetCurrentForm(form);
             // 默认窗体初始化

@@ -17,7 +17,7 @@ namespace Win32App
         [Offset(0, -50, AlignType.Center, AlignType.Center)]
         [BackgroundColor(0xff0094ff)]
         [UserCache(true)]
-        [Font(Names = "微软雅黑", Size = 12)]
+        [Font(Names = "微软雅黑", Size = 14)]
         class FormStyle { }
 
         /// <summary>

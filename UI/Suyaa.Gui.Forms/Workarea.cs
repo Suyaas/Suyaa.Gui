@@ -41,8 +41,8 @@ namespace Suyaa.Gui.Forms
             //var width = form.Styles.Get<float>(StyleType.Width);
             //var height = form.Styles.Get<float>(StyleType.Height);
             // 设置 宽度 和 高度
-            this.Styles.Set(StyleType.Width, rect.Width * scale);
-            this.Styles.Set(StyleType.Height, rect.Height * scale);
+            this.Styles.Set(StyleType.Width, rect.Width);
+            this.Styles.Set(StyleType.Height, rect.Height);
         }
 
         /// <summary>

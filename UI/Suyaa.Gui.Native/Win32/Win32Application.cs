@@ -94,7 +94,7 @@ namespace Suyaa.Gui.Native.Win32
             // 默认窗体初始化
             form.Initialize();
             // 显示默认窗体
-            //Application.ShowCurrentForm();
+            Application.ShowCurrentForm();
             // 进入消息循环
             User32.MSG msg = new User32.MSG();
             _continueLoop = true;

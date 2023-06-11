@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Suyaa.Gui.Drawing;
+using System.Collections;
 
 namespace Suyaa.Gui.Controls
 {
@@ -46,7 +47,10 @@ namespace Suyaa.Gui.Controls
         public void Add(IControl control)
         {
             _controls.Add(control);
+            // 设置父对象
             ((Control)control).Parent = _parent;
+            // 设置可见性
+            ((Block)control).Visible = true;
         }
 
         /// <summary>
@@ -103,7 +107,10 @@ namespace Suyaa.Gui.Controls
         public void Insert(int index, IControl control)
         {
             _controls.Insert(index, control);
+            // 设置父对象
             ((Control)control).Parent = _parent;
+            // 设置可见性
+            ((Block)control).Visible = true;
         }
 
         /// <summary>

@@ -156,5 +156,25 @@ namespace Forms
         /// </summary>
         public void Refresh()
             => this.NativeForm.Refresh();
+
+        /// <summary>
+        /// 获取样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public T GetStyle<T>(StyleType style)
+            => this.Styles.Get<T>(style);
+
+        /// <summary>
+        /// 设置样式
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public IWidget UseStyles(Action<Styles> action)
+        {
+            action(this.Styles);
+            return this;
+        }
     }
 }

@@ -36,5 +36,20 @@ namespace Suyaa.Gui
         /// 刷新
         /// </summary>
         void Refresh();
+
+        /// <summary>
+        /// 获取样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        T GetStyle<T>(StyleType style);
+
+        /// <summary>
+        /// 设置样式
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IWidget UseStyles(Action<Styles> action);
     }
 }

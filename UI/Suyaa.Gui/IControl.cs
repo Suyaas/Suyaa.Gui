@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Suyaa.Gui.Drawing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,5 +36,13 @@ namespace Suyaa.Gui
         /// 提交消息
         /// </summary>
         void PostMessage(IMessage msg);
+
+        /// <summary>
+        /// 获取可继承样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        T GetInheritableStyle<T>(StyleType style);
     }
 }

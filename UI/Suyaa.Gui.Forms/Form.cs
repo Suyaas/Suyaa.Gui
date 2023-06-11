@@ -23,6 +23,7 @@ namespace Suyaa.Gui.Forms
             this.Styles
                 .Set<float>(StyleType.Width, 300)
                 .Set<float>(StyleType.Height, 300)
+                .Set(StyleType.TextColor, new SKColor(0xff000000))
                 .Set(StyleType.BackgroundColor, new SKColor(0xfffdfdfd));
         }
 

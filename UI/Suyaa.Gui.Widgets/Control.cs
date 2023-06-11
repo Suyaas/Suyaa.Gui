@@ -34,6 +34,8 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public Control()
         {
+            // 初始化矩形区域
+            this.Rectangle = new Rectangle();
             // 设置Z轴深度
             this.ZIndex = 0;
             // 初始化样式表
@@ -96,6 +98,54 @@ namespace Suyaa.Gui.Controls
         public int ZIndex { get; internal protected set; }
 
         /// <summary>
+        /// 矩形区域
+        /// </summary>
+        public Rectangle Rectangle { get; private set; }
+
+        /// <summary>
+        /// 位置
+        /// </summary>
+        public Point Point => this.Rectangle.Point;
+
+        /// <summary>
+        /// 尺寸
+        /// </summary>
+        public Size Size => this.Rectangle.Size;
+
+        /// <summary>
+        /// 左边距
+        /// </summary>
+        public float Left => this.Rectangle.Left;
+
+        /// <summary>
+        /// 上边距
+        /// </summary>
+        public float Top => this.Rectangle.Top;
+
+        /// <summary>
+        /// 宽度
+        /// </summary>
+        public float Width => this.Rectangle.Width;
+
+        /// <summary>
+        /// 高度
+        /// </summary>
+        public float Height => this.Rectangle.Height;
+
+        /// <summary>
+        /// 获取可继承样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public T GetInheritableStyle<T>(StyleType style)
+        {
+            if (this.Styles.ContainsKey(style)) return this.Styles.Get<T>(style);
+            if (_parent is null) return this.Form.GetStyle<T>(style);
+            return _parent.GetInheritableStyle<T>(style);
+        }
+
+        /// <summary>
         /// 绘制中事件
         /// </summary>
         protected virtual void OnPainting(SKCanvas cvs, Rectangle rect, float scale) { }
@@ -124,6 +174,11 @@ namespace Suyaa.Gui.Controls
         {
             // 跳过不需要绘制的情况
             if (pm.Rectangle.Width <= 0 || pm.Rectangle.Height <= 0) return;
+
+            // 判断可见性
+            var visible = this.GetStyle<bool>(StyleType.Visible);
+            if (!visible) return;
+
             // 获取 是否使用缓存 样式
             var useCache = this.Styles.Get<bool>(StyleType.UseCache);
             var rect = pm.Rectangle;
@@ -193,7 +248,7 @@ namespace Suyaa.Gui.Controls
                 if (this.CacheBitmap is null)
                 {
 
-                    this.CacheBitmap = new SKBitmap((int)pm.Rectangle.Width, (int)pm.Rectangle.Height);
+                    this.CacheBitmap = new SKBitmap((int)width, (int)height);
                     OnPaintMessage(this.CacheBitmap, pm.Scale);
                 }
                 pm.Canvas.DrawBitmap(this.CacheBitmap, left, top);
@@ -208,6 +263,8 @@ namespace Suyaa.Gui.Controls
                     pm.Canvas.DrawBitmap(bmp, left, top);
                 }
             }
+            // 设置显示区域
+            this.Rectangle = new Rectangle(left, top, width, height);
         }
 
         /// <summary>
@@ -239,6 +296,11 @@ namespace Suyaa.Gui.Controls
         /// <param name="msg"></param>
         /// <returns></returns>
         protected virtual void OnPostMessage(IMessage msg) { }
+
+        /// <summary>
+        /// 刷新显示事件
+        /// </summary>
+        protected virtual void OnRefresh() { }
 
         /// <summary>
         /// 发送消息
@@ -278,15 +340,27 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public void Refresh()
         {
-            throw new NotImplementedException();
+            this.CacheBitmap?.Dispose();
+            this.CacheBitmap = null;
+            this.OnRefresh();
+            this.Form.Refresh();
         }
 
         /// <summary>
-        /// 使用样式
+        /// 获取样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public T GetStyle<T>(StyleType style)
+            => this.Styles.Get<T>(style);
+
+        /// <summary>
+        /// 设置样式
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public Control UseStyles(Action<Styles> action)
+        public IWidget UseStyles(Action<Styles> action)
         {
             action(this.Styles);
             return this;

@@ -158,7 +158,7 @@ namespace Suyaa.Gui.Drawing
         [StyleValue(typeof(SKColor))]
         TextColor = 0x301,
         /// <summary>
-        /// 文本字体
+        /// 文本字体 使用,分割多个字体设置
         /// </summary>
         [StyleValue(typeof(string))]
         TextFont = 0x302,

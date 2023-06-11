@@ -24,6 +24,7 @@ namespace Suyaa.Gui.Forms
         public Workarea(FormBase form)
         {
             this.Form = form;
+            this.Styles.Set(StyleType.Visible, true);
         }
 
         // 重新设置大小

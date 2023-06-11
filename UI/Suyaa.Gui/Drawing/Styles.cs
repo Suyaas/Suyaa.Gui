@@ -165,7 +165,7 @@ namespace Suyaa.Gui.Drawing
             // 所属组件
             _widget = widget;
             // 可见性
-            Set(StyleType.Visible, true);
+            Set(StyleType.Visible, false);
             // 是否启用缓存
             Set(StyleType.UseCache, false);
             // 对齐方式

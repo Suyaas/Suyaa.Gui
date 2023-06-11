@@ -74,6 +74,15 @@ namespace Suyaa.Gui.Native.Linux
         }
 
         /// <summary>
+        /// 获取样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public T GetStyle<T>(StyleType style)
+            => this.Styles.Get<T>(style);
+
+        /// <summary>
         /// 初始化
         /// </summary>
         public void Initialize()
@@ -304,6 +313,17 @@ namespace Suyaa.Gui.Native.Linux
         {
             /* 显示窗口 */
             LibX11.XMapWindow(_display, _window);
+        }
+
+        /// <summary>
+        /// 设置样式
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        public IWidget UseStyles(Action<Styles> action)
+        {
+            action(this.Styles);
+            return this;
         }
     }
 }

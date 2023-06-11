@@ -17,7 +17,7 @@ namespace Win32App
     [Offset(160, 80)]
     [Size(240, 200)]
     [BackgroundColor(0xaa000033)]
-    [UserCache(true)]
+    //[UserCache(true)]
     class MouseTestPanelStyles { }
 
     /// <summary>

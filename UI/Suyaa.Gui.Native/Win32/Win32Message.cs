@@ -7,8 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using static Suyaa.Gui.Native.Win32.Apis.User32;
 
 namespace Suyaa.Gui.Native.Win32
 {
@@ -133,6 +135,8 @@ namespace Suyaa.Gui.Native.Win32
         /// <param name="hwnd"></param>
         public static void ProcPaint(IntPtr hwnd)
         {
+            // 输出调试
+            Debug.WriteLine($"[Win32Message] Paint - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}");
             // 计算dpi比例
             var scale = Gdi32.GetDpiScale();
             var form = GetWin32FormByHwnd(hwnd);
@@ -147,6 +151,8 @@ namespace Suyaa.Gui.Native.Win32
         /// <param name="hwnd"></param>
         public static void ProcResize(IntPtr hwnd)
         {
+            // 输出调试
+            Debug.WriteLine($"[Win32Message] Resize - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}");
             // 计算dpi比例
             var form = GetFormByHwnd(hwnd);
             using (ResizeMessage msg = new(form.Handle))
@@ -154,18 +160,41 @@ namespace Suyaa.Gui.Native.Win32
                 form.SendMessage(msg);
             }
             // 重新绘制
-            ProcPaint(hwnd);
+            //ProcPaint(hwnd);
         }
 
         // 接收到绘制消息
         public unsafe static void ProcSysCommand(IntPtr hwnd, IntPtr wParam)
         {
-            var ptr = (uint*)wParam.ToPointer();
-            var ptrValue = *ptr;
-            var sw = (User32.SW)ptrValue;
-            switch (sw)
+            // 系统命令
+            var wp = wParam.ToInt32().GetLWord() & 0xFFF0;
+            var sc = (User32.SC)wp;
+            Debug.WriteLine($"[Win32Message] SysCommand - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, {sc.ToString()}");
+            // 获取关联窗体
+            var form = GetFormByHwnd(hwnd);
+            switch (sc)
             {
-                case User32.SW.RESTORE: ProcPaint(hwnd); break;
+                // 还原
+                case User32.SC.RESTORE:
+                    using (StatusChangeMessage msg = new(form.Handle, FormStatusTypes.Normal))
+                    {
+                        form.SendMessage(msg);
+                    }
+                    break;
+                // 最小化
+                case User32.SC.MINIMIZE:
+                    using (StatusChangeMessage msg = new(form.Handle, FormStatusTypes.Minimize))
+                    {
+                        form.SendMessage(msg);
+                    }
+                    break;
+                // 最大化
+                case User32.SC.MAXIMIZE:
+                    using (StatusChangeMessage msg = new(form.Handle, FormStatusTypes.Maximize))
+                    {
+                        form.SendMessage(msg);
+                    }
+                    break;
             }
         }
 
@@ -199,7 +228,7 @@ namespace Suyaa.Gui.Native.Win32
                 // 创建
                 case User32.WM.CREATE: break;
                 // 系统命令
-                case User32.WM.SYSCOMMAND: break;
+                case User32.WM.SYSCOMMAND: ProcSysCommand(hwnd, wParam); break;
                 // 绘制背景处理
                 // case User32.WM.ERASEBKGND: WinProcPaint(hwnd); break;
                 // 绘制
@@ -217,7 +246,7 @@ namespace Suyaa.Gui.Native.Win32
                     Application.PostMessage(new CloseMessage(win32.GetHandleByHwnd(hwnd)));
                     break;
                 default:
-                    Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
+                    // Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
                     break;
             }
             var res = User32.DefWindowProcW(hwnd, wm, wParam, lParam);

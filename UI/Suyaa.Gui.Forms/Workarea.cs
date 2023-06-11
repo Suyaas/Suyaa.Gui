@@ -6,6 +6,7 @@ using Suyaa.Gui.Native.Win32;
 using Suyaa.Gui.Native.Win32.Apis;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,6 +31,7 @@ namespace Suyaa.Gui.Forms
         // 重新设置大小
         internal void Resize()
         {
+            //Debug.WriteLine($"[Workarea] Resize");
             var form = (FormBase)this.Form;
             var win32Form = (Win32Form)form.NativeForm;
             // 获取窗体工作区域

@@ -17,6 +17,14 @@ namespace Suyaa.Gui.Forms
     /// </summary>
     public class Form : FormBase
     {
+        // 是否强制刷新
+        private bool _refresh;
+
+        /// <summary>
+        /// 窗体状态
+        /// </summary>
+        public FormStatusTypes FormStatus { get; internal protected set; }
+
         // 设置默认样式
         private void SetDefaultStyles()
         {
@@ -69,8 +77,15 @@ namespace Suyaa.Gui.Forms
                     break;
                 // 重置大小
                 case ResizeMessage _:
+                    if (this.FormStatus == FormStatusTypes.Minimize) break;
+                    // 重置大小
                     this.Workarea.Resize();
-                    //this.Refresh();
+                    // 刷新
+                    if (_refresh)
+                    {
+                        this.Refresh();
+                        _refresh = false;
+                    }
                     break;
                 // 绘制
                 case PaintMessage paint:
@@ -91,7 +106,14 @@ namespace Suyaa.Gui.Forms
                         }
                     }
                     break;
-
+                // 状态变化
+                case StatusChangeMessage statusChange:
+                    if (this.FormStatus == FormStatusTypes.Maximize && statusChange.FormStatus == FormStatusTypes.Normal)
+                    {
+                        _refresh = true;
+                    }
+                    this.FormStatus = statusChange.FormStatus;
+                    break;
             }
             return true;
         }
@@ -101,6 +123,10 @@ namespace Suyaa.Gui.Forms
         /// </summary>
         public Form()
         {
+            // 设置默认刷新
+            _refresh = false;
+            // 设置初始状态
+            this.FormStatus = FormStatusTypes.Normal;
             // 应用反射特性
             this.ApplyStyles();
         }

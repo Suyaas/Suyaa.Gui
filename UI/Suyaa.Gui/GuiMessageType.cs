@@ -32,6 +32,10 @@ namespace Suyaa.Gui
         /// </summary>
         Resize = 0x201,
         /// <summary>
+        /// 状态变化
+        /// </summary>
+        StatusChange = 0x202,
+        /// <summary>
         /// 鼠标移动
         /// </summary>
         MouseMove = 0x301,

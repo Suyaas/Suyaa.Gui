@@ -31,5 +31,9 @@ namespace Suyaa.Gui
         /// 重置大小
         /// </summary>
         Resize = 0x201,
+        /// <summary>
+        /// 鼠标移动
+        /// </summary>
+        MouseMove = 0x301,
     }
 }

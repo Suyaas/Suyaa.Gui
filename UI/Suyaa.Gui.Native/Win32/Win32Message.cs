@@ -47,6 +47,15 @@ namespace Suyaa.Gui.Native.Win32
             return (Win32Form)form.NativeForm;
         }
 
+        // 获取坐标信息
+        private static Point GetPointByLParam(IntPtr lParam)
+        {
+            var lp = lParam.ToInt32();
+            return new Point(lp.GetLWord(), lp.GetHWord());
+        }
+
+        #region 绘制相关
+
         /// <summary>
         /// 处理绘制消息
         /// </summary>
@@ -59,7 +68,7 @@ namespace Suyaa.Gui.Native.Win32
             // 读取背景
             using (PaintMessage msg = new(form.Handle, cvs, rectangle, scale))
             {
-                Application.PostMessage(msg);
+                Application.SendMessage(msg);
             }
         }
 
@@ -130,6 +139,8 @@ namespace Suyaa.Gui.Native.Win32
             ProcPaint(form, scale);
         }
 
+        #endregion
+
         /// <summary>
         /// 处理重置尺寸消息
         /// </summary>
@@ -140,7 +151,7 @@ namespace Suyaa.Gui.Native.Win32
             var form = GetFormByHwnd(hwnd);
             using (ResizeMessage msg = new(form.Handle))
             {
-                form.PostMessage(msg);
+                form.SendMessage(msg);
             }
             // 重新绘制
             ProcPaint(hwnd);
@@ -155,6 +166,19 @@ namespace Suyaa.Gui.Native.Win32
             switch (sw)
             {
                 case User32.SW.RESTORE: ProcPaint(hwnd); break;
+            }
+        }
+
+        // 接收到绘制消息
+        public unsafe static void ProcMouseMove(IntPtr hwnd, IntPtr lParam)
+        {
+            // 获取关联窗体
+            var form = GetFormByHwnd(hwnd);
+            // 获取坐标
+            var point = GetPointByLParam(lParam);
+            using (MouseMoveMessage msg = new(form.Handle, point))
+            {
+                form.SendMessage(msg);
             }
         }
 
@@ -185,7 +209,7 @@ namespace Suyaa.Gui.Native.Win32
                 // 非活动区鼠标移动
                 case User32.WM.NCMOUSEMOVE: break;
                 // 鼠标移动
-                case User32.WM.MOUSEMOVE: break;
+                case User32.WM.MOUSEMOVE: ProcMouseMove(hwnd, lParam); break;
                 // 销毁窗口
                 case User32.WM.DESTROY:
                     //User32.PostQuitMessage(0);

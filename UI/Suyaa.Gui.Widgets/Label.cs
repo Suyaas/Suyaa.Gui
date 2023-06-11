@@ -16,19 +16,21 @@ namespace Suyaa.Gui.Controls
     {
         // 内容
         private string _content;
+        // 是否强制刷新
+        private bool _refresh;
 
         // 重新设置显示尺寸
         private void Resize()
         {
-            // 判断可见性
-            var visible = this.GetStyle<bool>(StyleType.Visible);
-            if (!visible) return;
-            using (SKPaint p = new SKPaint(this.Font))
+            // 判断可用性
+            if (!this.IsVaild) return;
+            using (SKPaint paint = new SKPaint(this.Font))
             {
-                var width = p.MeasureText(_content);
+                paint.GetFontMetrics(out SKFontMetrics metrics);
+                var width = paint.MeasureText(_content);
                 this.UseStyles(d => d
                     .Set(StyleType.Width, width)
-                    .Set(StyleType.Height, this.FontSize)
+                    .Set(StyleType.Height, metrics.Bottom - metrics.Top)
                 );
             }
         }
@@ -36,10 +38,26 @@ namespace Suyaa.Gui.Controls
         /// <summary>
         /// 刷新事件
         /// </summary>
-        protected override void OnRefresh()
+        protected override bool OnRefresh()
         {
-            base.OnRefresh();
-            this.Resize();
+            _refresh = true;
+            return base.OnRefresh();
+        }
+
+        protected override bool OnMessage(IMessage msg)
+        {
+            switch (msg)
+            {
+                case PaintMessage _:
+                    // 判断是否带有强制刷新
+                    if (_refresh)
+                    {
+                        this.Resize();
+                        _refresh = false;
+                    }
+                    break;
+            }
+            return base.OnMessage(msg);
         }
 
         /// <summary>
@@ -63,7 +81,7 @@ namespace Suyaa.Gui.Controls
         public Label(string? content = null)
         {
             _content = content ?? string.Empty;
-            this.Resize();
+            _refresh = true;
         }
 
         /// <summary>
@@ -82,7 +100,8 @@ namespace Suyaa.Gui.Controls
                 TextSize = this.FontSize,
             })
             {
-                cvs.DrawText(this.Content, new SKPoint(1, this.FontSize), paint);
+                paint.GetFontMetrics(out SKFontMetrics metrics);
+                cvs.DrawText(this.Content, 0, 0 - metrics.Top, paint);
             }
         }
     }

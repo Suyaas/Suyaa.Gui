@@ -2,6 +2,8 @@
 using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Helpers;
 using Suyaa.Gui.Messages;
+using static Suyaa.Gui.Native.Win32.Apis.User32;
+using Suyaa.Gui.Native.Win32.Apis;
 using static System.Formats.Asn1.AsnWriter;
 
 namespace Suyaa.Gui.Controls
@@ -34,14 +36,47 @@ namespace Suyaa.Gui.Controls
         {
             base.OnPainted(cvs, rect, scale);
             // 按照Z轴深度和创建先后依次绘制子控件
-            foreach (Control c in Controls.OrderBy(d => d.ZIndex).ThenBy(d => d.Handle).ToList())
+            foreach (Control c in Controls.Where(d => d.IsVaild).OrderBy(d => d.ZIndex).ThenBy(d => d.Handle).ToList())
             {
                 // 发送绘制消息
                 using (PaintMessage msg = new(c.Handle, cvs, rect, scale))
                 {
-                    c.PostMessage(msg);
+                    c.SendMessage(msg);
                 }
             }
+        }
+
+        // 处理鼠标移动消息
+        private bool OnMouseMoveMessage(MouseMoveMessage mouseMove)
+        {
+            // 按照Z轴深度和创建先后依次绘制子控件
+            foreach (Control c in Controls.Where(d => d.IsVaild).OrderByDescending(d => d.ZIndex).ThenByDescending(d => d.Handle).ToList())
+            {
+                if (!c.Rectangle.Contain(mouseMove.Point)) continue;
+                // 发送绘制消息
+                using (MouseMoveMessage msg = new(c.Handle, new Point(mouseMove.Point.X - c.Left, mouseMove.Point.Y - c.Top)))
+                {
+                    if (!c.SendMessage(msg)) return false;
+                }
+            }
+            return true;
+        }
+
+        /// <summary>
+        /// 消息处理事件
+        /// </summary>
+        /// <param name="msg"></param>
+        /// <returns></returns>
+        protected override bool OnMessage(IMessage msg)
+        {
+            switch (msg)
+            {
+                // 鼠标移动事件
+                case MouseMoveMessage mouseMove:
+                    if (!OnMouseMoveMessage(mouseMove)) return false;
+                    break;
+            }
+            return base.OnMessage(msg);
         }
 
         /// <summary>

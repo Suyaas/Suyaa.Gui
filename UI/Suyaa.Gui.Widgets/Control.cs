@@ -16,6 +16,8 @@ namespace Suyaa.Gui.Controls
         private IForm? _form;
         // 关联窗体
         private IContainerControl? _parent;
+        // 是否强制刷新
+        private bool _refresh;
 
         /// <summary>
         /// 创建一个控件
@@ -34,6 +36,8 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public Control()
         {
+            // 初始化刷新属性
+            _refresh = false;
             // 初始化矩形区域
             this.Rectangle = new Rectangle();
             // 设置Z轴深度
@@ -133,6 +137,31 @@ namespace Suyaa.Gui.Controls
         public float Height => this.Rectangle.Height;
 
         /// <summary>
+        /// 是否有效
+        /// </summary>
+        public bool IsVaild
+        {
+            get
+            {
+                // 判断可见性
+                var visible = this.GetStyle<bool>(StyleType.Visible);
+                if (!visible) return false;
+                // 判断是否拥有父对象
+                if (_parent is null)
+                {
+                    // 没有父对象则判断是否关联窗体
+                    if (_form is null) return false;
+                    return true;
+                }
+                else
+                {
+                    // 带有父对象以父对象为依据
+                    return _parent.IsVaild;
+                }
+            }
+        }
+
+        /// <summary>
         /// 获取可继承样式
         /// </summary>
         /// <typeparam name="T"></typeparam>
@@ -175,9 +204,8 @@ namespace Suyaa.Gui.Controls
             // 跳过不需要绘制的情况
             if (pm.Rectangle.Width <= 0 || pm.Rectangle.Height <= 0) return;
 
-            // 判断可见性
-            var visible = this.GetStyle<bool>(StyleType.Visible);
-            if (!visible) return;
+            // 判断有效性
+            if (!this.IsVaild) return;
 
             // 获取 是否使用缓存 样式
             var useCache = this.Styles.Get<bool>(StyleType.UseCache);
@@ -238,7 +266,7 @@ namespace Suyaa.Gui.Controls
             {
                 if (this.CacheBitmap != null)
                 {
-                    if (this.CacheBitmap.Width != width || this.CacheBitmap.Height != height)
+                    if (this.CacheBitmap.Width != width || this.CacheBitmap.Height != height || _refresh)
                     {
                         this.CacheBitmap.Dispose();
                         this.CacheBitmap = null;
@@ -265,7 +293,15 @@ namespace Suyaa.Gui.Controls
             }
             // 设置显示区域
             this.Rectangle = new Rectangle(left, top, width, height);
+            // 还原强制刷新
+            _refresh = false;
         }
+
+        /// <summary>
+        /// 鼠标移动事件
+        /// </summary>
+        /// <param name="point"></param>
+        protected virtual bool OnMouseMove(Point point) { return true; }
 
         /// <summary>
         /// 消息事件
@@ -279,6 +315,7 @@ namespace Suyaa.Gui.Controls
                 case PaintMessage pm:
                     OnPaintMessage(pm);
                     return true;
+                case MouseMoveMessage mouseMove: return OnMouseMove(mouseMove.Point);
             }
             return true;
         }
@@ -300,7 +337,7 @@ namespace Suyaa.Gui.Controls
         /// <summary>
         /// 刷新显示事件
         /// </summary>
-        protected virtual void OnRefresh() { }
+        protected virtual bool OnRefresh() { return true; }
 
         /// <summary>
         /// 发送消息
@@ -340,10 +377,19 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public void Refresh()
         {
-            this.CacheBitmap?.Dispose();
-            this.CacheBitmap = null;
-            this.OnRefresh();
-            this.Form.Refresh();
+            // 执行刷新事件并设定刷新标志
+            _refresh = this.OnRefresh();
+            // 判断有效性
+            if (!this.IsVaild) return;
+            // 执行窗体刷新
+            if (_parent is null)
+            {
+                this.Form.Refresh();
+            }
+            else
+            {
+                _parent.Refresh();
+            }
         }
 
         /// <summary>

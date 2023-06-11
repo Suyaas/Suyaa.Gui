@@ -18,6 +18,11 @@ namespace Suyaa.Gui
         IForm Form { get; }
 
         /// <summary>
+        /// 是否有效
+        /// </summary>
+        bool IsVaild { get; }
+
+        /// <summary>
         /// Z轴索引
         /// </summary>
         int ZIndex { get; }

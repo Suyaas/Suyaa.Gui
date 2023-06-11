@@ -14,6 +14,7 @@ namespace Win32App
     /// </summary>
     public partial class FrmMain : Form
     {
+        // 标签
         private readonly Label _labInfo;
 
         /// <summary>
@@ -26,17 +27,29 @@ namespace Win32App
 
             // 设置内容标签
             _labInfo = new Label("Label");
+        }
+
+        protected override void OnLoad()
+        {
+            base.OnLoad();
 
             // 添加控件
             this.Controls.AddRange(
                 Control.Create<Block>().UseStyles(d => d.SetStyles<TestBlockStyle>()).AsControl(),
                 Control.Create<Block>().UseStyles(d => d.SetStyles<TestBlock2Style>()).AsControl(),
+                Control.Create<MouseTestPanel>(),
                 _labInfo.UseStyles(d => d
                     .Set<float>(StyleType.X, 5)
                     .Set<float>(StyleType.Y, 5)
                 //.Set(StyleType.BackgroundColor, new SKColor(0xff990000))
                 ).AsControl()
                 );
+        }
+
+        protected override void OnMouseMove(Point point)
+        {
+            base.OnMouseMove(point);
+            _labInfo!.Content = $"{point.X}:{point.Y}";
         }
     }
 }

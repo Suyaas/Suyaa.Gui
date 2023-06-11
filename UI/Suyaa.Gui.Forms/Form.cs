@@ -48,6 +48,12 @@ namespace Suyaa.Gui.Forms
         }
 
         /// <summary>
+        /// 鼠标移动事件
+        /// </summary>
+        /// <param name="point"></param>
+        protected virtual void OnMouseMove(Point point) { }
+
+        /// <summary>
         /// 消息处理
         /// </summary>
         /// <param name="msg"></param>
@@ -67,13 +73,25 @@ namespace Suyaa.Gui.Forms
                     //this.Refresh();
                     break;
                 // 绘制
-                case PaintMessage pm:
+                case PaintMessage paint:
                     // 重绘工作区域
-                    using (PaintMessage msgSink = new(this.Workarea.Handle, pm.Canvas, pm.Rectangle, pm.Scale))
+                    using (PaintMessage msgSink = new(this.Workarea.Handle, paint.Canvas, paint.Rectangle, paint.Scale))
                     {
-                        this.Workarea.PostMessage(msgSink);
+                        this.Workarea.SendMessage(msgSink);
                     }
                     break;
+                // 鼠标移动
+                case MouseMoveMessage mouseMove:
+                    // 重绘工作区域
+                    using (MouseMoveMessage msgSink = new(this.Workarea.Handle, mouseMove.Point))
+                    {
+                        if (this.Workarea.SendMessage(msgSink))
+                        {
+                            this.OnMouseMove(mouseMove.Point);
+                        }
+                    }
+                    break;
+
             }
             return true;
         }

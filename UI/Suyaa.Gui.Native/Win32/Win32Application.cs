@@ -47,7 +47,7 @@ namespace Suyaa.Gui.Native.Win32
         private bool PreTranslateMessage(User32.MSG msg)
         {
             User32.WM wm = (User32.WM)msg.message;
-            Debug.WriteLine($"[Loop] Hwnd: 0x{msg.hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.message.ToString("X2")})");
+            //Debug.WriteLine($"[Loop] Hwnd: 0x{msg.hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.message.ToString("X2")})");
             switch (wm)
             {
                 case User32.WM.DWMNCRENDERINGCHANGED:

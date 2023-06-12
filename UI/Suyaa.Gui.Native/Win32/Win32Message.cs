@@ -199,8 +199,47 @@ namespace Suyaa.Gui.Native.Win32
             }
         }
 
-        // 接收到绘制消息
+        // 接收到鼠标移动消息
+        public unsafe static void ProcNCMouseMove(IntPtr hwnd, IntPtr lParam)
+        {
+            // 获取关联窗体
+            var form = GetFormByHwnd(hwnd);
+            // 获取坐标
+            var point = GetPointByLParam(lParam);
+            using (NCMouseMoveMessage msg = new(form.Handle, point))
+            {
+                form.SendMessage(msg);
+            }
+        }
+
+        // 接收到鼠标移动消息
         public unsafe static void ProcMouseMove(IntPtr hwnd, IntPtr lParam)
+        {
+            // 获取关联窗体
+            var form = GetFormByHwnd(hwnd);
+            // 获取坐标
+            var point = GetPointByLParam(lParam);
+            using (MouseMoveMessage msg = new(form.Handle, point))
+            {
+                form.SendMessage(msg);
+            }
+        }
+
+        // 接收到鼠标移入消息
+        public unsafe static void ProcMouseHover(IntPtr hwnd, IntPtr lParam)
+        {
+            // 获取关联窗体
+            var form = GetFormByHwnd(hwnd);
+            // 获取坐标
+            var point = GetPointByLParam(lParam);
+            using (MouseMoveMessage msg = new(form.Handle, point))
+            {
+                form.SendMessage(msg);
+            }
+        }
+
+        // 接收到鼠标移出消息
+        public unsafe static void ProcMouseLeave(IntPtr hwnd, IntPtr lParam)
         {
             // 获取关联窗体
             var form = GetFormByHwnd(hwnd);
@@ -236,10 +275,14 @@ namespace Suyaa.Gui.Native.Win32
                 case User32.WM.PAINT: ProcPaint(hwnd); break;
                 // 尺寸变更
                 case User32.WM.SIZE: ProcResize(hwnd); break;
-                // 非活动区鼠标移动
-                case User32.WM.NCMOUSEMOVE: break;
-                // 鼠标移动
+                // 鼠标事件
                 case User32.WM.MOUSEMOVE: ProcMouseMove(hwnd, lParam); break;
+                //case User32.WM.MOUSELEAVE: ProcMouseLeave(hwnd, lParam); break;
+                //case User32.WM.MOUSEHOVER: ProcMouseHover(hwnd, lParam); break;
+                // 非活动区鼠标移动
+                case User32.WM.NCMOUSEMOVE: ProcNCMouseMove(hwnd, lParam); break;
+                case User32.WM.NCMOUSEHOVER: break;
+                case User32.WM.NCMOUSELEAVE: break;
                 // 销毁窗口
                 case User32.WM.DESTROY:
                     //User32.PostQuitMessage(0);
@@ -247,7 +290,7 @@ namespace Suyaa.Gui.Native.Win32
                     Application.PostMessage(new CloseMessage(win32.GetHandleByHwnd(hwnd)));
                     break;
                 default:
-                    // Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
+                    Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
                     break;
             }
             var res = User32.DefWindowProcW(hwnd, wm, wParam, lParam);

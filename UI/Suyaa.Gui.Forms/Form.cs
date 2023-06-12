@@ -19,6 +19,8 @@ namespace Suyaa.Gui.Forms
     {
         // 是否强制刷新
         private bool _refresh;
+        // 是否鼠标在区域内
+        private bool _mouseOn;
 
         /// <summary>
         /// 窗体状态
@@ -62,6 +64,16 @@ namespace Suyaa.Gui.Forms
         protected virtual void OnMouseMove(Point point) { }
 
         /// <summary>
+        /// 鼠标移入事件
+        /// </summary>
+        protected virtual void OnMouseHover() { }
+
+        /// <summary>
+        /// 鼠标移出事件
+        /// </summary>
+        protected virtual void OnMouseLeave() { }
+
+        /// <summary>
         /// 消息处理
         /// </summary>
         /// <param name="msg"></param>
@@ -97,6 +109,12 @@ namespace Suyaa.Gui.Forms
                     break;
                 // 鼠标移动
                 case MouseMoveMessage mouseMove:
+                    // 判断是否触发鼠标移入
+                    if (!_mouseOn)
+                    {
+                        _mouseOn = true;
+                        this.OnMouseHover();
+                    }
                     // 重绘工作区域
                     using (MouseMoveMessage msgSink = new(this.Workarea.Handle, mouseMove.Point))
                     {
@@ -114,6 +132,20 @@ namespace Suyaa.Gui.Forms
                     }
                     this.FormStatus = statusChange.FormStatus;
                     break;
+                // 非工作区鼠标移动
+                case NCMouseMoveMessage ncMouseMove:
+                    // 触发鼠标移除事件
+                    if (_mouseOn)
+                    {
+                        _mouseOn = false;
+                        this.OnMouseLeave();
+                        // 触发全局鼠标移开事件
+                        using (MouseLeaveMessage msgSink = new(0))
+                        {
+                            this.Workarea.PostMessage(msgSink);
+                        }
+                    }
+                    break;
             }
             return true;
         }
@@ -123,8 +155,9 @@ namespace Suyaa.Gui.Forms
         /// </summary>
         public Form()
         {
-            // 设置默认刷新
+            // 设置默认值
             _refresh = false;
+            _mouseOn = false;
             // 设置初始状态
             this.FormStatus = FormStatusTypes.Normal;
             // 应用反射特性

@@ -18,6 +18,7 @@ namespace Suyaa.Gui.Controls
         private IContainerControl? _parent;
         // 是否强制刷新
         private bool _refresh;
+        private bool _mouseOn;
 
         /// <summary>
         /// 创建一个控件
@@ -38,6 +39,7 @@ namespace Suyaa.Gui.Controls
         {
             // 初始化刷新属性
             _refresh = false;
+            _mouseOn = false;
             // 初始化矩形区域
             this.Rectangle = new Rectangle();
             // 设置Z轴深度
@@ -47,6 +49,8 @@ namespace Suyaa.Gui.Controls
             // 生成新的唯一句柄
             this.Handle = Application.GetNewHandle();
         }
+
+        #region 公用属性
 
         /// <summary>
         /// 唯一句柄
@@ -161,18 +165,9 @@ namespace Suyaa.Gui.Controls
             }
         }
 
-        /// <summary>
-        /// 获取可继承样式
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="style"></param>
-        /// <returns></returns>
-        public T GetInheritableStyle<T>(StyleType style)
-        {
-            if (this.Styles.ContainsKey(style)) return this.Styles.Get<T>(style);
-            if (_parent is null) return this.Form.GetStyle<T>(style);
-            return _parent.GetInheritableStyle<T>(style);
-        }
+        #endregion
+
+        #region 继承函数
 
         /// <summary>
         /// 绘制中事件
@@ -320,6 +315,16 @@ namespace Suyaa.Gui.Controls
         protected virtual bool OnMouseMove(Point point) { return true; }
 
         /// <summary>
+        /// 鼠标移入事件
+        /// </summary>
+        protected virtual void OnMouseHover() { }
+
+        /// <summary>
+        /// 鼠标移出事件
+        /// </summary>
+        protected virtual void OnMouseLeave() { }
+
+        /// <summary>
         /// 消息事件
         /// </summary>
         /// <param name="msg"></param>
@@ -331,7 +336,32 @@ namespace Suyaa.Gui.Controls
                 case PaintMessage pm:
                     OnPaintMessage(pm);
                     return true;
-                case MouseMoveMessage mouseMove: return OnMouseMove(mouseMove.Point);
+                case MouseMoveMessage mouseMove:
+                    if (!(new Rectangle(0, 0, this.Width, this.Height)).Contain(mouseMove.Point))
+                    {
+                        // 触发鼠标移出事件
+                        if (_mouseOn)
+                        {
+                            _mouseOn = false;
+                            this.OnMouseLeave();
+                        }
+                        return true;
+                    }
+                    // 触发鼠标移入事件
+                    if (!_mouseOn)
+                    {
+                        _mouseOn = true;
+                        this.OnMouseHover();
+                    }
+                    return OnMouseMove(mouseMove.Point);
+                case MouseLeaveMessage _:
+                    // 触发鼠标移出事件
+                    if (_mouseOn)
+                    {
+                        _mouseOn = false;
+                        this.OnMouseLeave();
+                    }
+                    break;
             }
             return true;
         }
@@ -354,6 +384,23 @@ namespace Suyaa.Gui.Controls
         /// 刷新显示事件
         /// </summary>
         protected virtual bool OnRefresh() { return true; }
+
+        #endregion
+
+        #region 公用函数
+
+        /// <summary>
+        /// 获取可继承样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public T GetInheritableStyle<T>(StyleType style)
+        {
+            if (this.Styles.ContainsKey(style)) return this.Styles.Get<T>(style);
+            if (_parent is null) return this.Form.GetStyle<T>(style);
+            return _parent.GetInheritableStyle<T>(style);
+        }
 
         /// <summary>
         /// 发送消息
@@ -384,6 +431,8 @@ namespace Suyaa.Gui.Controls
             }
             else
             {
+                // 兼容全局消息
+                if (msg.Handle == 0) this.OnMessage(msg);
                 this.OnPostMessage(msg);
             }
         }
@@ -427,5 +476,7 @@ namespace Suyaa.Gui.Controls
             action(this.Styles);
             return this;
         }
+
+        #endregion
     }
 }

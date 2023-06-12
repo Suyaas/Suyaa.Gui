@@ -26,6 +26,7 @@ namespace Win32App
     public class MouseTestPanel : Panel
     {
         private readonly Label _labInfo;
+        private SKColor _backgroundColor;
 
         /// <summary>
         /// 鼠标测试面板
@@ -57,6 +58,22 @@ namespace Win32App
         {
             _labInfo.Content = $"{point.X},{point.Y}";
             return base.OnMouseMove(point);
+        }
+
+        /// <summary>
+        /// 鼠标移入
+        /// </summary>
+        protected override void OnMouseHover()
+        {
+            base.OnMouseHover();
+            _backgroundColor = this.GetStyle<SKColor>(StyleType.BackgroundColor);
+            this.Styles.Set(StyleType.BackgroundColor, new SKColor(0xffff6600));
+        }
+
+        protected override void OnMouseLeave()
+        {
+            base.OnMouseLeave();
+            this.Styles.Set(StyleType.BackgroundColor, _backgroundColor);
         }
     }
 }

@@ -158,6 +158,17 @@ namespace Suyaa.Gui.Drawing
         }
 
         /// <summary>
+        /// 删除样式
+        /// </summary>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public new Styles Remove(StyleType style)
+        {
+            if (this.ContainsKey(style)) this.Remove(style);
+            return this;
+        }
+
+        /// <summary>
         /// 样式列表
         /// </summary>
         public Styles(IWidget widget)

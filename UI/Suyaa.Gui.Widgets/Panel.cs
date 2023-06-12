@@ -52,11 +52,10 @@ namespace Suyaa.Gui.Controls
             // 按照Z轴深度和创建先后依次绘制子控件
             foreach (Control c in Controls.Where(d => d.IsVaild).OrderByDescending(d => d.ZIndex).ThenByDescending(d => d.Handle).ToList())
             {
-                if (!c.Rectangle.Contain(mouseMove.Point)) continue;
                 // 发送绘制消息
                 using (MouseMoveMessage msg = new(c.Handle, new Point(mouseMove.Point.X - c.Left, mouseMove.Point.Y - c.Top)))
                 {
-                    if (!c.SendMessage(msg)) return false;
+                    c.PostMessage(msg);
                 }
             }
             return true;

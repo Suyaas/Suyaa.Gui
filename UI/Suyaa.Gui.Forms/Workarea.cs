@@ -36,13 +36,14 @@ namespace Suyaa.Gui.Forms
             var win32Form = (Win32Form)form.NativeForm;
             // 获取窗体工作区域
             var rect = User32.GetClientRect(win32Form.Hwnd);
-            var scale = Gdi32.GetDpiScale();
+            //var scale = Gdi32.GetDpiScale();
+            var scale = Application.GetScale();
             // 兼容 宽度 和 高度 的变更
             //var width = form.Styles.Get<float>(StyleType.Width);
             //var height = form.Styles.Get<float>(StyleType.Height);
             // 设置 宽度 和 高度
-            this.Styles.Set(StyleType.Width, rect.Width);
-            this.Styles.Set(StyleType.Height, rect.Height);
+            this.Styles.Set(StyleType.Width, rect.Width / scale);
+            this.Styles.Set(StyleType.Height, rect.Height / scale);
         }
 
         /// <summary>

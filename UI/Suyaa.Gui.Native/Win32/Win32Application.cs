@@ -7,7 +7,6 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static Suyaa.Gui.Win32Native.Win32Api;
 
 namespace Suyaa.Gui.Native.Win32
 {
@@ -30,6 +29,8 @@ namespace Suyaa.Gui.Native.Win32
         public Win32Application()
         {
             this.Handles = new Dictionary<IntPtr, long>();
+            // 设置
+            Application.SetScale(Gdi32.GetDpiScale());
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace Suyaa.Gui.Native.Win32
         private bool PreTranslateMessage(User32.MSG msg)
         {
             User32.WM wm = (User32.WM)msg.message;
-            //Debug.WriteLine($"[Loop] Hwnd: 0x{msg.hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.message.ToString("X2")})");
+            Debug.WriteLine($"[Loop] Hwnd: 0x{msg.hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.message.ToString("X2")})");
             switch (wm)
             {
                 case User32.WM.DWMNCRENDERINGCHANGED:

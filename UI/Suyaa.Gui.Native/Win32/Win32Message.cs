@@ -138,7 +138,8 @@ namespace Suyaa.Gui.Native.Win32
             // 输出调试
             Debug.WriteLine($"[Win32Message] Paint - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}");
             // 计算dpi比例
-            var scale = Gdi32.GetDpiScale();
+            //var scale = Gdi32.GetDpiScale();
+            var scale = Application.GetScale();
             var form = GetWin32FormByHwnd(hwnd);
             ProcPaint(form, scale);
         }

@@ -26,15 +26,16 @@ namespace Suyaa.Gui.Controls
             // 判断可用性
             if (!this.IsVaild) return;
             // 计算dpi比例
-            var scale = Gdi32.GetDpiScale();
+            //var scale = Gdi32.GetDpiScale();
+            var scale = Application.GetScale();
             using (SKPaint paint = new SKPaint(this.Font))
             {
-                paint.TextSize = this.FontSize;
+                paint.TextSize = this.FontSize * scale;
                 paint.GetFontMetrics(out SKFontMetrics metrics);
                 var width = paint.MeasureText(_content);
                 this.UseStyles(d => d
-                    .Set(StyleType.Width, width)
-                    .Set(StyleType.Height, metrics.Bottom - metrics.Top)
+                    .Set(StyleType.Width, width / scale)
+                    .Set(StyleType.Height, (metrics.Bottom - metrics.Top) / scale)
                 );
             }
         }
@@ -101,7 +102,7 @@ namespace Suyaa.Gui.Controls
             using (SKPaint paint = new SKPaint(this.Font)
             {
                 Color = this.Color,
-                TextSize = this.FontSize,
+                TextSize = this.FontSize * scale,
             })
             {
                 paint.GetFontMetrics(out SKFontMetrics metrics);

@@ -22,6 +22,9 @@ namespace Suyaa.Gui
         // 句柄生成器
         private static long _hanlder = 0;
         private static object _hanlderLock = new object();
+        // DPI放大比例
+        private static float _scale = 1;
+        private static bool _scaleble = false;
 
         /// <summary>
         /// 设置应用实现类
@@ -31,6 +34,34 @@ namespace Suyaa.Gui
         {
             _application = new T();
             return _application;
+        }
+
+        /// <summary>
+        /// 设置程序是否支持缩放
+        /// </summary>
+        /// <returns></returns>
+        public static void UseScale(bool scaleble)
+        {
+            _scaleble = scaleble;
+        }
+
+        /// <summary>
+        /// 设置程序放大比例
+        /// </summary>
+        /// <returns></returns>
+        public static void SetScale(float scale)
+        {
+            _scale = scale;
+        }
+
+        /// <summary>
+        /// 获取程序放大比例
+        /// </summary>
+        /// <returns></returns>
+        public static float GetScale()
+        {
+            if (!_scaleble) return 1;
+            return _scale;
         }
 
         /// <summary>

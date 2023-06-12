@@ -232,33 +232,35 @@ namespace Suyaa.Gui.Controls
             //{
             //    height = height / pm.Scale;
             //}
-            var drawWidth = width;
-            var drawHeight = height;
+            var drawWidth = width * pm.Scale;
+            var drawHeight = height * pm.Scale;
+            //var drawWidth = width;
+            //var drawHeight = height;
             #endregion
 
             #region 处理对齐
             var x = this.Styles.Get<float>(StyleType.X);
             var y = this.Styles.Get<float>(StyleType.Y);
-            var left = x;
-            var top = y;
+            var left = x * pm.Scale;
+            var top = y * pm.Scale;
             var xAlign = this.Styles.Get<AlignType>(StyleType.XAlign);
             var yAlign = this.Styles.Get<AlignType>(StyleType.YAlign);
             switch (xAlign)
             {
                 case AlignType.Center:
-                    left = (rect.Right - width) / 2 + x;
+                    left = (rect.Width - drawWidth) / 2 + x * pm.Scale;
                     break;
                 case AlignType.Opposite:
-                    left = rect.Right - width - x;
+                    left = rect.Right - drawWidth - x * pm.Scale;
                     break;
             }
             switch (yAlign)
             {
                 case AlignType.Center:
-                    top = (rect.Bottom - height) / 2 + y;
+                    top = (rect.Height - drawHeight) / 2 + y * pm.Scale;
                     break;
                 case AlignType.Opposite:
-                    top = rect.Bottom - height - y;
+                    top = rect.Bottom - drawHeight - y * pm.Scale;
                     break;
             }
             #endregion
@@ -293,7 +295,7 @@ namespace Suyaa.Gui.Controls
                 if (width <= 0 || height <= 0) return;
                 // 直接绘制
                 //using (SKBitmap bmp = new SKBitmap((int)(width * pm.Scale), (int)(height * pm.Scale)))
-               
+
                 using (SKBitmap bmp = new SKBitmap((int)drawWidth, (int)drawHeight))
                 {
                     OnPaintMessage(bmp, pm.Scale);

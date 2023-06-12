@@ -84,8 +84,12 @@ namespace Suyaa.Gui.Native.Win32
         /// </summary>
         public unsafe void Initialize()
         {
+            // 忽略DPI
+            SHCore.SetProcessDpiAwareness(SHCore.PROCESS_DPI_AWARENESS.Process_Per_Monitor_DPI_Aware);
+
             // 计算dpi比例
-            var scale = Gdi32.GetDpiScale();
+            //var scale = Gdi32.GetDpiScale();
+            var scale = Application.GetScale();
 
             // 获取系统工作区
             var rect = User32.GetSystemWorkarea();
@@ -99,18 +103,18 @@ namespace Suyaa.Gui.Native.Win32
             {
                 width = rect.Width * (width / 100);
             }
-            //else
-            //{
-            //    width = width / scale;
-            //}
+            else
+            {
+                width = width * scale;
+            }
             if (heightUnit == UnitType.Percentage)
             {
                 height = rect.Height * (height / 100);
             }
-            //else
-            //{
-            //    height = height / scale;
-            //}
+            else
+            {
+                height = height * scale;
+            }
             #endregion
 
             #region 处理对齐
@@ -123,7 +127,7 @@ namespace Suyaa.Gui.Native.Win32
             switch (xAlign)
             {
                 case AlignType.Center:
-                    left = (rect.right - width) / 2 + x;
+                    left = (rect.Width - width) / 2 + x;
                     break;
                 case AlignType.Opposite:
                     left = rect.right - width - x;
@@ -250,7 +254,8 @@ namespace Suyaa.Gui.Native.Win32
         public void Refresh()
         {
             // 计算dpi比例
-            var scale = Gdi32.GetDpiScale();
+            //var scale = Gdi32.GetDpiScale();
+            var scale = Application.GetScale();
             Win32Message.ProcPaint(this, scale, true);
         }
 

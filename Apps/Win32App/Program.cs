@@ -32,6 +32,8 @@ namespace Win32App
             //ApplicationConfiguration.Initialize();
             //Application.Run(new Form1());
             System.Console.WriteLine("App Loading ...");
+            // ¼æÈÝDPI±ÈÀý
+            Application.UseScale(true);
             Application.Set<Win32Application>().Run(new FrmMain());
         }
     }

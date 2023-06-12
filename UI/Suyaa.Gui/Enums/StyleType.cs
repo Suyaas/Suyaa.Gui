@@ -1,11 +1,12 @@
 ﻿using SkiaSharp;
+using Suyaa.Gui.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Suyaa.Gui.Drawing
+namespace Suyaa.Gui.Enums
 {
     /// <summary>
     /// 对齐方式

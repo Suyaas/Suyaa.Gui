@@ -9,6 +9,7 @@ using Suyaa.Gui.Native.Win32.Apis;
 using static System.Formats.Asn1.AsnWriter;
 using System.Runtime.CompilerServices;
 using Suyaa.Gui.Native.Helpers;
+using Suyaa.Gui.Enums;
 
 namespace Suyaa.Gui.Native.Win32
 {

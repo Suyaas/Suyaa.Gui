@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Enums;
 using Suyaa.Gui.Messages;
 using Suyaa.Gui.Native.Helpers;
 using Suyaa.Gui.Native.Win32.Apis;
@@ -177,27 +178,29 @@ namespace Suyaa.Gui.Native.Win32
             {
                 // 还原
                 case User32.SC.RESTORE:
-                    using (StatusChangeMessage msg = new(form.Handle, FormStatusTypes.Normal))
+                    using (StatusChangeMessage msg = new(form.Handle, FormStatusType.Normal))
                     {
                         form.SendMessage(msg);
                     }
                     break;
                 // 最小化
                 case User32.SC.MINIMIZE:
-                    using (StatusChangeMessage msg = new(form.Handle, FormStatusTypes.Minimize))
+                    using (StatusChangeMessage msg = new(form.Handle, FormStatusType.Minimize))
                     {
                         form.SendMessage(msg);
                     }
                     break;
                 // 最大化
                 case User32.SC.MAXIMIZE:
-                    using (StatusChangeMessage msg = new(form.Handle, FormStatusTypes.Maximize))
+                    using (StatusChangeMessage msg = new(form.Handle, FormStatusType.Maximize))
                     {
                         form.SendMessage(msg);
                     }
                     break;
             }
         }
+
+        #region 鼠标相关
 
         // 接收到鼠标移动消息
         public unsafe static void ProcNCMouseMove(IntPtr hwnd, IntPtr lParam)
@@ -225,31 +228,21 @@ namespace Suyaa.Gui.Native.Win32
             }
         }
 
-        // 接收到鼠标移入消息
-        public unsafe static void ProcMouseHover(IntPtr hwnd, IntPtr lParam)
+        // 接收到鼠标操作消息
+        public unsafe static void ProcMouseOperate(IntPtr hwnd, IntPtr lParam, MouseOperateType mouseOperate)
         {
             // 获取关联窗体
             var form = GetFormByHwnd(hwnd);
             // 获取坐标
             var point = GetPointByLParam(lParam);
-            using (MouseMoveMessage msg = new(form.Handle, point))
+            Debug.WriteLine($"[Win32Message] MouseOperate - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, {mouseOperate.ToString()}({point.X}, {point.Y})");
+            using (MouseButtonMessage msg = new(form.Handle, mouseOperate, point))
             {
                 form.SendMessage(msg);
             }
         }
 
-        // 接收到鼠标移出消息
-        public unsafe static void ProcMouseLeave(IntPtr hwnd, IntPtr lParam)
-        {
-            // 获取关联窗体
-            var form = GetFormByHwnd(hwnd);
-            // 获取坐标
-            var point = GetPointByLParam(lParam);
-            using (MouseMoveMessage msg = new(form.Handle, point))
-            {
-                form.SendMessage(msg);
-            }
-        }
+        #endregion
 
         /// <summary>
         /// 处理消息
@@ -279,6 +272,12 @@ namespace Suyaa.Gui.Native.Win32
                 case User32.WM.MOUSEMOVE: ProcMouseMove(hwnd, lParam); break;
                 //case User32.WM.MOUSELEAVE: ProcMouseLeave(hwnd, lParam); break;
                 //case User32.WM.MOUSEHOVER: ProcMouseHover(hwnd, lParam); break;
+                case User32.WM.LBUTTONDOWN: ProcMouseOperate(hwnd, lParam, MouseOperateType.LButtonDown); break;
+                case User32.WM.LBUTTONUP: ProcMouseOperate(hwnd, lParam, MouseOperateType.LButtonUp); break;
+                case User32.WM.RBUTTONDOWN: ProcMouseOperate(hwnd, lParam, MouseOperateType.RButtonDown); break;
+                case User32.WM.RBUTTONUP: ProcMouseOperate(hwnd, lParam, MouseOperateType.RButtonUp); break;
+                case User32.WM.MBUTTONDOWN: ProcMouseOperate(hwnd, lParam, MouseOperateType.MButtonDown); break;
+                case User32.WM.MBUTTONUP: ProcMouseOperate(hwnd, lParam, MouseOperateType.MButtonUp); break;
                 // 非活动区鼠标移动
                 case User32.WM.NCMOUSEMOVE: ProcNCMouseMove(hwnd, lParam); break;
                 case User32.WM.NCMOUSEHOVER: break;

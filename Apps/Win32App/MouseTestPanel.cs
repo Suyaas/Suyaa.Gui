@@ -3,6 +3,7 @@ using SkiaSharp;
 using Suyaa.Gui.Attributes;
 using Suyaa.Gui.Controls;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,6 +75,19 @@ namespace Win32App
         {
             base.OnMouseLeave();
             this.Styles.Set(StyleType.BackgroundColor, _backgroundColor);
+        }
+
+        protected override void OnMouseClick()
+        {
+            base.OnMouseClick();
+            
+        }
+
+        protected override void OnMouseDoubleClick()
+        {
+            base.OnMouseDoubleClick();
+            FrmDialog dialog = new FrmDialog();
+            dialog.Show();
         }
     }
 }

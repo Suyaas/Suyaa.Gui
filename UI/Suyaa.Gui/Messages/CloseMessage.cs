@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using Suyaa.Gui.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

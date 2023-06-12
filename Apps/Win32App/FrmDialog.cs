@@ -8,6 +8,7 @@ using Suyaa.Gui.Win32Native;
 using Suyaa.Gui.Native.Win32;
 using Suyaa.Gui.Forms;
 using SkiaSharp;
+using Suyaa.Gui.Enums;
 
 namespace Win32App
 {
@@ -16,6 +17,10 @@ namespace Win32App
         public FrmDialog()
         {
             this.Title = "提示";
+            this.UseStyles(d => d
+                .Set(StyleType.XAlign, AlignType.Center)
+                .Set(StyleType.YAlign, AlignType.Center)
+            );
         }
 
         // 绘制事件

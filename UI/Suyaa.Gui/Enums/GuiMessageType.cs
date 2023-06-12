@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Suyaa.Gui
+namespace Suyaa.Gui.Enums
 {
     /// <summary>
     /// 界面消息类型
@@ -39,5 +39,9 @@ namespace Suyaa.Gui
         /// 鼠标移动
         /// </summary>
         MouseMove = 0x301,
+        /// <summary>
+        /// 鼠标按键操作
+        /// </summary>
+        MouseButton = 0x302,
     }
 }

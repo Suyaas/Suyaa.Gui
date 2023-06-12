@@ -68,6 +68,24 @@ namespace Suyaa.Gui.Controls
             return true;
         }
 
+        // 处理鼠标操作消息
+        private bool OnMouseButtonMessage(MouseButtonMessage mouseButton)
+        {
+            // 按照Z轴深度和创建先后依次绘制子控件
+            var controls = Controls.Where(d => d.IsVaild && d.IsMouseReply).OrderByDescending(d => d.ZIndex).ThenByDescending(d => d.Handle).ToList();
+            foreach (Control c in controls)
+            {
+                // 跳过无关元素
+                if (!c.Rectangle.Contain(mouseButton.Point)) continue;
+                // 发送绘制消息
+                using (MouseButtonMessage msg = new(c.Handle, mouseButton.OperateType, new Point(mouseButton.Point.X - c.Left, mouseButton.Point.Y - c.Top)))
+                {
+                    if (!c.SendMessage(msg)) return false;
+                }
+            }
+            return true;
+        }
+
         /// <summary>
         /// 消息处理事件
         /// </summary>
@@ -79,7 +97,11 @@ namespace Suyaa.Gui.Controls
             {
                 // 鼠标移动事件
                 case MouseMoveMessage mouseMove:
-                    if (!OnMouseMoveMessage(mouseMove)) return false;
+                    OnMouseMoveMessage(mouseMove);
+                    break;
+                // 鼠标移动事件
+                case MouseButtonMessage mouseButton:
+                    if (!OnMouseButtonMessage(mouseButton)) return false;
                     break;
             }
             return base.OnMessage(msg);

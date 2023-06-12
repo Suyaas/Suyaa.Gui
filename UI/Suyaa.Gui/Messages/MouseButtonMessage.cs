@@ -10,10 +10,14 @@ using System.Threading.Tasks;
 namespace Suyaa.Gui.Messages
 {
     /// <summary>
-    /// 绘制消息
+    /// 鼠标键消息
     /// </summary>
-    public class MouseMoveMessage : Message
+    public class MouseButtonMessage : Message
     {
+        /// <summary>
+        /// 操作类型
+        /// </summary>
+        public MouseOperateType OperateType { get; }
 
         /// <summary>
         /// 坐标
@@ -24,8 +28,9 @@ namespace Suyaa.Gui.Messages
         /// 消息
         /// </summary>
         /// <param name="handle"></param>
-        public MouseMoveMessage(long handle, Point point) : base(GuiMessageType.MouseMove, handle)
+        public MouseButtonMessage(long handle, MouseOperateType operateType, Point point) : base(GuiMessageType.MouseButton, handle)
         {
+            this.OperateType = operateType;
             this.Point = point;
         }
     }

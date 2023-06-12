@@ -2,6 +2,7 @@
 using SkiaSharp;
 using Suyaa.Gui.Controls;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Enums;
 using Suyaa.Gui.Native.Win32;
 using Suyaa.Gui.Native.Win32.Apis;
 using System;

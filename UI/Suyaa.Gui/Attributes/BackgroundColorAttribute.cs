@@ -1,5 +1,5 @@
 ﻿using SkiaSharp;
-using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Suyaa.Gui
+namespace Suyaa.Gui.Enums
 {
     /// <summary>
     /// 窗体状态类型
     /// </summary>
-    public enum FormStatusTypes : int
+    public enum FormStatusType : int
     {
         /// <summary>
         /// 正常

@@ -2,6 +2,7 @@
 using SkiaSharp;
 using Suyaa.Gui.Attributes;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Enums;
 using Suyaa.Gui.Messages;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,7 @@ namespace Suyaa.Gui.Forms
         /// <summary>
         /// 窗体状态
         /// </summary>
-        public FormStatusTypes FormStatus { get; internal protected set; }
+        public FormStatusType FormStatus { get; internal protected set; }
 
         // 设置默认样式
         private void SetDefaultStyles()
@@ -89,7 +90,7 @@ namespace Suyaa.Gui.Forms
                     break;
                 // 重置大小
                 case ResizeMessage _:
-                    if (this.FormStatus == FormStatusTypes.Minimize) break;
+                    if (this.FormStatus == FormStatusType.Minimize) break;
                     // 重置大小
                     this.Workarea.Resize();
                     // 刷新
@@ -126,7 +127,7 @@ namespace Suyaa.Gui.Forms
                     break;
                 // 状态变化
                 case StatusChangeMessage statusChange:
-                    if (this.FormStatus == FormStatusTypes.Maximize && statusChange.FormStatus == FormStatusTypes.Normal)
+                    if (this.FormStatus == FormStatusType.Maximize && statusChange.FormStatus == FormStatusType.Normal)
                     {
                         _refresh = true;
                     }
@@ -146,6 +147,13 @@ namespace Suyaa.Gui.Forms
                         }
                     }
                     break;
+                // 鼠标操作事件
+                case MouseButtonMessage mouseButton:
+                    using (MouseButtonMessage msgSink = new(this.Workarea.Handle, mouseButton.OperateType, mouseButton.Point))
+                    {
+                        this.Workarea.PostMessage(msgSink);
+                    }
+                    break;
             }
             return true;
         }
@@ -159,7 +167,7 @@ namespace Suyaa.Gui.Forms
             _refresh = false;
             _mouseOn = false;
             // 设置初始状态
-            this.FormStatus = FormStatusTypes.Normal;
+            this.FormStatus = FormStatusType.Normal;
             // 应用反射特性
             this.ApplyStyles();
         }

@@ -1,6 +1,7 @@
 ﻿using Forms;
 using SkiaSharp;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Enums;
 using Suyaa.Gui.Native.Linux.Apis;
 using System.Drawing;
 using System.Runtime.InteropServices;

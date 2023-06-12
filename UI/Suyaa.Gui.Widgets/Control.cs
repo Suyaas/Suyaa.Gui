@@ -4,6 +4,7 @@ using Suyaa.Gui.Helpers;
 using Suyaa.Gui.Messages;
 using static System.Formats.Asn1.AsnWriter;
 using Suyaa.Gui.Native.Win32.Apis;
+using Suyaa.Gui.Enums;
 
 namespace Suyaa.Gui.Controls
 {
@@ -19,6 +20,8 @@ namespace Suyaa.Gui.Controls
         // 是否强制刷新
         private bool _refresh;
         private bool _mouseOn;
+        // 最后一次鼠标点击
+        private int _lastMouseClick;
 
         /// <summary>
         /// 创建一个控件
@@ -40,6 +43,7 @@ namespace Suyaa.Gui.Controls
             // 初始化刷新属性
             _refresh = false;
             _mouseOn = false;
+            _lastMouseClick = 0;
             // 初始化矩形区域
             this.Rectangle = new Rectangle();
             // 设置Z轴深度
@@ -330,6 +334,57 @@ namespace Suyaa.Gui.Controls
         protected virtual void OnMouseLeave() { }
 
         /// <summary>
+        /// 鼠标移动事件
+        /// </summary>
+        /// <param name="point"></param>
+        protected virtual void OnMouseDown(MouseOperateType button, Point point) { }
+
+        /// <summary>
+        /// 鼠标移动事件
+        /// </summary>
+        /// <param name="point"></param>
+        protected virtual void OnMouseUp(MouseOperateType button, Point point) { }
+
+        /// <summary>
+        /// 鼠标单击事件
+        /// </summary>
+        /// <param name="point"></param>
+        protected virtual void OnMouseClick() { }
+
+        /// <summary>
+        /// 鼠标双击事件
+        /// </summary>
+        /// <param name="point"></param>
+        protected virtual void OnMouseDoubleClick() { }
+
+        // 处理绘制消息
+        private void OnMouseButtonMessage(MouseButtonMessage mouseButton)
+        {
+            var button = (MouseOperateType)((int)mouseButton.OperateType & 0xf0);
+            var opreate = (MouseOperateType)((int)mouseButton.OperateType & 0xf);
+            if (opreate == MouseOperateType.Down) this.OnMouseDown(button, mouseButton.Point);
+            if (opreate == MouseOperateType.Up)
+            {
+                this.OnMouseUp(button, mouseButton.Point);
+                if (button == MouseOperateType.LButton)
+                {
+                    var tick = Environment.TickCount;
+                    var doubleClickTime = (int)User32.GetDoubleClickTime();
+                    if (_lastMouseClick + doubleClickTime >= tick)
+                    {
+                        _lastMouseClick = 0;
+                        this.OnMouseDoubleClick();
+                    }
+                    else
+                    {
+                        _lastMouseClick = tick;
+                        this.OnMouseClick();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// 消息事件
         /// </summary>
         /// <param name="msg"></param>
@@ -367,6 +422,10 @@ namespace Suyaa.Gui.Controls
                         this.OnMouseLeave();
                     }
                     break;
+                // 鼠标操作事件
+                case MouseButtonMessage mouseButton:
+                    this.OnMouseButtonMessage(mouseButton);
+                    return false;
             }
             return true;
         }

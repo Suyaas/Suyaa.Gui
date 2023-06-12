@@ -1,4 +1,5 @@
 ﻿using Suyaa.Gui.Attributes;
+using Suyaa.Gui.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

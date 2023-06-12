@@ -4,6 +4,7 @@ using SkiaSharp;
 using Suyaa.Gui.Attributes;
 using Suyaa.Gui.Controls;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Enums;
 using Suyaa.Gui.Forms;
 using Suyaa.Gui.Native.Win32;
 

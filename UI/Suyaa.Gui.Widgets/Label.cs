@@ -1,5 +1,6 @@
 ﻿using SkiaSharp;
 using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Enums;
 using Suyaa.Gui.Messages;
 using Suyaa.Gui.Native.Win32.Apis;
 using System;

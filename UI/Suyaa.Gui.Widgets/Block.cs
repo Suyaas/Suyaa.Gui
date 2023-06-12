@@ -19,6 +19,11 @@ namespace Suyaa.Gui.Controls
         private SKFont? _font;
 
         /// <summary>
+        /// 是否响应鼠标事件
+        /// </summary>
+        public override bool IsMouseReply => false;
+
+        /// <summary>
         /// 字体
         /// </summary>
         public SKFont Font

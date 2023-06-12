@@ -20,6 +20,11 @@ namespace Suyaa.Gui.Controls
         // 是否强制刷新
         private bool _refresh;
 
+        /// <summary>
+        /// 是否响应鼠标事件
+        /// </summary>
+        public override bool IsMouseReply => false;
+
         // 重新设置显示尺寸
         private void Resize()
         {

@@ -165,6 +165,11 @@ namespace Suyaa.Gui.Controls
             }
         }
 
+        /// <summary>
+        /// 是否响应鼠标事件
+        /// </summary>
+        public virtual bool IsMouseReply => true;
+
         #endregion
 
         #region 继承函数

@@ -14,6 +14,11 @@ namespace Suyaa.Gui.Controls
     public class Panel : Block, IContainerControl
     {
         /// <summary>
+        /// 是否响应鼠标事件
+        /// </summary>
+        public override bool IsMouseReply => true;
+
+        /// <summary>
         /// 子控件集合
         /// </summary>
         public IControlCollection<IControl> Controls { get; }
@@ -36,7 +41,8 @@ namespace Suyaa.Gui.Controls
         {
             base.OnPainted(cvs, rect, scale);
             // 按照Z轴深度和创建先后依次绘制子控件
-            foreach (Control c in Controls.Where(d => d.IsVaild).OrderBy(d => d.ZIndex).ThenBy(d => d.Handle).ToList())
+            var controls = Controls.Where(d => d.IsVaild).OrderBy(d => d.ZIndex).ThenBy(d => d.Handle).ToList();
+            foreach (Control c in controls)
             {
                 // 发送绘制消息
                 using (PaintMessage msg = new(c.Handle, cvs, rect, scale))
@@ -50,7 +56,8 @@ namespace Suyaa.Gui.Controls
         private bool OnMouseMoveMessage(MouseMoveMessage mouseMove)
         {
             // 按照Z轴深度和创建先后依次绘制子控件
-            foreach (Control c in Controls.Where(d => d.IsVaild).OrderByDescending(d => d.ZIndex).ThenByDescending(d => d.Handle).ToList())
+            var controls = Controls.Where(d => d.IsVaild && d.IsMouseReply).OrderByDescending(d => d.ZIndex).ThenByDescending(d => d.Handle).ToList();
+            foreach (Control c in controls)
             {
                 // 发送绘制消息
                 using (MouseMoveMessage msg = new(c.Handle, new Point(mouseMove.Point.X - c.Left, mouseMove.Point.Y - c.Top)))

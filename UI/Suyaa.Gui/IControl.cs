@@ -18,6 +18,11 @@ namespace Suyaa.Gui
         IForm Form { get; }
 
         /// <summary>
+        /// 是否响应鼠标事件
+        /// </summary>
+        bool IsMouseReply { get; }
+
+        /// <summary>
         /// 是否有效
         /// </summary>
         bool IsVaild { get; }

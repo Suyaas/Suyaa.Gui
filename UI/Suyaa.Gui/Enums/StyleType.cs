@@ -137,20 +137,105 @@ namespace Suyaa.Gui.Enums
         #endregion
         #region 边框相关样式_0x200
         /// <summary>
+        /// 上边框尺寸
+        /// </summary>
+        [StyleValue(typeof(float))]
+        BorderTopSize = 0x201,
+        /// <summary>
+        /// 上边框类型
+        /// </summary>
+        [StyleValue(typeof(BorderStyleType))]
+        BorderTopStyle = 0x202,
+        /// <summary>
+        /// 上边框颜色
+        /// </summary>
+        [StyleValue(typeof(SKColor))]
+        BorderTopColor = 0x203,
+        /// <summary>
+        /// 右边框尺寸
+        /// </summary>
+        [StyleValue(typeof(float))]
+        BorderRightSize = 0x204,
+        /// <summary>
+        /// 右边框类型
+        /// </summary>
+        [StyleValue(typeof(BorderStyleType))]
+        BorderRightStyle = 0x205,
+        /// <summary>
+        /// 右边框颜色
+        /// </summary>
+        [StyleValue(typeof(SKColor))]
+        BorderRightColor = 0x206,
+        /// <summary>
+        /// 右边框尺寸
+        /// </summary>
+        [StyleValue(typeof(float))]
+        BorderBottomSize = 0x207,
+        /// <summary>
+        /// 右边框类型
+        /// </summary>
+        [StyleValue(typeof(BorderStyleType))]
+        BorderBottomStyle = 0x208,
+        /// <summary>
+        /// 右边框颜色
+        /// </summary>
+        [StyleValue(typeof(SKColor))]
+        BorderBottomColor = 0x209,
+        /// <summary>
         /// 边框尺寸
         /// </summary>
         [StyleValue(typeof(float))]
-        BorderSize = 0x201,
+        BorderLeftSize = 0x20a,
         /// <summary>
         /// 边框类型
         /// </summary>
-        [StyleValue(typeof(float))]
-        BorderStyle = 0x202,
+        [StyleValue(typeof(BorderStyleType))]
+        BorderLeftStyle = 0x20b,
         /// <summary>
         /// 边框颜色
         /// </summary>
         [StyleValue(typeof(SKColor))]
-        BorderColor = 0x203,
+        BorderLeftColor = 0x20c,
+        /// <summary>
+        /// 左上圆角
+        /// </summary>
+        [StyleValue(typeof(float))]
+        BorderRadiusLeftTop = 0x211,
+        /// <summary>
+        /// 右上圆角
+        /// </summary>
+        [StyleValue(typeof(float))]
+        BorderRadiusRightTop = 0x212,
+        /// <summary>
+        /// 右下圆角
+        /// </summary>
+        [StyleValue(typeof(float))]
+        BorderRadiusRightBottom = 0x213,
+        /// <summary>
+        /// 左下圆角
+        /// </summary>
+        [StyleValue(typeof(float))]
+        BorderRadiusLeftBottom = 0x214,
+        /// <summary>
+        /// 阴影尺寸
+        /// </summary>
+        [StyleValue(typeof(int))]
+        BorderShadowSize = 0x221,
+        /// <summary>
+        /// 阴影横向偏移
+        /// </summary>
+        [StyleValue(typeof(float))]
+        BorderShadowX = 0x222,
+        /// <summary>
+        /// 阴影纵向偏移
+        /// </summary>
+        [StyleValue(typeof(float))]
+        BorderShadowY = 0x223,
+        /// <summary>
+        /// 阴影基准颜色
+        /// </summary>
+        [StyleValue(typeof(SKColor))]
+        BorderShadowColor = 0x224,
         #endregion
         #region 文本样式_0x300
         /// <summary>

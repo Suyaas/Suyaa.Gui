@@ -26,7 +26,7 @@ namespace Suyaa.Gui.Drawing
             if (field is null) throw new GuiException($"Style type '{columnTypeName}' not found.");
             var styleValueAttr = field.GetCustomAttribute<StyleValueAttribute>();
             if (styleValueAttr is null) return;
-            if (!type.IsBased(styleValueAttr.Type)) throw new GuiException($"Style '{columnTypeName}' not found.");
+            if (!type.IsBased(styleValueAttr.Type)) throw new GuiException($"Style '{columnTypeName}' type '{type.FullName}' not based '{styleValueAttr.Type.FullName}'.");
         }
 
         /// <summary>

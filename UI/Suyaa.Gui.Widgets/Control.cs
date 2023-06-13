@@ -195,8 +195,8 @@ namespace Suyaa.Gui.Controls
         {
             using (SKCanvas cvs = new SKCanvas(bitmap))
             {
-                cvs.DrawStyles(this.Styles);
                 var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+                cvs.DrawStyles(this.Styles, rect);
                 this.OnPainting(cvs, rect, scale);
                 this.OnPainted(cvs, rect, scale);
             }

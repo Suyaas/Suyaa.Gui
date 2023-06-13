@@ -18,7 +18,7 @@ namespace Forms
         internal void WorkareaRepaint(SKCanvas canvas)
         {
             // 绘制标准样式结果
-            canvas.DrawStyles(this.Styles);
+            canvas.DrawStyles(this.Styles, this.Workarea.Rectangle);
             this.OnWorkareaPaint(canvas);
         }
     }

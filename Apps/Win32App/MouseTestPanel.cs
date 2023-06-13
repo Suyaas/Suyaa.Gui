@@ -18,6 +18,7 @@ namespace Win32App
     [Offset(160, 80)]
     [Size(240, 200)]
     [BackgroundColor(0xaa000033)]
+    [Border(1, 0xffff0000, BorderStyleType.Dashed)]
     //[UserCache(true)]
     class MouseTestPanelStyles { }
 
@@ -80,7 +81,7 @@ namespace Win32App
         protected override void OnMouseClick()
         {
             base.OnMouseClick();
-            
+
         }
 
         protected override void OnMouseDoubleClick()

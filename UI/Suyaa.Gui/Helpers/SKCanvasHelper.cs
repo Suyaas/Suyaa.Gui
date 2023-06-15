@@ -45,7 +45,9 @@ namespace Suyaa.Gui.Helpers
         {
             var paint = GetBorderPaint(styles, StyleType.BorderTopSize, StyleType.BorderTopColor, StyleType.BorderTopStyle);
             if (paint is null) return;
-            cvs.DrawLine(0, 0, rect.Right - 1, 0, paint);
+            // 转为内边距
+            float offset = styles.Get<float>(StyleType.BorderTopSize) / 2;
+            cvs.DrawLine(offset, offset, rect.Right - offset, offset, paint);
             paint.Dispose();
         }
 
@@ -59,7 +61,9 @@ namespace Suyaa.Gui.Helpers
         {
             var paint = GetBorderPaint(styles, StyleType.BorderRightSize, StyleType.BorderRightColor, StyleType.BorderRightStyle);
             if (paint is null) return;
-            cvs.DrawLine(rect.Right, 0, rect.Right - 1, rect.Bottom - 1, paint);
+            // 转为内边距
+            float offset = styles.Get<float>(StyleType.BorderRightSize) / 2;
+            cvs.DrawLine(rect.Right - offset, offset, rect.Right - offset, rect.Bottom - offset, paint);
             paint.Dispose();
         }
 
@@ -73,7 +77,9 @@ namespace Suyaa.Gui.Helpers
         {
             var paint = GetBorderPaint(styles, StyleType.BorderBottomSize, StyleType.BorderBottomColor, StyleType.BorderBottomStyle);
             if (paint is null) return;
-            cvs.DrawLine(rect.Right - 1, rect.Bottom - 1, 0, rect.Bottom - 1, paint);
+            // 转为内边距
+            float offset = styles.Get<float>(StyleType.BorderBottomSize) / 2;
+            cvs.DrawLine(rect.Right - offset, rect.Bottom - offset, offset, rect.Bottom - offset, paint);
             paint.Dispose();
         }
 
@@ -87,7 +93,9 @@ namespace Suyaa.Gui.Helpers
         {
             var paint = GetBorderPaint(styles, StyleType.BorderLeftSize, StyleType.BorderLeftColor, StyleType.BorderLeftStyle);
             if (paint is null) return;
-            cvs.DrawLine(0, rect.Bottom - 1, 0, 0, paint);
+            // 转为内边距
+            float offset = styles.Get<float>(StyleType.BorderLeftSize) / 2;
+            cvs.DrawLine(offset, rect.Bottom - offset, offset, offset, paint);
             paint.Dispose();
         }
 

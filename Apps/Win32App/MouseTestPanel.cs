@@ -18,7 +18,9 @@ namespace Win32App
     [Offset(160, 80)]
     [Size(240, 200)]
     [BackgroundColor(0xaa000033)]
-    [Border(1, 0xffff0000, BorderStyleType.Dashed)]
+    [BorderTop(1, 0xffff0000, BorderStyleType.Dashed)]
+    [BorderRight(1, 0xffffffff, BorderStyleType.Solid)]
+    [BorderBottom(2, 0xffff00ff, BorderStyleType.Dashed)]
     //[UserCache(true)]
     class MouseTestPanelStyles { }
 

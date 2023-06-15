@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace Suyaa.Gui.Attributes
 {
     /// <summary>
-    /// 尺寸样式设置
+    /// 边框样式设置
     /// </summary>
     public class BorderAttribute : StyleAttribute
     {
@@ -30,7 +30,7 @@ namespace Suyaa.Gui.Attributes
         public BorderStyleType BorderStyle { get; set; }
 
         /// <summary>
-        /// 字体
+        /// 边框样式设置
         /// </summary>
         public BorderAttribute(float size, uint color, BorderStyleType style = BorderStyleType.Solid) : base(StyleType.None)
         {

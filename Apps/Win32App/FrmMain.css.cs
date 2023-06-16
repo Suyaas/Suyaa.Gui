@@ -15,7 +15,7 @@ namespace Win32App
         /// 窗口样式
         /// </summary>
         [Size(800, 500)]
-        [Offset(0, -50, AlignType.Center, AlignType.Center)]
+        [Position(0, -50, AlignType.Center, AlignType.Center)]
         [BackgroundColor(0xff0094ff)]
         [UserCache(true)]
         [Font(Names = "微软雅黑", Size = 14)]
@@ -25,7 +25,7 @@ namespace Win32App
         /// 块样式
         /// </summary>
         [Size(50, 100, UnitType.Percentage, UnitType.Pixel)]
-        [Offset(0, 20, AlignType.Center, AlignType.Normal)]
+        //[Position(0, 20, AlignType.Center, AlignType.Normal)]
         [BackgroundColor(0xff003300)]
         class TestBlockStyle { }
 

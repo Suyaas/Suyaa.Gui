@@ -14,19 +14,19 @@ namespace Suyaa.Gui.Drawing
         /// <summary>
         /// 上
         /// </summary>
-        public float Top;
+        public readonly float Top;
         /// <summary>
         /// 右
         /// </summary>
-        public float Right;
+        public readonly float Right;
         /// <summary>
         /// 下
         /// </summary>
-        public float Bottom;
+        public readonly float Bottom;
         /// <summary>
         /// 左
         /// </summary>
-        public float Left;
+        public readonly float Left;
 
         /// <summary>
         /// 边距

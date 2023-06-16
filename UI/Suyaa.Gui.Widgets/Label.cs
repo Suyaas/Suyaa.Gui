@@ -18,8 +18,6 @@ namespace Suyaa.Gui.Controls
     {
         // 内容
         private string _content;
-        // 是否强制刷新
-        private bool _refresh;
 
         /// <summary>
         /// 是否响应鼠标事件
@@ -27,22 +25,25 @@ namespace Suyaa.Gui.Controls
         public override bool IsMouseReply => false;
 
         // 重新设置显示尺寸
-        private void Resize()
+        private void Resize(float scale)
         {
             // 判断可用性
             if (!this.IsVaild) return;
-            // 计算dpi比例
-            //var scale = Gdi32.GetDpiScale();
-            var scale = Application.GetScale();
+            // 计算动态尺寸
             using (SKPaint paint = new SKPaint(this.Font))
             {
                 paint.TextSize = this.FontSize * scale;
                 paint.GetFontMetrics(out SKFontMetrics metrics);
                 var width = paint.MeasureText(_content);
-                this.UseStyles(d => d
-                    .Set(StyleType.Width, width / scale)
-                    .Set(StyleType.Height, (metrics.Bottom - metrics.Top) / scale)
-                );
+                // 创建
+                var labSize = new Size(width, metrics.Bottom - metrics.Top);
+                //// 变更样式
+                //this.UseStyles(d => d
+                //    .Set(StyleType.Width, width / scale)
+                //    .Set(StyleType.Height, (metrics.Bottom - metrics.Top) / scale)
+                //);
+                // 重置尺寸
+                base.Resize(labSize, scale);
             }
         }
 
@@ -51,25 +52,25 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         protected override bool OnRefresh()
         {
-            _refresh = true;
+            this.IsNeedRepaint = true;
             return base.OnRefresh();
         }
 
-        protected override bool OnMessage(IMessage msg)
-        {
-            switch (msg)
-            {
-                case PaintMessage _:
-                    // 判断是否带有强制刷新
-                    if (_refresh)
-                    {
-                        this.Resize();
-                        _refresh = false;
-                    }
-                    break;
-            }
-            return base.OnMessage(msg);
-        }
+        //protected override bool OnMessage(IMessage msg)
+        //{
+        //    switch (msg)
+        //    {
+        //        case PaintMessage _:
+        //            // 判断是否带有强制刷新
+        //            if (_refresh)
+        //            {
+        //                //this.Resize();
+        //                _refresh = false;
+        //            }
+        //            break;
+        //    }
+        //    return base.OnMessage(msg);
+        //}
 
         /// <summary>
         /// 内容
@@ -79,6 +80,7 @@ namespace Suyaa.Gui.Controls
             get => _content;
             set
             {
+                if (_content == value) return;
                 // 设置内容
                 _content = value;
                 // 刷新显示
@@ -92,7 +94,18 @@ namespace Suyaa.Gui.Controls
         public Label(string? content = null)
         {
             _content = content ?? string.Empty;
-            _refresh = true;
+            // 设置需要重绘
+            this.IsNeedRepaint = true;
+        }
+
+        /// <summary>
+        /// 重置尺寸
+        /// </summary>
+        /// <param name="size"></param>
+        /// <param name="scale"></param>
+        protected override void OnResize(Size size, float scale)
+        {
+            this.Resize(scale);
         }
 
         /// <summary>

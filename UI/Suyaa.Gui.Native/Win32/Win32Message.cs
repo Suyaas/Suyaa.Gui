@@ -150,19 +150,31 @@ namespace Suyaa.Gui.Native.Win32
         /// <summary>
         /// 处理重置尺寸消息
         /// </summary>
-        /// <param name="hwnd"></param>
-        public static void ProcResize(IntPtr hwnd)
+        /// <param name="form"></param>
+        /// <param name="scale"></param>
+        public static void ProcResize(Win32Form form, float scale)
         {
             // 输出调试
-            Debug.WriteLine($"[Win32Message] Resize - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}");
-            // 计算dpi比例
-            var form = GetFormByHwnd(hwnd);
-            using (ResizeMessage msg = new(form.Handle))
+            Debug.WriteLine($"[Win32Message] Resize - Handle: 0x{form.Handle.ToString("x").PadLeft(12, '0')}");
+            using (ResizeMessage msg = new(form.Handle, new Size(), scale))
             {
-                form.SendMessage(msg);
+                Application.SendMessage(msg);
             }
             // 重新绘制
             //ProcPaint(hwnd);
+        }
+
+        /// <summary>
+        /// 处理重置尺寸消息
+        /// </summary>
+        /// <param name="hwnd"></param>
+        public static void ProcResize(IntPtr hwnd)
+        {
+            // 计算dpi比例
+            var scale = Application.GetScale();
+            // 获取窗体
+            var form = GetWin32FormByHwnd(hwnd);
+            ProcResize(form, scale);
         }
 
         // 接收到绘制消息

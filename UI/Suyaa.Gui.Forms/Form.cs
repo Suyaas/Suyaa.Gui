@@ -86,13 +86,24 @@ namespace Suyaa.Gui.Forms
             {
                 // 初始化
                 case InitMessage _:
-                    this.Workarea.Resize();
+                    // 获取dpi比例
+                    float scale = Application.GetScale();
+                    // 重置尺寸
+                    using (ResizeMessage msgSink = new(this.Workarea.Handle, new Size(), scale))
+                    {
+                        this.Workarea.SendMessage(msgSink);
+                    }
                     break;
                 // 重置大小
-                case ResizeMessage _:
+                case ResizeMessage resize:
                     if (this.FormStatus == FormStatusType.Minimize) break;
-                    // 重置大小
-                    this.Workarea.Resize();
+                    // 获取dpi比例
+                    scale = Application.GetScale();
+                    // 重置尺寸
+                    using (ResizeMessage msgSink = new(this.Workarea.Handle, new Size(), scale))
+                    {
+                        this.Workarea.SendMessage(msgSink);
+                    }
                     // 刷新
                     if (_refresh)
                     {

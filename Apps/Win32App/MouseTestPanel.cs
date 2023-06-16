@@ -15,7 +15,7 @@ namespace Win32App
     /// <summary>
     /// 鼠标测试面板样式
     /// </summary>
-    [Offset(160, 80)]
+    //[Position(160, 80)]
     [Size(240, 200)]
     [BackgroundColor(0xaa000033)]
     [BorderTop(1, 0xffff0000, BorderStyleType.Dashed)]

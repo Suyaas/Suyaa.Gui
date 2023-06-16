@@ -257,6 +257,7 @@ namespace Suyaa.Gui.Native.Win32
             // 计算dpi比例
             //var scale = Gdi32.GetDpiScale();
             var scale = Application.GetScale();
+            Win32Message.ProcResize(this, scale);
             Win32Message.ProcPaint(this, scale, true);
         }
 

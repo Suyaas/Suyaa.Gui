@@ -62,6 +62,11 @@ namespace Suyaa.Gui.Enums
         /// </summary>
         [StyleValue(typeof(bool))]
         UseCache = 0x11,
+        /// <summary>
+        /// 定位模式
+        /// </summary>
+        [StyleValue(typeof(PositionType))]
+        Position = 0x21,
         #endregion
         #region 二维样式_0x100
         /// <summary>

@@ -186,10 +186,12 @@ namespace Suyaa.Gui.Drawing
             // 显示单位
             Set(StyleType.WidthUnit, UnitType.Pixel);
             Set(StyleType.HeightUnit, UnitType.Pixel);
-            // 上边距
-            Set<float>(StyleType.X, 0);
-            // 左边距
-            Set<float>(StyleType.Y, 0);
+            // 设置定位模式为浮动
+            Set(StyleType.Position, PositionType.Float);
+            //// 上边距
+            //Set<float>(StyleType.X, 0);
+            //// 左边距
+            //Set<float>(StyleType.Y, 0);
             // 宽度
             Set<float>(StyleType.Width, 0);
             // 高度

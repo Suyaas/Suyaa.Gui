@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using Suyaa.Gui.Drawing;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,12 +7,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Suyaa.Gui.Drawing
+namespace Suyaa.Gui.Helpers
 {
     /// <summary>
     /// 助手类
     /// </summary>
-    public static class Helpers
+    public static class RectangleHelper
     {
         /// <summary>
         /// 判断矩形是否包含坐标

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,11 +15,11 @@ namespace Suyaa.Gui.Drawing
         /// <summary>
         /// 宽度
         /// </summary>
-        public float Width;
+        public readonly float Width;
         /// <summary>
         /// 高度
         /// </summary>
-        public float Height;
+        public readonly float Height;
 
         /// <summary>
         /// 尺寸
@@ -38,6 +39,16 @@ namespace Suyaa.Gui.Drawing
         {
             this.Width = 0;
             this.Height = 0;
+        }
+
+        /// <summary>
+        /// 是否相同尺寸
+        /// </summary>
+        /// <param name="size"></param>
+        /// <returns></returns>
+        public bool Equals(Size value)
+        {
+            return this.Width == value.Width && this.Height == value.Height;
         }
     }
 }

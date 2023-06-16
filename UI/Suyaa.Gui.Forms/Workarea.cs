@@ -29,22 +29,23 @@ namespace Suyaa.Gui.Forms
             this.Styles.Set(StyleType.Visible, true);
         }
 
-        // 重新设置大小
-        internal void Resize()
+        /// <summary>
+        /// 重置大小事件
+        /// </summary>
+        /// <param name="size"></param>
+        /// <param name="scale"></param>
+        protected override void OnResize(Size size, float scale)
         {
-            //Debug.WriteLine($"[Workarea] Resize");
+            // 获取窗体
             var form = (FormBase)this.Form;
             var win32Form = (Win32Form)form.NativeForm;
             // 获取窗体工作区域
             var rect = User32.GetClientRect(win32Form.Hwnd);
-            //var scale = Gdi32.GetDpiScale();
-            var scale = Application.GetScale();
-            // 兼容 宽度 和 高度 的变更
-            //var width = form.Styles.Get<float>(StyleType.Width);
-            //var height = form.Styles.Get<float>(StyleType.Height);
             // 设置 宽度 和 高度
             this.Styles.Set(StyleType.Width, rect.Width / scale);
             this.Styles.Set(StyleType.Height, rect.Height / scale);
+            // 更新有效矩形区域
+            this.Resize(new Size(rect.Width, rect.Height), scale);
         }
 
         /// <summary>

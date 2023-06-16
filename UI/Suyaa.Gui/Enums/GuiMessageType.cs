@@ -28,9 +28,9 @@ namespace Suyaa.Gui.Enums
         /// </summary>
         Paint = 0x101,
         /// <summary>
-        /// 重置大小
+        /// 布局
         /// </summary>
-        Resize = 0x201,
+        Layout = 0x201,
         /// <summary>
         /// 状态变化
         /// </summary>

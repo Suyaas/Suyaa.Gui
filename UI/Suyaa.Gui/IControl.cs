@@ -1,4 +1,5 @@
-﻿using Suyaa.Gui.Enums;
+﻿using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,16 @@ namespace Suyaa.Gui
         /// Z轴索引
         /// </summary>
         int ZIndex { get; }
+
+        /// <summary>
+        /// 有效区域
+        /// </summary>
+        Rectangle Rectangle { get; }
+
+        /// <summary>
+        /// 显示区域
+        /// </summary>
+        Rectangle DisplayRectangle { get; }
 
         /// <summary>
         /// 父控件

@@ -5,6 +5,9 @@ using Suyaa.Gui.Messages;
 using static System.Formats.Asn1.AsnWriter;
 using Suyaa.Gui.Native.Win32.Apis;
 using Suyaa.Gui.Enums;
+using System.Reflection.Metadata.Ecma335;
+using System.Xml.Linq;
+//using System.Drawing;
 
 namespace Suyaa.Gui.Controls
 {
@@ -83,6 +86,15 @@ namespace Suyaa.Gui.Controls
         }
 
         /// <summary>
+        /// 是否需要重新绘制
+        /// </summary>
+        public bool IsNeedRepaint
+        {
+            get => _refresh;
+            protected internal set => _refresh = value;
+        }
+
+        /// <summary>
         /// 父对象
         /// </summary>
         public IContainerControl Parent
@@ -110,39 +122,78 @@ namespace Suyaa.Gui.Controls
         public int ZIndex { get; internal protected set; }
 
         /// <summary>
-        /// 矩形区域
+        /// 外边距
+        /// </summary>
+        public Margin Margin { get; private set; }
+
+        /// <summary>
+        /// 内边距
+        /// </summary>
+        public Margin Padding { get; private set; }
+
+        /// <summary>
+        /// 主体区域
         /// </summary>
         public Rectangle Rectangle { get; private set; }
 
         /// <summary>
-        /// 位置
-        /// </summary>
-        public Point Point => this.Rectangle.Point;
-
-        /// <summary>
-        /// 尺寸
+        /// 主体尺寸
         /// </summary>
         public Size Size => this.Rectangle.Size;
 
         /// <summary>
-        /// 左边距
-        /// </summary>
-        public float Left => this.Rectangle.Left;
-
-        /// <summary>
-        /// 上边距
-        /// </summary>
-        public float Top => this.Rectangle.Top;
-
-        /// <summary>
-        /// 宽度
+        /// 主体宽度
         /// </summary>
         public float Width => this.Rectangle.Width;
 
         /// <summary>
-        /// 高度
+        /// 主体高度
         /// </summary>
         public float Height => this.Rectangle.Height;
+
+        /// <summary>
+        /// 主体位置
+        /// </summary>
+        public Point Point => this.Rectangle.Point;
+
+        /// <summary>
+        /// 主体相对父对象的左边距
+        /// </summary>
+        public float Left => this.Rectangle.Left;
+
+        /// <summary>
+        /// 主体相对父对象的上边距
+        /// </summary>
+        public float Top => this.Rectangle.Top;
+
+        /// <summary>
+        /// 矩形显示区域
+        /// </summary>
+        public Rectangle DisplayRectangle { get; private set; }
+
+        /// <summary>
+        /// 更新主体区域
+        /// </summary>
+        /// <param name="size"></param>
+        /// <param name="scale"></param>
+        /// <param name="relayout"></param>
+        protected void Resize(Size size, float scale, bool relayout = false)
+        {
+            // 如果没有变化则退出
+            if (this.Rectangle.Size.Equals(size)) return;
+            // 重新刷新有效区域
+            this.Rectangle = new Rectangle(this.Rectangle.Left, this.Rectangle.Top, size.Width, size.Height);
+            if (relayout)
+            {
+                // 控件无效则不处理
+                if (!this.IsVaild) return;
+                // 触发父对象重新执行布局
+                using (ResizeMessage msg = new(_parent!.Handle, size, scale))
+                {
+                    _parent!.SendMessage(msg);
+                }
+            }
+        }
 
         /// <summary>
         /// 是否有效
@@ -199,6 +250,17 @@ namespace Suyaa.Gui.Controls
                 cvs.DrawStyles(this.Styles, rect);
                 this.OnPainting(cvs, rect, scale);
                 this.OnPainted(cvs, rect, scale);
+#if DEBUG
+                using (SKPaint paint = new SKPaint(new SKFont(SKTypeface.FromFamilyName("Consolas")))
+                {
+                    Color = new SKColor(0x88ffffff),
+                    TextSize = 9,
+                })
+                {
+                    paint.GetFontMetrics(out SKFontMetrics metrics);
+                    cvs.DrawText($"{this.Left},{this.Top},{this.Width},{this.Height}", 0, 0 - metrics.Top, paint);
+                }
+#endif
             }
         }
 
@@ -206,68 +268,34 @@ namespace Suyaa.Gui.Controls
         private void OnPaintMessage(PaintMessage pm)
         {
             // 跳过不需要绘制的情况
-            if (pm.Rectangle.Width <= 0 || pm.Rectangle.Height <= 0) return;
+            if (this.Width <= 0 || this.Height <= 0) return;
 
             // 判断有效性
             if (!this.IsVaild) return;
 
             // 获取 是否使用缓存 样式
             var useCache = this.Styles.Get<bool>(StyleType.UseCache);
-            var rect = pm.Rectangle;
+            //var rect = pm.Rectangle;
 
-            #region 处理尺寸
-            var width = this.Styles.Get<float>(StyleType.Width);
-            var height = this.Styles.Get<float>(StyleType.Height);
-            var widthUnit = this.Styles.Get<UnitType>(StyleType.WidthUnit);
-            var heightUnit = this.Styles.Get<UnitType>(StyleType.HeightUnit);
-            if (widthUnit == UnitType.Percentage)
-            {
-                width = rect.Width * (width / 100);
-            }
-            //else
-            //{
-            //    width = width / pm.Scale;
-            //}
-            if (heightUnit == UnitType.Percentage)
-            {
-                height = rect.Height * (height / 100);
-            }
+            #region 计算外边距
+            var margin = this.Styles.GetMargin(pm.Scale);
+            this.Margin = margin;
+            #endregion
+
+            #region 获取矩形区域
+            //var rect = this.Styles.GetRectangle(pm.Rectangle, margin, pm.Scale);
+            //this.Rectangle = rect;
             //else
             //{
             //    height = height / pm.Scale;
             //}
-            var drawWidth = width * pm.Scale;
-            var drawHeight = height * pm.Scale;
+
             //var drawWidth = width;
             //var drawHeight = height;
             #endregion
 
-            #region 处理对齐
-            var x = this.Styles.Get<float>(StyleType.X);
-            var y = this.Styles.Get<float>(StyleType.Y);
-            var left = x * pm.Scale;
-            var top = y * pm.Scale;
-            var xAlign = this.Styles.Get<AlignType>(StyleType.XAlign);
-            var yAlign = this.Styles.Get<AlignType>(StyleType.YAlign);
-            switch (xAlign)
-            {
-                case AlignType.Center:
-                    left = (rect.Width - drawWidth) / 2 + x * pm.Scale;
-                    break;
-                case AlignType.Opposite:
-                    left = rect.Right - drawWidth - x * pm.Scale;
-                    break;
-            }
-            switch (yAlign)
-            {
-                case AlignType.Center:
-                    top = (rect.Height - drawHeight) / 2 + y * pm.Scale;
-                    break;
-                case AlignType.Opposite:
-                    top = rect.Bottom - drawHeight - y * pm.Scale;
-                    break;
-            }
-            #endregion
+            var drawWidth = this.Width + margin.Left + margin.Right;
+            var drawHeight = this.Height + margin.Top + margin.Bottom;
 
             // 判断是否使用缓存
             if (useCache)
@@ -290,29 +318,25 @@ namespace Suyaa.Gui.Controls
                 using (SKPaint paint = new SKPaint())
                 {
                     paint.FilterQuality = SKFilterQuality.High;
-                    pm.Canvas.DrawBitmap(this.CacheBitmap, left, top, paint);
+                    pm.Canvas.DrawBitmap(this.CacheBitmap, this.Left - margin.Left, this.Top - margin.Top, paint);
                     //pm.Canvas.DrawBitmap(this.CacheBitmap, new SKRect(left, top, left + width, top + height), paint);
                 }
             }
             else
             {
-                if (width <= 0 || height <= 0) return;
                 // 直接绘制
                 //using (SKBitmap bmp = new SKBitmap((int)(width * pm.Scale), (int)(height * pm.Scale)))
-
                 using (SKBitmap bmp = new SKBitmap((int)drawWidth, (int)drawHeight))
                 {
                     OnPaintMessage(bmp, pm.Scale);
                     using (SKPaint paint = new SKPaint())
                     {
                         paint.FilterQuality = SKFilterQuality.High;
-                        pm.Canvas.DrawBitmap(bmp, left, top, paint);
+                        pm.Canvas.DrawBitmap(bmp, this.Left - margin.Left, this.Top - margin.Top, paint);
                         //pm.Canvas.DrawBitmap(bmp, new SKRect(left, top, left + width, top + height), paint);
                     }
                 }
             }
-            // 设置显示区域
-            this.Rectangle = new Rectangle(left, top, width, height);
             // 还原强制刷新
             _refresh = false;
         }
@@ -385,6 +409,28 @@ namespace Suyaa.Gui.Controls
         }
 
         /// <summary>
+        /// 重置大小事件
+        /// </summary>
+        /// <param name="size"></param>
+        /// <param name="scale"></param>
+        protected virtual void OnResize(Size size, float scale)
+        {
+            this.Resize(size, scale);
+        }
+
+        /// <summary>
+        /// 移动事件
+        /// </summary>
+        /// <param name="point"></param>
+        protected virtual void OnMove(Point point)
+        {
+            // 没变化跳过
+            if (this.Rectangle.Point.Equals(point)) return;
+            // 重新刷新有效区域
+            this.Rectangle = new Rectangle(point.X, point.Y, this.Rectangle.Width, this.Rectangle.Height);
+        }
+
+        /// <summary>
         /// 消息事件
         /// </summary>
         /// <param name="msg"></param>
@@ -426,6 +472,14 @@ namespace Suyaa.Gui.Controls
                 case MouseButtonMessage mouseButton:
                     this.OnMouseButtonMessage(mouseButton);
                     return false;
+                // 布局
+                case ResizeMessage resize:
+                    this.OnResize(resize.Size, resize.Scale);
+                    return true;
+                // 移动事件
+                case MoveMessage move:
+                    this.OnMove(move.Point);
+                    return true;
             }
             return true;
         }
@@ -447,7 +501,17 @@ namespace Suyaa.Gui.Controls
         /// <summary>
         /// 刷新显示事件
         /// </summary>
-        protected virtual bool OnRefresh() { return true; }
+        protected virtual bool OnRefresh()
+        {
+            // 计算dpi比例
+            var scale = Application.GetScale();
+            // 触发重设大小
+            using (ResizeMessage msg = new(this.Handle, this.Size, scale))
+            {
+                this.SendMessage(msg);
+            }
+            return true;
+        }
 
         #endregion
 

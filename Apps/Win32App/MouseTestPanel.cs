@@ -25,6 +25,13 @@ namespace Win32App
     class MouseTestPanelStyles { }
 
     /// <summary>
+    /// 鼠标测试面板信息样式
+    /// </summary>
+    [Position(0, 0, AlignType.Center, AlignType.Center)]
+    //[UserCache(true)]
+    class MouseTestPanelLabelStyles { }
+
+    /// <summary>
     /// 鼠标测试面板
     /// </summary>
     public class MouseTestPanel : Panel
@@ -45,6 +52,7 @@ namespace Win32App
             // 添加控件
             this.Controls.AddRange(
                 _labInfo.UseStyles(d => d
+                    .SetStyles<MouseTestPanelLabelStyles>()
                     .Set<float>(StyleType.X, 5)
                     .Set<float>(StyleType.Y, 5)
                     .Set(StyleType.TextColor, SKColors.White)

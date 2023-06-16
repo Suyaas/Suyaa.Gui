@@ -113,8 +113,8 @@ namespace Suyaa.Gui.Controls
             float[] floatTops = new float[(int)this.Width];
             foreach (var ctl in floatControls)
             {
-                // 跳过固定的
-                if (ctl.Styles.Get<PositionType>(StyleType.Position) == PositionType.Fixed) continue;
+                // 跳过不是浮动的定位
+                if (ctl.Styles.Get<PositionType>(StyleType.Position) != PositionType.Float) continue;
                 // 获取对齐方式
                 var xAlign = ctl.Styles.Get<AlignType>(StyleType.XAlign);
                 // 浮动不支持居中
@@ -181,6 +181,7 @@ namespace Suyaa.Gui.Controls
                     floatTops[i] = bottom;
                 }
                 // 发送移动事件
+                if (ctl.Rectangle.X == x && ctl.Rectangle.Y == y) continue;
                 using (MoveMessage msg = new(ctl.Handle, new Point(x, y)))
                 {
                     if (!ctl.SendMessage(msg)) return false;
@@ -189,7 +190,41 @@ namespace Suyaa.Gui.Controls
             #endregion
 
             #region 处理固定定位
-
+            // 处理浮动定位
+            var fixedControls = Controls.Where(d => d.IsVaild).OrderBy(d => d.ZIndex).ToList();
+            foreach (var ctl in fixedControls)
+            {
+                // 跳过不是浮动的定位
+                if (ctl.Styles.Get<PositionType>(StyleType.Position) != PositionType.Fixed) continue;
+                var x = ctl.Styles.Get<float>(StyleType.X) * resize.Scale;
+                var y = ctl.Styles.Get<float>(StyleType.Y) * resize.Scale;
+                var xAlign = ctl.Styles.Get<AlignType>(StyleType.XAlign);
+                var yAlign = ctl.Styles.Get<AlignType>(StyleType.YAlign);
+                switch (xAlign)
+                {
+                    case AlignType.Center:
+                        x = (size.Width - ctl.Rectangle.Width) / 2 + x;
+                        break;
+                    case AlignType.Opposite:
+                        x = size.Width - ctl.Rectangle.Width - x;
+                        break;
+                }
+                switch (yAlign)
+                {
+                    case AlignType.Center:
+                        y = (size.Height - ctl.Rectangle.Height) / 2 + y;
+                        break;
+                    case AlignType.Opposite:
+                        y = size.Height - ctl.Rectangle.Height - y;
+                        break;
+                }
+                // 发送移动事件
+                if (ctl.Rectangle.X == x && ctl.Rectangle.Y == y) continue;
+                using (MoveMessage msg = new(ctl.Handle, new Point(x, y)))
+                {
+                    if (!ctl.SendMessage(msg)) return false;
+                }
+            }
             #endregion
 
             return true;

@@ -138,10 +138,10 @@ namespace Suyaa.Gui.Forms
                     break;
                 // 状态变化
                 case StatusChangeMessage statusChange:
-                    if (this.FormStatus == FormStatusType.Maximize && statusChange.FormStatus == FormStatusType.Normal)
-                    {
-                        _refresh = true;
-                    }
+                    //if (this.FormStatus == FormStatusType.Maximize && statusChange.FormStatus == FormStatusType.Normal)
+                    //{
+                    //    _refresh = true;
+                    //}
                     this.FormStatus = statusChange.FormStatus;
                     break;
                 // 非工作区鼠标移动

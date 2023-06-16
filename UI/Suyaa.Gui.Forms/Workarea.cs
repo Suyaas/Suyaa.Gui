@@ -45,7 +45,9 @@ namespace Suyaa.Gui.Forms
             this.Styles.Set(StyleType.Width, rect.Width / scale);
             this.Styles.Set(StyleType.Height, rect.Height / scale);
             // 更新有效矩形区域
+            bool isReduce = rect.Width < this.Width || rect.Height < this.Height;
             this.Resize(new Size(rect.Width, rect.Height), scale);
+            if (isReduce) this.Refresh();
         }
 
         /// <summary>

@@ -151,6 +151,20 @@ namespace Suyaa.Gui.Drawing
         }
 
         /// <summary>
+        /// 获取样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <returns></returns>
+        public T Get<T>(StyleType style, T value)
+        {
+            if (!this.ContainsKey(style)) return value;
+            // 检测值类型
+            CheckValueType(style, typeof(T));
+            return (T)this[style];
+        }
+
+        /// <summary>
         /// 生效样式
         /// </summary>
         public void Apply()

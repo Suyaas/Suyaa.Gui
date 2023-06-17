@@ -19,6 +19,7 @@ namespace Win32App
         [BackgroundColor(0xff0094ff)]
         [UserCache(true)]
         [Font(Names = "微软雅黑", Size = 14)]
+        [Padding(10)]
         class FormStyle { }
 
         /// <summary>
@@ -27,6 +28,8 @@ namespace Win32App
         [Size(50, 100, UnitType.Percentage, UnitType.Pixel)]
         //[Position(0, 20, AlignType.Center, AlignType.Normal)]
         [BackgroundColor(0xff003300)]
+        [Margin(10)]
+        [UserDebug(true)]
         class TestBlockStyle { }
 
         /// <summary>

@@ -58,16 +58,22 @@ namespace Suyaa.Gui.Enums
         [StyleValue(typeof(bool))]
         Visible = 0x01,
         /// <summary>
+        /// 使用调试
+        /// </summary>
+        [StyleValue(typeof(bool))]
+        UseDebug = 0x11,
+        /// <summary>
         /// 使用缓存
         /// </summary>
         [StyleValue(typeof(bool))]
-        UseCache = 0x11,
+        UseCache = 0x12,
         /// <summary>
         /// 定位模式
         /// </summary>
         [StyleValue(typeof(PositionType))]
         Position = 0x21,
         #endregion
+
         #region 二维样式_0x100
         /// <summary>
         /// 水平偏移
@@ -110,11 +116,6 @@ namespace Suyaa.Gui.Enums
         [StyleValue(typeof(UnitType))]
         HeightUnit = 0x114,
         /// <summary>
-        /// 内边距（统一）
-        /// </summary>
-        [StyleValue(typeof(float))]
-        Padding = 0x120,
-        /// <summary>
         /// 内上边距
         /// </summary>
         [StyleValue(typeof(float))]
@@ -135,11 +136,32 @@ namespace Suyaa.Gui.Enums
         [StyleValue(typeof(float))]
         PaddingLeft = 0x124,
         /// <summary>
+        /// 外上边距
+        /// </summary>
+        [StyleValue(typeof(float))]
+        MarginTop = 0x131,
+        /// <summary>
+        /// 外右边距
+        /// </summary>
+        [StyleValue(typeof(float))]
+        MarginRight = 0x132,
+        /// <summary>
+        /// 外下边距
+        /// </summary>
+        [StyleValue(typeof(float))]
+        MarginBottom = 0x133,
+        /// <summary>
+        /// 外左边距
+        /// </summary>
+        [StyleValue(typeof(float))]
+        MarginLeft = 0x134,
+        /// <summary>
         /// 背景颜色
         /// </summary>
         [StyleValue(typeof(SKColor))]
-        BackgroundColor = 0x131,
+        BackgroundColor = 0x141,
         #endregion
+
         #region 边框相关样式_0x200
         /// <summary>
         /// 上边框尺寸
@@ -242,6 +264,7 @@ namespace Suyaa.Gui.Enums
         [StyleValue(typeof(SKColor))]
         BorderShadowColor = 0x224,
         #endregion
+
         #region 文本样式_0x300
         /// <summary>
         /// 文本颜色

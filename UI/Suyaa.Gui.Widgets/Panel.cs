@@ -92,12 +92,13 @@ namespace Suyaa.Gui.Controls
         private bool OnResizeMessage(ResizeMessage resize)
         {
             // 获取对象尺寸
-            var size = this.Size;
+            //var size = this.Size;
+            var rect = new Rectangle(0, 0, this.Width, this.Height).Padding(this.Padding);
             // 按照创建先后顺序重置大小
             var controls = Controls.Where(d => d.IsVaild).OrderBy(d => d.Handle).ToList();
             foreach (Control ctl in controls)
             {
-                var ctlSize = ctl.Styles.GetSize(size, resize.Scale);
+                var ctlSize = ctl.Styles.GetSize(rect.Size, resize.Scale);
                 // 发送绘制消息
                 using (ResizeMessage msg = new(ctl.Handle, ctlSize, resize.Scale))
                 {
@@ -110,11 +111,14 @@ namespace Suyaa.Gui.Controls
             var floatControls = Controls.Where(d => d.IsVaild).OrderBy(d => d.Handle).ToList();
             float floatLeft = 0;
             float floatRight = 0;
-            float[] floatTops = new float[(int)this.Width];
+            float[] floatTops = new float[(int)rect.Width];
             foreach (var ctl in floatControls)
             {
                 // 跳过不是浮动的定位
                 if (ctl.Styles.Get<PositionType>(StyleType.Position) != PositionType.Float) continue;
+                // 获取控件的外边距及真实占位矩形
+                var ctlMargin = ctl.Margin;
+                var ctlRect = ctl.Rectangle.Margin(ctlMargin, AlignType.Normal, AlignType.Normal);
                 // 获取对齐方式
                 var xAlign = ctl.Styles.Get<AlignType>(StyleType.XAlign);
                 // 浮动不支持居中
@@ -127,44 +131,44 @@ namespace Suyaa.Gui.Controls
                     // 左浮动
                     x = floatLeft;
                     // 右占位
-                    right = x + ctl.Rectangle.Width;
+                    right = x + ctlRect.Width;
                     // 超出范围则换入下一行
-                    if (right > this.Width)
+                    if (rect.Left + right > rect.Right)
                     {
                         if (floatLeft > 0)
                         {
                             floatLeft = 0;
-                            x = 0;
-                            right = x + ctl.Rectangle.Width;
+                            x = floatLeft;
+                            right = ctlRect.Width < rect.Width ? x + ctlRect.Width : rect.Width;
                         }
                         else
                         {
-                            right = this.Width;
+                            right = rect.Width;
                         }
                     }
                     // 添加浮动偏移
-                    floatLeft += ctl.Rectangle.Width;
+                    floatLeft += ctlRect.Width;
                 }
                 else
                 {
                     // 计算右浮动
-                    x = size.Width - ctl.Rectangle.Width - floatRight;
+                    x = rect.Width - ctlRect.Width - floatRight;
                     if (x < 0)
                     {
                         if (floatRight > 0)
                         {
                             floatRight = 0;
-                            x = size.Width - ctl.Rectangle.Width;
+                            x = rect.Width - ctlRect.Width;
                         }
                         else
                         {
-                            floatRight = size.Width - ctl.Rectangle.Width;
+                            floatRight = rect.Width - ctlRect.Width;
                         }
                     }
                     // 右占位
-                    right = x + ctl.Rectangle.Width;
+                    right = x + ctlRect.Width;
                     // 添加浮动偏移
-                    floatRight += ctl.Rectangle.Width;
+                    floatRight += ctlRect.Width;
                 }
                 // 查找合适的上边距
                 float y = 0;
@@ -173,13 +177,16 @@ namespace Suyaa.Gui.Controls
                     if (x < 0) continue;
                     if (floatTops[i] > y) y = floatTops[i];
                 }
-                float bottom = y + ctl.Rectangle.Height;
+                float bottom = y + ctlRect.Height;
                 // 更新上边距占位
                 for (int i = (int)x; i < right; i++)
                 {
                     if (x < 0) continue;
                     floatTops[i] = bottom;
                 }
+                // 转化为兼容父对象内边距和自身的外边距
+                x += rect.Left + ctlMargin.Left;
+                y += rect.Top + ctlMargin.Top;
                 // 发送移动事件
                 if (ctl.Rectangle.X == x && ctl.Rectangle.Y == y) continue;
                 using (MoveMessage msg = new(ctl.Handle, new Point(x, y)))
@@ -203,19 +210,19 @@ namespace Suyaa.Gui.Controls
                 switch (xAlign)
                 {
                     case AlignType.Center:
-                        x = (size.Width - ctl.Rectangle.Width) / 2 + x;
+                        x = rect.Left + (rect.Width - ctl.Rectangle.Width) / 2 + x;
                         break;
                     case AlignType.Opposite:
-                        x = size.Width - ctl.Rectangle.Width - x;
+                        x = rect.Right - ctl.Rectangle.Width - x;
                         break;
                 }
                 switch (yAlign)
                 {
                     case AlignType.Center:
-                        y = (size.Height - ctl.Rectangle.Height) / 2 + y;
+                        y = rect.Top + (rect.Height - ctl.Rectangle.Height) / 2 + y;
                         break;
                     case AlignType.Opposite:
-                        y = size.Height - ctl.Rectangle.Height - y;
+                        y = rect.Bottom - ctl.Rectangle.Height - y;
                         break;
                 }
                 // 发送移动事件

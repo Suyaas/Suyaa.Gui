@@ -39,6 +39,22 @@ namespace Suyaa.Gui.Drawing
             this.Left = left;
         }
 
-        
+        /// <summary>
+        /// 转化为字符串
+        /// </summary>
+        /// <returns></returns>
+        public new string ToString()
+        {
+            return $"Margin({this.Top},{this.Right},{this.Bottom},{this.Left})";
+        }
+
+        /// <summary>
+        /// 转化为字符串
+        /// </summary>
+        /// <returns></returns>
+        public string ToString(string name)
+        {
+            return $"{name}({this.Top},{this.Right},{this.Bottom},{this.Left})";
+        }
     }
 }

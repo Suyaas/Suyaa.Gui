@@ -124,12 +124,12 @@ namespace Suyaa.Gui.Controls
         /// <summary>
         /// 外边距
         /// </summary>
-        public Margin Margin { get; private set; }
+        public Margin Margin { get; internal protected set; }
 
         /// <summary>
         /// 内边距
         /// </summary>
-        public Margin Padding { get; private set; }
+        public Margin Padding { get; internal protected set; }
 
         /// <summary>
         /// 主体区域
@@ -166,10 +166,10 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public float Top => this.Rectangle.Top;
 
-        /// <summary>
-        /// 矩形显示区域
-        /// </summary>
-        public Rectangle DisplayRectangle { get; private set; }
+        ///// <summary>
+        ///// 矩形显示区域
+        ///// </summary>
+        //public Rectangle DisplayRectangle { get; private set; }
 
         /// <summary>
         /// 更新主体区域
@@ -183,6 +183,9 @@ namespace Suyaa.Gui.Controls
             if (this.Rectangle.Size.Equals(size)) return;
             // 重新刷新有效区域
             this.Rectangle = new Rectangle(this.Rectangle.Left, this.Rectangle.Top, size.Width, size.Height);
+            // 计算内外边距
+            this.Padding = this.Styles.GetPadding(scale);
+            this.Margin = this.Styles.GetMargin(scale);
             if (relayout)
             {
                 // 控件无效则不处理
@@ -251,14 +254,31 @@ namespace Suyaa.Gui.Controls
                 this.OnPainting(cvs, rect, scale);
                 this.OnPainted(cvs, rect, scale);
 #if DEBUG
-                using (SKPaint paint = new SKPaint(new SKFont(SKTypeface.FromFamilyName("Consolas")))
+                // 调试输出
+                if (this.Styles.Get(StyleType.UseDebug, false))
                 {
-                    Color = new SKColor(0x88ffffff),
-                    TextSize = 9,
-                })
-                {
-                    paint.GetFontMetrics(out SKFontMetrics metrics);
-                    cvs.DrawText($"{this.Left},{this.Top},{this.Width},{this.Height}", 0, 0 - metrics.Top, paint);
+                    using (SKPaint paint = new SKPaint(new SKFont(SKTypeface.FromFamilyName("Consolas")))
+                    {
+                        Color = new SKColor(0x88333333),
+                        TextSize = 9,
+                    })
+                    {
+                        paint.GetFontMetrics(out SKFontMetrics metrics);
+                        cvs.DrawText($"{this.Left},{this.Top},{this.Width},{this.Height}", 1, 1 - metrics.Top, paint);
+                        cvs.DrawText($"{this.Margin.ToString("Margin")}", 1, 13 - metrics.Top, paint);
+                        cvs.DrawText($"{this.Padding.ToString("Padding")}", 1, 25 - metrics.Top, paint);
+                    }
+                    using (SKPaint paint = new SKPaint(new SKFont(SKTypeface.FromFamilyName("Consolas")))
+                    {
+                        Color = new SKColor(0x88ffffff),
+                        TextSize = 9,
+                    })
+                    {
+                        paint.GetFontMetrics(out SKFontMetrics metrics);
+                        cvs.DrawText($"{this.Left},{this.Top},{this.Width},{this.Height}", 0, 0 - metrics.Top, paint);
+                        cvs.DrawText($"{this.Margin.ToString("Margin")}", 0, 12 - metrics.Top, paint);
+                        cvs.DrawText($"{this.Padding.ToString("Padding")}", 0, 24 - metrics.Top, paint);
+                    }
                 }
 #endif
             }
@@ -277,32 +297,20 @@ namespace Suyaa.Gui.Controls
             var useCache = this.Styles.Get<bool>(StyleType.UseCache);
             //var rect = pm.Rectangle;
 
-            #region 计算外边距
-            var margin = this.Styles.GetMargin(pm.Scale);
-            this.Margin = margin;
-            #endregion
+            // 获取属性信息
+            var margin = this.Margin;
+            var marginDisplay = this.Styles.GetDisplayMargin(pm.Scale);
+            var rectDisplay = this.Rectangle.Margin(marginDisplay);
 
-            #region 获取矩形区域
-            //var rect = this.Styles.GetRectangle(pm.Rectangle, margin, pm.Scale);
-            //this.Rectangle = rect;
-            //else
-            //{
-            //    height = height / pm.Scale;
-            //}
-
-            //var drawWidth = width;
-            //var drawHeight = height;
-            #endregion
-
-            var drawWidth = this.Width + margin.Left + margin.Right;
-            var drawHeight = this.Height + margin.Top + margin.Bottom;
+            //var drawWidth = this.Width + margin.Left + margin.Right;
+            //var drawHeight = this.Height + margin.Top + margin.Bottom;
 
             // 判断是否使用缓存
             if (useCache)
             {
                 if (this.CacheBitmap != null)
                 {
-                    if (this.CacheBitmap.Width != drawWidth || this.CacheBitmap.Height != drawHeight || _refresh)
+                    if (this.CacheBitmap.Width != rectDisplay.Width || this.CacheBitmap.Height != rectDisplay.Height || _refresh)
                     {
                         this.CacheBitmap.Dispose();
                         this.CacheBitmap = null;
@@ -312,13 +320,13 @@ namespace Suyaa.Gui.Controls
                 if (this.CacheBitmap is null)
                 {
                     //this.CacheBitmap = new SKBitmap((int)(width * pm.Scale), (int)(height * pm.Scale));
-                    this.CacheBitmap = new SKBitmap((int)drawWidth, (int)drawHeight);
+                    this.CacheBitmap = new SKBitmap((int)rectDisplay.Width, (int)rectDisplay.Height);
                     OnPaintMessage(this.CacheBitmap, pm.Scale);
                 }
                 using (SKPaint paint = new SKPaint())
                 {
                     paint.FilterQuality = SKFilterQuality.High;
-                    pm.Canvas.DrawBitmap(this.CacheBitmap, this.Left - margin.Left, this.Top - margin.Top, paint);
+                    pm.Canvas.DrawBitmap(this.CacheBitmap, this.Left - marginDisplay.Left, this.Top - marginDisplay.Top, paint);
                     //pm.Canvas.DrawBitmap(this.CacheBitmap, new SKRect(left, top, left + width, top + height), paint);
                 }
             }
@@ -326,13 +334,13 @@ namespace Suyaa.Gui.Controls
             {
                 // 直接绘制
                 //using (SKBitmap bmp = new SKBitmap((int)(width * pm.Scale), (int)(height * pm.Scale)))
-                using (SKBitmap bmp = new SKBitmap((int)drawWidth, (int)drawHeight))
+                using (SKBitmap bmp = new SKBitmap((int)rectDisplay.Width, (int)rectDisplay.Height))
                 {
                     OnPaintMessage(bmp, pm.Scale);
                     using (SKPaint paint = new SKPaint())
                     {
                         paint.FilterQuality = SKFilterQuality.High;
-                        pm.Canvas.DrawBitmap(bmp, this.Left - margin.Left, this.Top - margin.Top, paint);
+                        pm.Canvas.DrawBitmap(bmp, this.Left - marginDisplay.Left, this.Top - marginDisplay.Top, paint);
                         //pm.Canvas.DrawBitmap(bmp, new SKRect(left, top, left + width, top + height), paint);
                     }
                 }

@@ -39,9 +39,19 @@ namespace Suyaa.Gui
         Rectangle Rectangle { get; }
 
         /// <summary>
-        /// 显示区域
+        /// 内边距
         /// </summary>
-        Rectangle DisplayRectangle { get; }
+        Margin Padding { get; }
+
+        /// <summary>
+        /// 外边距
+        /// </summary>
+        Margin Margin { get; }
+
+        ///// <summary>
+        ///// 显示区域
+        ///// </summary>
+        //Rectangle DisplayRectangle { get; }
 
         /// <summary>
         /// 父控件

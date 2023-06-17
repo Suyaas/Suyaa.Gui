@@ -47,6 +47,8 @@ namespace Suyaa.Gui.Forms
             // 更新有效矩形区域
             bool isReduce = rect.Width < this.Width || rect.Height < this.Height;
             this.Resize(new Size(rect.Width, rect.Height), scale);
+            // 计算内外边距
+            this.Padding = form.Styles.GetPadding(scale);
             if (isReduce) this.Refresh();
         }
 

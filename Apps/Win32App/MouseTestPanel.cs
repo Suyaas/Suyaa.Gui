@@ -21,7 +21,9 @@ namespace Win32App
     [BorderTop(1, 0xffff0000, BorderStyleType.Dashed)]
     [BorderRight(1, 0xffffffff, BorderStyleType.Solid)]
     [BorderBottom(2, 0xffff00ff, BorderStyleType.Dashed)]
-    //[UserCache(true)]
+    [BorderLeft(2, 0xffffffff, BorderStyleType.Solid)]
+    [UserDebug]
+    [BorderShadow(0, 0, 10, 0xff333333)]
     class MouseTestPanelStyles { }
 
     /// <summary>

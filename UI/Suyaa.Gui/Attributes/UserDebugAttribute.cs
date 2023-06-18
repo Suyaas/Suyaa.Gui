@@ -19,5 +19,12 @@ namespace Suyaa.Gui.Attributes
         public UserDebugAttribute(bool value) : base(StyleType.UseDebug, value)
         {
         }
+
+        /// <summary>
+        /// 是否使用调试
+        /// </summary>
+        public UserDebugAttribute() : base(StyleType.UseDebug, true)
+        {
+        }
     }
 }

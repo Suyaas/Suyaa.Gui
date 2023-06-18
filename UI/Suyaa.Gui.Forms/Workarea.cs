@@ -1,6 +1,7 @@
 ﻿using Forms;
 using SkiaSharp;
 using Suyaa.Gui.Controls;
+using Suyaa.Gui.Controls.EventArgs;
 using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Enums;
 using Suyaa.Gui.Native.Win32;
@@ -8,9 +9,12 @@ using Suyaa.Gui.Native.Win32.Apis;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Suyaa.Gui.Native.Win32.Apis.User32;
+using Size = Suyaa.Gui.Drawing.Size;
 
 namespace Suyaa.Gui.Forms
 {
@@ -55,14 +59,12 @@ namespace Suyaa.Gui.Forms
         /// <summary>
         /// 绘制
         /// </summary>
-        /// <param name="cvs"></param>
-        /// <param name="rect"></param>
-        /// <param name="scale"></param>
-        protected override void OnPainting(SKCanvas cvs, Rectangle rect, float scale)
+        /// <param name="e"></param>
+        protected override void OnPainting(PaintEventArgs e)
         {
             var form = (FormBase)this.Form;
-            form.WorkareaRepaint(cvs);
-            base.OnPainting(cvs, rect, scale);
+            form.WorkareaRepaint(e.Canvas);
+            base.OnPainting(e);
         }
     }
 }

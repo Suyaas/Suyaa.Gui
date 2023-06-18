@@ -105,5 +105,38 @@ namespace Suyaa.Gui.Helpers
                 rect.Height - padding.Top - padding.Bottom
                 );
         }
+
+        /// <summary>
+        /// 获取移动后的矩形
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="point"></param>
+        /// <returns></returns>
+        public static Rectangle Move(this Rectangle rect, Point point)
+        {
+            return new Rectangle(
+                rect.Left + point.X,
+                rect.Top + point.Y,
+                rect.Width,
+                rect.Height
+                );
+        }
+
+        /// <summary>
+        /// 获取移动后的矩形
+        /// </summary>
+        /// <param name="rect"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static Rectangle Move(this Rectangle rect, float x, float y)
+        {
+            return new Rectangle(
+                rect.Left + x,
+                rect.Top + y,
+                rect.Width,
+                rect.Height
+                );
+        }
     }
 }

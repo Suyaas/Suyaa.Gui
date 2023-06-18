@@ -17,7 +17,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 尺寸
         /// </summary>
-        public float Size { get; set; }
+        public int Size { get; set; }
 
         /// <summary>
         /// 颜色
@@ -37,7 +37,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 边框样式设置
         /// </summary>
-        public BorderShadowAttribute(float x, float y, float size, uint color) : base(StyleType.None)
+        public BorderShadowAttribute(float x, float y, int size, uint color) : base(StyleType.None)
         {
             this.Size = size;
             this.Color = new SKColor(color);

@@ -22,9 +22,9 @@ namespace Suyaa.Gui.Drawing
         /// <returns></returns>
         public static Margin GetShadowMargin(this Styles styles, float scale)
         {
-            if (!styles.ContainsKey(StyleType.BorderShadowSize)) return new Margin(0, 0, 0, 0);
             // 获取阴影大小
-            var size = styles.Get<float>(StyleType.BorderShadowSize) * scale;
+            var size = (int)(styles.Get(StyleType.BorderShadowSize, 0) * scale);
+            if (size <= 0) return new Margin(0, 0, 0, 0);
             // 获取横向偏移
             float x = 0;
             if (styles.ContainsKey(StyleType.BorderShadowX)) x = styles.Get<float>(StyleType.BorderShadowX) * scale;
@@ -50,6 +50,20 @@ namespace Suyaa.Gui.Drawing
             float right = styles.Get<float>(StyleType.PaddingRight, 0) * scale;
             float bottom = styles.Get<float>(StyleType.PaddingBottom, 0) * scale;
             float left = styles.Get<float>(StyleType.PaddingLeft, 0) * scale;
+            return new Margin((int)top, (int)right, (int)bottom, (int)left);
+        }
+
+        /// <summary>
+        /// 获取内边距
+        /// </summary>
+        /// <param name="styles"></param>
+        /// <returns></returns>
+        public static Margin GetBorders(this Styles styles, float scale)
+        {
+            float top = styles.Get<float>(StyleType.BorderTopSize, 0) * scale;
+            float right = styles.Get<float>(StyleType.BorderRightSize, 0) * scale;
+            float bottom = styles.Get<float>(StyleType.BorderBottomSize, 0) * scale;
+            float left = styles.Get<float>(StyleType.BorderLeftSize, 0) * scale;
             return new Margin((int)top, (int)right, (int)bottom, (int)left);
         }
 

@@ -1,4 +1,5 @@
 ﻿using SkiaSharp;
+using Suyaa.Gui.Controls.EventArgs;
 using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Enums;
 using Suyaa.Gui.Messages;
@@ -114,18 +115,18 @@ namespace Suyaa.Gui.Controls
         /// <param name="cvs"></param>
         /// <param name="rect"></param>
         /// <param name="scale"></param>
-        protected override void OnPainting(SKCanvas cvs, Rectangle rect, float scale)
+        protected override void OnPainting(PaintEventArgs e)
         {
-            base.OnPainting(cvs, rect, scale);
+            base.OnPainting(e);
             //cvs.Clear(SKColors.White);
             using (SKPaint paint = new SKPaint(this.Font)
             {
                 Color = this.Color,
-                TextSize = this.FontSize * scale,
+                TextSize = this.FontSize * e.Scale,
             })
             {
                 paint.GetFontMetrics(out SKFontMetrics metrics);
-                cvs.DrawText(this.Content, 0, 0 - metrics.Top, paint);
+                e.Canvas.DrawText(this.Content, 0, 0 - metrics.Top, paint);
             }
         }
     }

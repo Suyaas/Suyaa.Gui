@@ -7,6 +7,7 @@ using Suyaa.Gui.Native.Win32.Apis;
 using static System.Formats.Asn1.AsnWriter;
 using Suyaa.Gui.Enums;
 using System.Runtime.InteropServices;
+using Suyaa.Gui.Controls.EventArgs;
 
 namespace Suyaa.Gui.Controls
 {
@@ -39,15 +40,15 @@ namespace Suyaa.Gui.Controls
         /// <param name="cvs"></param>
         /// <param name="rect"></param>
         /// <param name="scale"></param>
-        protected override void OnPainted(SKCanvas cvs, Rectangle rect, float scale)
+        protected override void OnPainted(PaintEventArgs e)
         {
-            base.OnPainted(cvs, rect, scale);
+            base.OnPainted(e);
             // 按照Z轴深度和创建先后依次绘制子控件
             var controls = Controls.Where(d => d.IsVaild).OrderBy(d => d.ZIndex).ThenBy(d => d.Handle).ToList();
             foreach (Control c in controls)
             {
                 // 发送绘制消息
-                using (PaintMessage msg = new(c.Handle, cvs, rect, scale))
+                using (PaintMessage msg = new(c.Handle, e.Canvas, e.Rectangle, e.Scale))
                 {
                     c.SendMessage(msg);
                 }
@@ -93,7 +94,13 @@ namespace Suyaa.Gui.Controls
         {
             // 获取对象尺寸
             //var size = this.Size;
-            var rect = new Rectangle(0, 0, this.Width, this.Height).Padding(this.Padding);
+            var rect = new Rectangle(0, 0, this.Width, this.Height)
+                .Padding(this.Styles.GetBorders(resize.Scale)) // 去掉边框
+                .Padding(this.Padding); //去掉内边距
+
+            if (rect.Width <= 0 || rect.Height <= 0)
+                return false;
+
             // 按照创建先后顺序重置大小
             var controls = Controls.Where(d => d.IsVaild).OrderBy(d => d.Handle).ToList();
             foreach (Control ctl in controls)

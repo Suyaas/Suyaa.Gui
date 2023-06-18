@@ -19,5 +19,12 @@ namespace Suyaa.Gui.Attributes
         public UserCacheAttribute(bool value) : base(StyleType.UseCache, value)
         {
         }
+
+        /// <summary>
+        /// 使用缓存
+        /// </summary>
+        public UserCacheAttribute() : base(StyleType.UseCache, true)
+        {
+        }
     }
 }

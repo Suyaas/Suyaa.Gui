@@ -7,6 +7,8 @@ using Suyaa.Gui.Native.Win32.Apis;
 using Suyaa.Gui.Enums;
 using System.Reflection.Metadata.Ecma335;
 using System.Xml.Linq;
+using Suyaa.Gui.Controls.EventArgs;
+using static Suyaa.Gui.Native.Win32.Apis.User32;
 //using System.Drawing;
 
 namespace Suyaa.Gui.Controls
@@ -230,17 +232,43 @@ namespace Suyaa.Gui.Controls
 
         #endregion
 
-        #region 继承函数
+        #region 事件处理
 
         /// <summary>
         /// 绘制中事件
         /// </summary>
-        protected virtual void OnPainting(SKCanvas cvs, Rectangle rect, float scale) { }
+        protected virtual void OnPainting(PaintEventArgs e) { }
 
         /// <summary>
         /// 绘制结束事件
         /// </summary>
-        protected virtual void OnPainted(SKCanvas cvs, Rectangle rect, float scale) { }
+        protected virtual void OnPainted(PaintEventArgs e) { }
+
+        /// <summary>
+        /// 绘制标准样式
+        /// </summary>
+        public void PaintStandardStyles(PaintEventArgs e)
+        {
+            // 组织变量
+            var styles = e.Styles;
+            var cvs = e.Canvas;
+            var marginDisplay = this.Styles.GetDisplayMargin(e.Scale);
+            var rect = e.Rectangle.Padding(marginDisplay);
+            // 绘制阴影
+            cvs.DrawShadowStyles(styles, rect, e.Scale);
+            // 绘制背景
+            cvs.DrawBackgroundStyles(styles, rect.Padding(styles.GetBorders(e.Scale)));
+            // 绘制上边框
+            cvs.DrawBorderTopStyles(styles, rect);
+            // 绘制右边框
+            cvs.DrawBorderRightStyles(styles, rect);
+            // 绘制下边框
+            cvs.DrawBorderBottomStyles(styles, rect);
+            // 绘制左边框
+            cvs.DrawBorderLeftStyles(styles, rect);
+            // 绘制阴影
+            //cvs.DrawShadowStyles(styles, rect, e.Scale);
+        }
 
         /// <summary>
         /// 绘制预处理事件
@@ -250,9 +278,15 @@ namespace Suyaa.Gui.Controls
             using (SKCanvas cvs = new SKCanvas(bitmap))
             {
                 var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
-                cvs.DrawStyles(this.Styles, rect);
-                this.OnPainting(cvs, rect, scale);
-                this.OnPainted(cvs, rect, scale);
+                //cvs.DrawStyles(this.Styles, rect);
+                using (PaintEventArgs e = new(cvs, this.Styles))
+                {
+                    e.Rectangle = rect;
+                    e.Scale = scale;
+                    this.PaintStandardStyles(e);
+                    this.OnPainting(e);
+                    this.OnPainted(e);
+                }
 #if DEBUG
                 // 调试输出
                 if (this.Styles.Get(StyleType.UseDebug, false))

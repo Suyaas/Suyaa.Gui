@@ -27,7 +27,6 @@ namespace Win32App
         protected override void OnWorkareaPaint(SKCanvas canvas)
         {
             base.OnWorkareaPaint(canvas);
-
             SKCanvas cvs = canvas;
             cvs.Clear(SKColors.Gray);
         }

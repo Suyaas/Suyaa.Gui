@@ -4,6 +4,8 @@ using Suyaa.Gui.Controls;
 using Suyaa.Gui.Controls.EventArgs;
 using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Enums;
+using Suyaa.Gui.Native.Helpers;
+using Suyaa.Gui.Native.Linux;
 using Suyaa.Gui.Native.Win32;
 using Suyaa.Gui.Native.Win32.Apis;
 using System;
@@ -23,6 +25,9 @@ namespace Suyaa.Gui.Forms
     /// </summary>
     public class Workarea : Panel
     {
+        // 最后一次鼠标点击
+        private CursorType? _lastCursor;
+
         /// <summary>
         /// 工作区域
         /// </summary>
@@ -65,6 +70,33 @@ namespace Suyaa.Gui.Forms
             var form = (FormBase)this.Form;
             form.WorkareaRepaint(e.Canvas);
             base.OnPainting(e);
+        }
+
+        /// <summary>
+        /// 鼠标移入
+        /// </summary>
+        protected override void OnMouseHover()
+        {
+            if (!this.IsVaild) return;
+            // 兼容鼠标处理
+            var form = (FormBase)this.Form;
+            if (!form.Styles.ContainsKey(StyleType.Cursor)) return;
+            //_lastCursor = null;
+            var cur = form.Styles.Get<CursorType>(StyleType.Cursor);
+            //if (this.Form.Cursor.Equals(cur)) return;
+            _lastCursor = this.Form.Cursor;
+            this.Form.Cursor = cur;
+        }
+
+        /// <summary>
+        /// 鼠标移出
+        /// </summary>
+        protected override void OnMouseLeave()
+        {
+            if (!this.IsVaild) return;
+            // 兼容鼠标处理
+            if (!_lastCursor.HasValue) return;
+            this.Form.Cursor = _lastCursor.Value;
         }
     }
 }

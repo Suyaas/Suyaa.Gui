@@ -9,6 +9,8 @@ using System.Reflection.Metadata.Ecma335;
 using System.Xml.Linq;
 using Suyaa.Gui.Controls.EventArgs;
 using static Suyaa.Gui.Native.Win32.Apis.User32;
+using Suyaa.Gui.Native.Win32;
+using Suyaa.Gui.Native.Helpers;
 //using System.Drawing;
 
 namespace Suyaa.Gui.Controls
@@ -27,6 +29,8 @@ namespace Suyaa.Gui.Controls
         private bool _mouseOn;
         // 最后一次鼠标点击
         private int _lastMouseClick;
+        // 最后一次鼠标点击
+        private CursorType? _lastCursor;
 
         /// <summary>
         /// 创建一个控件
@@ -392,12 +396,28 @@ namespace Suyaa.Gui.Controls
         /// <summary>
         /// 鼠标移入事件
         /// </summary>
-        protected virtual void OnMouseHover() { }
+        protected virtual void OnMouseHover()
+        {
+            if (!this.IsVaild) return;
+            // 兼容鼠标处理
+            if (!this.Styles.ContainsKey(StyleType.Cursor)) return;
+            //_lastCursor = null;
+            var cur = this.Styles.Get<CursorType>(StyleType.Cursor);
+            //if (_form!.Cursor.Equals(cur)) return;
+            _lastCursor = this.Form.Cursor;
+            this.Form.Cursor = cur;
+        }
 
         /// <summary>
         /// 鼠标移出事件
         /// </summary>
-        protected virtual void OnMouseLeave() { }
+        protected virtual void OnMouseLeave()
+        {
+            if (!this.IsVaild) return;
+            // 兼容鼠标处理
+            if (!_lastCursor.HasValue) return;
+            this.Form.Cursor = _lastCursor.Value;
+        }
 
         /// <summary>
         /// 鼠标移动事件

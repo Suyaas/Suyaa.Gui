@@ -22,6 +22,7 @@ namespace Forms
     /// </summary>
     public abstract partial class FormBase : IForm
     {
+
         /// <summary>
         /// 原生窗体
         /// </summary>
@@ -56,6 +57,15 @@ namespace Forms
         /// 控件集合
         /// </summary>
         public IControlCollection<IControl> Controls => this.Workarea.Controls;
+
+        /// <summary>
+        /// 光标
+        /// </summary>
+        public CursorType Cursor
+        {
+            get => this.NativeForm.Cursor;
+            set => this.NativeForm.Cursor = value;
+        }
 
         /// <summary>
         /// 窗体

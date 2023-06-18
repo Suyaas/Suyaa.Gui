@@ -35,7 +35,8 @@ namespace Suyaa.Gui.Forms
                 .Set<float>(StyleType.Width, 300)
                 .Set<float>(StyleType.Height, 300)
                 .Set(StyleType.TextColor, new SKColor(0xff000000))
-                .Set(StyleType.BackgroundColor, new SKColor(0xfffdfdfd));
+                .Set(StyleType.BackgroundColor, new SKColor(0xfffdfdfd))
+                .Set(StyleType.Cursor, CursorType.Default);
         }
 
         // 生效样式特性

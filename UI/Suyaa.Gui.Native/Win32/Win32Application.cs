@@ -31,6 +31,8 @@ namespace Suyaa.Gui.Native.Win32
             this.Handles = new Dictionary<IntPtr, long>();
             // 设置
             Application.SetScale(Gdi32.GetDpiScale());
+            // 光标预加载
+            Cursors.Load();
         }
 
         /// <summary>

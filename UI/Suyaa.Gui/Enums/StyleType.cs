@@ -72,6 +72,11 @@ namespace Suyaa.Gui.Enums
         /// </summary>
         [StyleValue(typeof(PositionType))]
         Position = 0x21,
+        /// <summary>
+        /// 光标
+        /// </summary>
+        [StyleValue(typeof(CursorType))]
+        Cursor = 0x31,
         #endregion
 
         #region 二维样式_0x100

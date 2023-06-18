@@ -7,11 +7,15 @@ using Suyaa.Gui.Native.Win32.Apis;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using static Suyaa.Gui.Native.Win32.Apis.User32;
+using Point = Suyaa.Gui.Drawing.Point;
+using Rectangle = Suyaa.Gui.Drawing.Rectangle;
+using Size = Suyaa.Gui.Drawing.Size;
 
 namespace Suyaa.Gui.Native.Win32
 {
@@ -137,7 +141,7 @@ namespace Suyaa.Gui.Native.Win32
         public static void ProcPaint(IntPtr hwnd)
         {
             // 输出调试
-            Debug.WriteLine($"[Win32Message] Paint - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}");
+            //Debug.WriteLine($"[Win32Message] Paint - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}");
             // 计算dpi比例
             //var scale = Gdi32.GetDpiScale();
             var scale = Application.GetScale();
@@ -155,7 +159,7 @@ namespace Suyaa.Gui.Native.Win32
         public static void ProcResize(Win32Form form, float scale)
         {
             // 输出调试
-            Debug.WriteLine($"[Win32Message] Resize - Handle: 0x{form.Handle.ToString("x").PadLeft(12, '0')}");
+            //Debug.WriteLine($"[Win32Message] Resize - Handle: 0x{form.Handle.ToString("x").PadLeft(12, '0')}");
             using (ResizeMessage msg = new(form.Handle, new Size(), scale))
             {
                 Application.SendMessage(msg);
@@ -254,6 +258,23 @@ namespace Suyaa.Gui.Native.Win32
             }
         }
 
+        /// <summary>
+        /// 处理光标消息
+        /// </summary>
+        /// <param name="hwnd"></param>
+        public static void ProcCursor(IntPtr hwnd)
+        {
+            // 获取窗体
+            var form = GetFormByHwnd(hwnd);
+            //var cursor = (Cursor)form.Cursor;
+            Debug.WriteLine($"[Win32Message] Cursor - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, Cursor: {form.Cursor})");
+            //form.Cursor = form.Cursor;
+            using (CursorMessage msg = new(form.Handle))
+            {
+                form.SendMessage(msg);
+            }
+        }
+
         #endregion
 
         /// <summary>
@@ -300,8 +321,9 @@ namespace Suyaa.Gui.Native.Win32
                     Win32Application win32 = (Win32Application)Application.GetCurrent();
                     Application.PostMessage(new CloseMessage(win32.GetHandleByHwnd(hwnd)));
                     break;
+                case User32.WM.SETCURSOR: ProcCursor(hwnd); break;
                 default:
-                    Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
+                    //Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
                     break;
             }
             var res = User32.DefWindowProcW(hwnd, wm, wParam, lParam);

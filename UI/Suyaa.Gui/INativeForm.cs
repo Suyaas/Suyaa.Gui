@@ -1,4 +1,5 @@
 ﻿using Suyaa.Gui;
+using Suyaa.Gui.Enums;
 
 namespace Forms
 {
@@ -21,5 +22,10 @@ namespace Forms
         /// 显示
         /// </summary>
         void Show();
+
+        /// <summary>
+        /// 光标类型
+        /// </summary>
+        CursorType Cursor { get; set; }
     }
 }

@@ -43,5 +43,9 @@ namespace Suyaa.Gui.Enums
         /// 鼠标按键操作
         /// </summary>
         MouseButton = 0x302,
+        /// <summary>
+        /// 光标设置
+        /// </summary>
+        Cursor = 0x311,
     }
 }

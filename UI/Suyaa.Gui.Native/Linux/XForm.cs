@@ -66,6 +66,11 @@ namespace Suyaa.Gui.Native.Linux
         public SKBitmap? CacheBitmap { get; private set; }
 
         /// <summary>
+        /// 光标
+        /// </summary>
+        public CursorType Cursor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        /// <summary>
         /// 释放资源
         /// </summary>
         public void Dispose()

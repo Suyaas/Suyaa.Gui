@@ -10,6 +10,7 @@ using static System.Formats.Asn1.AsnWriter;
 using System.Runtime.CompilerServices;
 using Suyaa.Gui.Native.Helpers;
 using Suyaa.Gui.Enums;
+using System.Runtime.ConstrainedExecution;
 
 namespace Suyaa.Gui.Native.Win32
 {
@@ -24,6 +25,8 @@ namespace Suyaa.Gui.Native.Win32
         private string _title = string.Empty;
         // 默认线程操作对象
         private readonly User32.WNDPROC _windProc;
+        // 光标
+        private CursorType? _cursor;
 
         /// <summary>
         /// Win32窗体
@@ -38,6 +41,30 @@ namespace Suyaa.Gui.Native.Win32
             this.Styles = new Styles(this);
             //this.Styles.Set<float>(StyleType.Width, 300);
             //this.Styles.Set<float>(StyleType.Height, 300);
+        }
+
+        #endregion
+
+        #region 私有函数
+
+        /// <summary>
+        /// 获取默认光标
+        /// </summary>
+        /// <returns></returns>
+        private CursorType OnGetDefaultCursor()
+        {
+            CursorType cur = CursorType.Default;
+            User32.SetCursor(cur.GetWin32Cursor());
+            return cur;
+        }
+
+        /// <summary>
+        /// 获取默认光标
+        /// </summary>
+        /// <returns></returns>
+        private void OnSetCursor(CursorType cursor)
+        {
+            User32.SetCursor(cursor.GetWin32Cursor());
         }
 
         #endregion
@@ -73,6 +100,19 @@ namespace Suyaa.Gui.Native.Win32
             set
             {
                 _title = value;
+            }
+        }
+
+        /// <summary>
+        /// 光标
+        /// </summary>
+        public CursorType Cursor
+        {
+            get => _cursor ??= OnGetDefaultCursor();
+            set
+            {
+                _cursor = value;
+                OnSetCursor(value);
             }
         }
 

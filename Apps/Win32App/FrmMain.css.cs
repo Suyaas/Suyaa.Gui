@@ -16,8 +16,8 @@ namespace Win32App
         /// </summary>
         [Size(800, 500)]
         [Position(0, -50, AlignType.Center, AlignType.Center)]
-        //[BackgroundColor(0xff0094ff)]
-        [BackgroundColor(0xffffffff)]
+        [BackgroundColor(0xff0094ff)]
+        //[BackgroundColor(0xffffffff)]
         [UserCache(true)]
         [Font(Names = "微软雅黑", Size = 14)]
         [Padding(10)]
@@ -30,8 +30,9 @@ namespace Win32App
         //[Position(0, 20, AlignType.Center, AlignType.Normal)]
         [BackgroundColor(0xff003300)]
         [Margin(30, 20)]
-        [UserDebug(true)]
+        //[UserDebug(true)]
         [BorderShadow(0, 0, 10, 0xff000000)]
+        [UserCache]
         class TestBlockStyle { }
 
         /// <summary>

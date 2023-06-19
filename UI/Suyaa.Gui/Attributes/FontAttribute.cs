@@ -13,27 +13,32 @@ namespace Suyaa.Gui.Attributes
     /// </summary>
     public class FontAttribute : StyleAttribute
     {
+        // 定义私有变量
+        private bool? _antialias;
+        private string? _names;
+        private float? _size;
+
+
         /// <summary>
         /// 字体名称
         /// </summary>
-        public string? Names { get; set; }
+        public string Names { get => _names ?? string.Empty; set => _names = value; }
 
         /// <summary>
         /// 高度单位
         /// </summary>
-        public float Size { get; set; }
+        public float Size { get => _size ?? 0; set => _size = value; }
 
         /// <summary>
         /// 抗锯齿
         /// </summary>
-        public bool? Antialias { get; set; }
+        public bool Antialias { get => _antialias ?? false; set => _antialias = value; }
 
         /// <summary>
         /// 字体
         /// </summary>
         public FontAttribute() : base(StyleType.None)
         {
-            this.Size = 0;
         }
 
         /// <summary>
@@ -42,9 +47,9 @@ namespace Suyaa.Gui.Attributes
         /// <param name="styles"></param>
         protected override void OnApply(Styles styles)
         {
-            if (!this.Names.IsNullOrWhiteSpace()) styles.Set(StyleType.TextFont, this.Names!);
-            if (this.Size > 0) styles.Set(StyleType.TextSize, this.Size);
-            if (this.Antialias.HasValue) styles.Set(StyleType.TextAntialias, this.Antialias.Value);
+            if (_names != null) styles.Set(StyleType.TextFont, _names);
+            if (_size.HasValue) styles.Set(StyleType.TextSize, _size.Value);
+            if (_antialias.HasValue) styles.Set(StyleType.TextAntialias, _antialias.Value);
         }
     }
 }

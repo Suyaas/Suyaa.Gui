@@ -33,6 +33,7 @@ namespace Win32App
     /// </summary>
     [Position(0, 0, AlignType.Center, AlignType.Center)]
     //[UserCache(true)]
+    [Font(Antialias = false)]
     class MouseTestPanelLabelStyles { }
 
     /// <summary>

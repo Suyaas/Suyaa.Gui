@@ -31,13 +31,16 @@ namespace Suyaa.Gui.Controls
             // 判断可用性
             if (!this.IsVaild) return;
             // 计算动态尺寸
-            using (SKPaint paint = new SKPaint(this.Font))
+            using (SKPaint paint = new SKPaint(this.Font)
             {
-                paint.TextSize = this.FontSize * scale;
+                IsAntialias = this.IsAntialias,
+                TextSize = this.FontSize * scale,
+            })
+            {
                 paint.GetFontMetrics(out SKFontMetrics metrics);
                 var width = paint.MeasureText(_content);
                 // 创建
-                var labSize = new Size(width, metrics.Bottom - metrics.Top);
+                var labSize = new Size((int)width, (int)(metrics.Bottom - metrics.Top));
                 //// 变更样式
                 //this.UseStyles(d => d
                 //    .Set(StyleType.Width, width / scale)
@@ -123,6 +126,7 @@ namespace Suyaa.Gui.Controls
             {
                 Color = this.Color,
                 TextSize = this.FontSize * e.Scale,
+                IsAntialias = this.IsAntialias,
             })
             {
                 paint.GetFontMetrics(out SKFontMetrics metrics);

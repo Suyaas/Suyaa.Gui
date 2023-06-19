@@ -25,7 +25,7 @@ namespace Win32App
     //[UserDebug]
     [BorderShadow(0, 0, 10, 0xff333333)]
     [Cursor(CursorType.Hand)]
-    //[UserCache]
+    [UseCache]
     class MouseTestPanelStyles { }
 
     /// <summary>
@@ -83,13 +83,13 @@ namespace Win32App
         {
             base.OnMouseHover();
             _backgroundColor = this.GetStyle<SKColor>(StyleType.BackgroundColor);
-            this.Styles.Set(StyleType.BackgroundColor, new SKColor(0xffff6600));
+            this.Styles.Set(StyleType.BackgroundColor, new SKColor(0xffff6600)).Apply();
         }
 
         protected override void OnMouseLeave()
         {
             base.OnMouseLeave();
-            this.Styles.Set(StyleType.BackgroundColor, _backgroundColor);
+            this.Styles.Set(StyleType.BackgroundColor, _backgroundColor).Apply();
         }
 
         protected override void OnMouseClick()

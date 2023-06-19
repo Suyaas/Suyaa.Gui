@@ -10,20 +10,20 @@ namespace Suyaa.Gui.Attributes
     /// <summary>
     /// 是否使用调试
     /// </summary>
-    public class UserDebugAttribute : ValueStyleAttribute<bool>
+    public class UseDebugAttribute : ValueStyleAttribute<bool>
     {
         /// <summary>
         /// 是否使用调试
         /// </summary>
         /// <param name="value"></param>
-        public UserDebugAttribute(bool value) : base(StyleType.UseDebug, value)
+        public UseDebugAttribute(bool value) : base(StyleType.UseDebug, value)
         {
         }
 
         /// <summary>
         /// 是否使用调试
         /// </summary>
-        public UserDebugAttribute() : base(StyleType.UseDebug, true)
+        public UseDebugAttribute() : base(StyleType.UseDebug, true)
         {
         }
     }

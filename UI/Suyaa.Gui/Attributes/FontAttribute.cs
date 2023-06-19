@@ -24,6 +24,11 @@ namespace Suyaa.Gui.Attributes
         public float Size { get; set; }
 
         /// <summary>
+        /// 抗锯齿
+        /// </summary>
+        public bool? Antialias { get; set; }
+
+        /// <summary>
         /// 字体
         /// </summary>
         public FontAttribute() : base(StyleType.None)
@@ -39,6 +44,7 @@ namespace Suyaa.Gui.Attributes
         {
             if (!this.Names.IsNullOrWhiteSpace()) styles.Set(StyleType.TextFont, this.Names!);
             if (this.Size > 0) styles.Set(StyleType.TextSize, this.Size);
+            if (this.Antialias.HasValue) styles.Set(StyleType.TextAntialias, this.Antialias.Value);
         }
     }
 }

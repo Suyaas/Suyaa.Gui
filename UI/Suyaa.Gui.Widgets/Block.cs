@@ -83,6 +83,20 @@ namespace Suyaa.Gui.Controls
             }
         }
 
+        /// <summary>
+        /// 文本抗锯齿
+        /// </summary>
+        public bool IsAntialias
+        {
+            get => this.GetInheritableStyle<bool>(StyleType.TextAntialias);
+            set
+            {
+                this.Styles.Set(StyleType.TextAntialias, value);
+                // 刷新显示
+                this.Refresh();
+            }
+        }
+
 
         /// <summary>
         /// 字体大小

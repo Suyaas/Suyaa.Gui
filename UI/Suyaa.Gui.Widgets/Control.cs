@@ -295,27 +295,38 @@ namespace Suyaa.Gui.Controls
                 // 调试输出
                 if (this.Styles.Get(StyleType.UseDebug, false))
                 {
+                    int lineHeight = 12;
+                    List<string> debugs = new List<string>() {
+                        $"Rect:{this.Left},{this.Top},{this.Width},{this.Height}",
+                        $"{this.Margin.ToString("Margin")}",
+                        $"{this.Padding.ToString("Padding")}",
+                        $"Cache:{this.Styles.Get(StyleType.UseCache,false)}",
+                    };
                     using (SKPaint paint = new SKPaint(new SKFont(SKTypeface.FromFamilyName("Consolas")))
                     {
                         Color = new SKColor(0x88333333),
-                        TextSize = 9,
+                        TextSize = 9.5f,
                     })
                     {
+                        paint.IsAntialias = true;
                         paint.GetFontMetrics(out SKFontMetrics metrics);
-                        cvs.DrawText($"{this.Left},{this.Top},{this.Width},{this.Height}", 1, 1 - metrics.Top, paint);
-                        cvs.DrawText($"{this.Margin.ToString("Margin")}", 1, 13 - metrics.Top, paint);
-                        cvs.DrawText($"{this.Padding.ToString("Padding")}", 1, 25 - metrics.Top, paint);
+                        for (int i = 0; i < debugs.Count; i++)
+                        {
+                            cvs.DrawText(debugs[i], 1, 1 - metrics.Top + lineHeight * i, paint);
+                        }
                     }
                     using (SKPaint paint = new SKPaint(new SKFont(SKTypeface.FromFamilyName("Consolas")))
                     {
                         Color = new SKColor(0x88ffffff),
-                        TextSize = 9,
+                        TextSize = 9.5f,
                     })
                     {
+                        paint.IsAntialias = true;
                         paint.GetFontMetrics(out SKFontMetrics metrics);
-                        cvs.DrawText($"{this.Left},{this.Top},{this.Width},{this.Height}", 0, 0 - metrics.Top, paint);
-                        cvs.DrawText($"{this.Margin.ToString("Margin")}", 0, 12 - metrics.Top, paint);
-                        cvs.DrawText($"{this.Padding.ToString("Padding")}", 0, 24 - metrics.Top, paint);
+                        for (int i = 0; i < debugs.Count; i++)
+                        {
+                            cvs.DrawText(debugs[i], 0, 0 - metrics.Top + lineHeight * i, paint);
+                        }
                     }
                 }
 #endif

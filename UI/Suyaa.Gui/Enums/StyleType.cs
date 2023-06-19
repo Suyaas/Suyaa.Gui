@@ -286,6 +286,11 @@ namespace Suyaa.Gui.Enums
         /// </summary>
         [StyleValue(typeof(float))]
         TextSize = 0x303,
+        /// <summary>
+        /// 文本抗锯齿
+        /// </summary>
+        [StyleValue(typeof(bool))]
+        TextAntialias = 0x304,
         #endregion
     }
 }

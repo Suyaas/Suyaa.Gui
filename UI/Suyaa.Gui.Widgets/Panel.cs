@@ -102,7 +102,7 @@ namespace Suyaa.Gui.Controls
                 return false;
 
             // 按照创建先后顺序重置大小
-            var controls = Controls.Where(d => d.IsVaild).OrderBy(d => d.Handle).ToList();
+            var controls = Controls.Where(d => d.IsVaild).ToList();
             foreach (Control ctl in controls)
             {
                 var ctlSize = ctl.Styles.GetSize(rect.Size, resize.Scale);
@@ -115,7 +115,7 @@ namespace Suyaa.Gui.Controls
 
             #region 处理浮动定位
             // 处理浮动定位
-            var floatControls = Controls.Where(d => d.IsVaild).OrderBy(d => d.Handle).ToList();
+            var floatControls = Controls.Where(d => d.IsVaild).ToList();
             float floatLeft = 0;
             float floatRight = 0;
             float[] floatTops = new float[(int)rect.Width];

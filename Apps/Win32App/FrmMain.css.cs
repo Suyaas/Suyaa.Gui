@@ -29,27 +29,38 @@ namespace Win32App
         [Size(50, 100, UnitType.Percentage, UnitType.Pixel)]
         //[Position(0, 20, AlignType.Center, AlignType.Normal)]
         [BackgroundColor(0xff003300)]
-        [Margin(30, 20)]
-        //[UserDebug(true)]
-        [BorderShadow(0, 0, 10, 0xff000000)]
+        [Margin(50, 20, 10, 50)]
+        //[UseDebug]
         [UseCache]
+        [BorderShadow(0, 0, 50, 0xff000000)]
+        [BorderTop(1, 0xffffffff, BorderStyleType.Dashed)]
+        [BorderRight(2, 0xffffff00, BorderStyleType.Dashed)]
+        [BorderBottom(3, 0xffff0000, BorderStyleType.Dashed)]
+        [BorderLeft(4, 0xffff00ff, BorderStyleType.Solid)]
+        [BorderRadius(10)]
         class TestBlockStyle { }
 
         /// <summary>
-        /// 第二个块
+        /// 块2样式
         /// </summary>
+        //[Position(0, 20, AlignType.Center, AlignType.Normal)]
+        [BackgroundColor(0xff993300)]
+        //[UseDebug]
+        [BorderShadow(2, 2, 10, 0x99000000)]
+        [UseCache]
+        [BorderRadius(40, 10, 20, 30)]
+        [Margin(0, 0, 20, 0)]
+        [BorderTop(2, 0xffffffff, BorderStyleType.Dashed)]
+        [BorderRight(4, 0xffffff00, BorderStyleType.Dashed)]
+        [BorderBottom(8, 0xffff0000, BorderStyleType.Dashed)]
+        [BorderLeft(16, 0xffff00ff, BorderStyleType.Dashed)]
         class TestBlock2Style : IStyles
         {
             public void Apply(Styles styles)
             {
                 styles
                     .Set<float>(StyleType.Width, 200)
-                    .Set<float>(StyleType.Height, 120)
-                    .Set<float>(StyleType.X, 50)
-                    .Set<float>(StyleType.Y, 50)
-                    .Set(StyleType.UseDebug, true)
-                    .Set(StyleType.UseCache, true)
-                    .Set(StyleType.BackgroundColor, new SKColor(0x99990000));
+                    .Set<float>(StyleType.Height, 120);
             }
         }
     }

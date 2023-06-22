@@ -77,6 +77,16 @@ namespace Suyaa.Gui.Enums
         /// </summary>
         [StyleValue(typeof(CursorType))]
         Cursor = 0x31,
+        /// <summary>
+        /// 是否开启抗锯齿
+        /// </summary>
+        [StyleValue(typeof(bool))]
+        Antialias = 0x41,
+        /// <summary>
+        /// 背景颜色
+        /// </summary>
+        [StyleValue(typeof(SKColor))]
+        BackgroundColor = 0x51,
         #endregion
 
         #region 二维样式_0x100
@@ -160,11 +170,6 @@ namespace Suyaa.Gui.Enums
         /// </summary>
         [StyleValue(typeof(float))]
         MarginLeft = 0x134,
-        /// <summary>
-        /// 背景颜色
-        /// </summary>
-        [StyleValue(typeof(SKColor))]
-        BackgroundColor = 0x141,
         #endregion
 
         #region 边框相关样式_0x200

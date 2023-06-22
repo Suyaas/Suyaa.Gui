@@ -194,6 +194,8 @@ namespace Suyaa.Gui.Drawing
             Set(StyleType.Visible, false);
             // 是否启用缓存
             Set(StyleType.UseCache, false);
+            // 是否启用抗锯齿
+            Set(StyleType.Antialias, true);
             // 对齐方式
             Set(StyleType.XAlign, AlignType.Normal);
             Set(StyleType.YAlign, AlignType.Normal);

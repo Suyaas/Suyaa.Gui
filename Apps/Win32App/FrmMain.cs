@@ -36,8 +36,8 @@ namespace Win32App
 
             // 添加控件
             this.Controls.AddRange(
-                Control.Create<Block>().UseStyles(d => d.SetStyles<TestBlockStyle>()).AsControl(),
                 Control.Create<Block>().UseStyles(d => d.SetStyles<TestBlock2Style>()).AsControl(),
+                Control.Create<Block>().UseStyles(d => d.SetStyles<TestBlockStyle>()).AsControl(),
                 Control.Create<MouseTestPanel>(),
                 _labInfo.UseStyles(d => d
                     .Set<float>(StyleType.X, 5)

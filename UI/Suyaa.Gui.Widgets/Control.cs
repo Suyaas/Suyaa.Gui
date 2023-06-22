@@ -261,15 +261,18 @@ namespace Suyaa.Gui.Controls
             // 绘制阴影
             cvs.DrawShadowStyles(styles, rect, e.Scale);
             // 绘制背景
-            cvs.DrawBackgroundStyles(styles, rect.Padding(styles.GetBorders(e.Scale)));
-            // 绘制上边框
-            cvs.DrawBorderTopStyles(styles, rect);
-            // 绘制右边框
-            cvs.DrawBorderRightStyles(styles, rect);
-            // 绘制下边框
-            cvs.DrawBorderBottomStyles(styles, rect);
-            // 绘制左边框
-            cvs.DrawBorderLeftStyles(styles, rect);
+            //cvs.DrawBackgroundStyles(styles, rect.Padding(styles.GetBorders(e.Scale)), e.Scale);
+            cvs.DrawBackgroundStyles(styles, rect, e.Scale);
+            // 绘制边框
+            cvs.DrawBorderStyles(styles, rect, e.Scale);
+            //// 绘制上边框
+            //cvs.DrawBorderTopStyles(styles, rect);
+            //// 绘制右边框
+            //cvs.DrawBorderRightStyles(styles, rect);
+            //// 绘制下边框
+            //cvs.DrawBorderBottomStyles(styles, rect);
+            //// 绘制左边框
+            //cvs.DrawBorderLeftStyles(styles, rect);
             // 绘制阴影
             //cvs.DrawShadowStyles(styles, rect, e.Scale);
         }
@@ -292,14 +295,20 @@ namespace Suyaa.Gui.Controls
                     this.OnPainted(e);
                 }
 #if DEBUG
+                var marginShadow = this.Styles.GetShadowMargin(scale);
+                var marginDisplay = this.Styles.GetDisplayMargin(scale);
+                var rectDisplay = this.Rectangle.Margin(marginDisplay);
                 // 调试输出
                 if (this.Styles.Get(StyleType.UseDebug, false))
                 {
                     int lineHeight = 12;
                     List<string> debugs = new List<string>() {
                         $"Rect:{this.Left},{this.Top},{this.Width},{this.Height}",
+                        $"Display:{rectDisplay.Left},{rectDisplay.Top},{rectDisplay.Width},{rectDisplay.Height}",
                         $"{this.Margin.ToString("Margin")}",
                         $"{this.Padding.ToString("Padding")}",
+                        $"{marginShadow.ToString("Shadow")}",
+                        $"{marginDisplay.ToString("Display")}",
                         $"Cache:{this.Styles.Get(StyleType.UseCache,false)}",
                     };
                     using (SKPaint paint = new SKPaint(new SKFont(SKTypeface.FromFamilyName("Consolas")))

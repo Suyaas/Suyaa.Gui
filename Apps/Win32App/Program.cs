@@ -1,7 +1,10 @@
 //using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 //using System.Windows.Forms;
 using Suyaa.Gui;
+using Suyaa.Gui.Drawing;
+using Suyaa.Gui.Helpers;
 using Suyaa.Gui.Native.Win32;
+using System.Diagnostics;
 
 namespace Win32App
 {

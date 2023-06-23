@@ -198,7 +198,31 @@ namespace Suyaa.Gui.Native.Win32
             wc.lpszClassName = nameof(Win32Form).AsPtr();
             wc.cbClsExtra = 0;
             wc.cbWndExtra = 0;
-            wc.hIcon = IntPtr.Zero;
+            using (SKBitmap bmp = new SKBitmap(48, 48))
+            {
+                using (SKCanvas cvs = new SKCanvas(bmp))
+                {
+                    cvs.Clear(SKColors.Green);
+                    using (SKPaint paint = new SKPaint()
+                    {
+                        Color = new SKColor(0xff990000),
+                        Style = SKPaintStyle.Fill,
+                    })
+                    {
+                        cvs.DrawRect(new SKRect(10, 10, 30, 25), paint);
+                    }
+                    using (SKPaint paint = new SKPaint()
+                    {
+                        Color = new SKColor(0xff000099),
+                        Style = SKPaintStyle.Fill,
+                    })
+                    {
+                        cvs.DrawRect(new SKRect(15, 15, 35, 30), paint);
+                    }
+                }
+                wc.hIcon = bmp.CreateIcon();
+            }
+            //wc.hIcon = IntPtr.Zero;
             wc.hCursor = IntPtr.Zero;
             wc.lpszMenuName = null;
 

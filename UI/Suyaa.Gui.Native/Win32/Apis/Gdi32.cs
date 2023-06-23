@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using static Suyaa.Gui.Native.Win32.Apis.Enums;
 
 namespace Suyaa.Gui.Native.Win32.Apis
 {

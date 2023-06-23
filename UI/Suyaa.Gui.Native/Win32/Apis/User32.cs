@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using static Suyaa.Gui.Native.Win32.Apis.Enums;
 using static Suyaa.Gui.Win32Native.Win32Api;
 
 namespace Suyaa.Gui.Native.Win32.Apis
@@ -1487,6 +1488,36 @@ namespace Suyaa.Gui.Native.Win32.Apis
             /// GETFONTSMOOTHINGCONTRAST
             /// </summary>
             GETFONTSMOOTHINGCONTRAST = 0x200C,
+        }
+        #endregion
+
+        #region 图标
+        /// <summary>
+        /// ICONINFO
+        /// </summary>
+        [StructLayout(LayoutKind.Sequential)]
+        public ref struct ICONINFO
+        {
+            /// <summary>
+            /// fIcon
+            /// </summary>
+            public BOOL fIcon;
+            /// <summary>
+            /// xHotspot
+            /// </summary>
+            public uint xHotspot;
+            /// <summary>
+            /// yHotspot
+            /// </summary>
+            public uint yHotspot;
+            /// <summary>
+            /// hbmMask
+            /// </summary>
+            public Gdi32.HBITMAP hbmMask;
+            /// <summary>
+            /// hbmColor
+            /// </summary>
+            public Gdi32.HBITMAP hbmColor;
         }
         #endregion
     }

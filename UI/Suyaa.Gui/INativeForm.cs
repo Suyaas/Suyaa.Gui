@@ -27,5 +27,10 @@ namespace Forms
         /// 光标类型
         /// </summary>
         CursorType Cursor { get; set; }
+
+        /// <summary>
+        /// 处理系统绘制消息
+        /// </summary>
+        public void Repaint(bool force);
     }
 }

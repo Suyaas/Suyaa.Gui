@@ -35,6 +35,8 @@ namespace Win32App
             //ApplicationConfiguration.Initialize();
             //Application.Run(new Form1());
             System.Console.WriteLine("App Loading ...");
+            // 兼容时间帧刷新
+            Application.UseTimeFrame(60);
             // 兼容DPI比例
             Application.UseScale(true);
             Application.Set<Win32Application>().Run(new FrmMain());

@@ -18,10 +18,10 @@ namespace Suyaa.Gui.Forms
     /// </summary>
     public class Form : FormBase
     {
-        // 是否强制刷新
-        private bool _refresh;
         // 是否鼠标在区域内
         private bool _mouseOn;
+        // 计时器
+        private readonly Timer? _timer;
 
         /// <summary>
         /// 窗体状态
@@ -106,12 +106,12 @@ namespace Suyaa.Gui.Forms
                     {
                         this.Workarea.SendMessage(msgSink);
                     }
-                    // 刷新
-                    if (_refresh)
-                    {
-                        this.Refresh();
-                        _refresh = false;
-                    }
+                    //// 刷新
+                    //if (_refresh)
+                    //{
+                    //    this.Refresh();
+                    //    //_refresh = false;
+                    //}
                     break;
                 // 绘制
                 case PaintMessage paint:
@@ -171,18 +171,33 @@ namespace Suyaa.Gui.Forms
             return true;
         }
 
+        // 计时器事件
+        private void OnTimer(object? state)
+        {
+            if (this.IsNeedRepaint)
+            {
+                this.NativeForm.Repaint(true);
+                this.IsNeedRepaint = false;
+            }
+            _timer!.Change(Application.UpdateFrameTime, Timeout.Infinite);
+        }
+
         /// <summary>
         /// 标准窗体
         /// </summary>
         public Form()
         {
             // 设置默认值
-            _refresh = false;
             _mouseOn = false;
             // 设置初始状态
             this.FormStatus = FormStatusType.Normal;
             // 应用反射特性
             this.ApplyStyles();
+            // 建立计时器
+            if (Application.UpdateFrameTime > 0)
+            {
+                _timer = new Timer(OnTimer, 1, 0, Timeout.Infinite);
+            }
         }
     }
 }

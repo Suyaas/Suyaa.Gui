@@ -25,6 +25,8 @@ namespace Suyaa.Gui
         // DPI放大比例
         private static float _scale = 1;
         private static bool _scaleble = false;
+        // 更新时间
+        private static int _frameUpdateTime = 0;
 
         /// <summary>
         /// 设置应用实现类
@@ -53,6 +55,20 @@ namespace Suyaa.Gui
         {
             _scale = scale;
         }
+
+        /// <summary>
+        /// 使用时间帧模式
+        /// </summary>
+        /// <param name="frames">每秒帧数</param>
+        public static void UseTimeFrame(int frames)
+        {
+            _frameUpdateTime = (int)(1000 / frames);
+        }
+
+        /// <summary>
+        /// 帧刷新时间差
+        /// </summary>
+        public static int UpdateFrameTime => _frameUpdateTime;
 
         /// <summary>
         /// 获取程序放大比例

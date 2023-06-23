@@ -26,7 +26,6 @@ namespace Suyaa.Gui.Native.Win32
     {
         // 默认线程操作对象
         private static IntPtr _defWindowProc = IntPtr.Zero;
-        private static bool _isPrinting = false;
 
         /// <summary>
         /// 设置默认处理函数
@@ -66,77 +65,6 @@ namespace Suyaa.Gui.Native.Win32
         /// <summary>
         /// 处理绘制消息
         /// </summary>
-        /// <param name="form"></param>
-        /// <param name="cvs"></param>
-        /// <param name="rectangle"></param>
-        /// <param name="scale"></param>
-        public static void ProcPaint(Win32Form form, SKCanvas cvs, Rectangle rectangle, float scale)
-        {
-            // 读取背景
-            using (PaintMessage msg = new(form.Handle, cvs, rectangle, scale))
-            {
-                Application.SendMessage(msg);
-            }
-        }
-
-        /// <summary>
-        /// 处理绘制消息
-        /// </summary>
-        /// <param name="form"></param>
-        /// <param name="scale"></param>
-        /// <param name="force"></param>
-        public static void ProcPaint(Win32Form form, float scale, bool force = false)
-        {
-            // 未显示状态则直接退出
-            if (!form.GetStyle<bool>(StyleType.Visible)) return;
-            if (_isPrinting) return;
-            _isPrinting = true;
-            // 获取是否使用缓存
-            var useCache = form.Styles.Get<bool>(StyleType.UseCache);
-            // 获取窗口工作区
-            var rect = User32.GetClientRect(form.Hwnd);
-            if (rect.Width <= 0 || rect.Height <= 0) return;
-            // 判断是否使用缓存
-            if (useCache)
-            {
-                // 判断是否需要重新绘制
-                if (form.CacheBitmap != null)
-                {
-                    if (form.CacheBitmap.Width != rect.Width || form.CacheBitmap.Height != rect.Height || force)
-                    {
-                        form.CacheBitmap.Dispose();
-                        form.CacheBitmap = null;
-                    }
-                }
-                // 判断是否有缓存
-                if (form.CacheBitmap is null)
-                {
-                    form.CacheBitmap = new SKBitmap((int)rect.Width, (int)rect.Height);
-                    using (SKCanvas cvs = new SKCanvas(form.CacheBitmap))
-                    {
-                        ProcPaint(form, cvs, rect, scale);
-                    }
-                }
-                form.CacheBitmap.BitBltToHwnd(form.Hwnd);
-            }
-            else
-            {
-                // 直接绘制
-                using (SKBitmap bmp = new SKBitmap((int)rect.Width, (int)rect.Height))
-                {
-                    using (SKCanvas cvs = new SKCanvas(bmp))
-                    {
-                        ProcPaint(form, cvs, rect, scale);
-                    }
-                    bmp.BitBltToHwnd(form.Hwnd);
-                }
-            }
-            _isPrinting = false;
-        }
-
-        /// <summary>
-        /// 处理绘制消息
-        /// </summary>
         /// <param name="hwnd"></param>
         public static void ProcPaint(IntPtr hwnd)
         {
@@ -144,9 +72,11 @@ namespace Suyaa.Gui.Native.Win32
             //Debug.WriteLine($"[Win32Message] Paint - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}");
             // 计算dpi比例
             //var scale = Gdi32.GetDpiScale();
-            var scale = Application.GetScale();
-            var form = GetWin32FormByHwnd(hwnd);
-            ProcPaint(form, scale);
+            //var scale = Application.GetScale();
+            //var form = GetWin32FormByHwnd(hwnd);
+            var form = GetFormByHwnd(hwnd);
+            //ProcPaint(form, scale);
+            form.Repaint(true);
         }
 
         #endregion

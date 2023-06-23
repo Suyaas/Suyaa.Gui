@@ -764,6 +764,16 @@ namespace Suyaa.Gui.Controls
             return this;
         }
 
+        /// <summary>
+        /// 获取样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public T GetStyle<T>(StyleType style, T defaultValue)
+            => this.Styles.Get<T>(style, defaultValue);
+
         #endregion
     }
 }

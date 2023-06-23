@@ -47,6 +47,15 @@ namespace Suyaa.Gui
         T GetStyle<T>(StyleType style);
 
         /// <summary>
+        /// 获取样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        T GetStyle<T>(StyleType style, T defaultValue);
+
+        /// <summary>
         /// 设置样式
         /// </summary>
         /// <param name="action"></param>

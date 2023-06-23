@@ -27,6 +27,8 @@ namespace Suyaa.Gui.Native.Win32
         private readonly User32.WNDPROC _windProc;
         // 光标
         private CursorType? _cursor;
+        // 是否绘制中
+        private bool _isPainting = false;
 
         /// <summary>
         /// Win32窗体
@@ -298,7 +300,7 @@ namespace Suyaa.Gui.Native.Win32
             //var scale = Gdi32.GetDpiScale();
             var scale = Application.GetScale();
             Win32Message.ProcResize(this, scale);
-            Win32Message.ProcPaint(this, scale, true);
+            Win32Message.ProcPaint(this.Hwnd);
         }
 
         /// <summary>
@@ -309,6 +311,16 @@ namespace Suyaa.Gui.Native.Win32
         /// <returns></returns>
         public T GetStyle<T>(StyleType style)
             => this.Styles.Get<T>(style);
+
+        /// <summary>
+        /// 获取样式值
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public T GetStyle<T>(StyleType style, T defaultValue)
+            => this.Styles.Get(style, defaultValue);
 
         /// <summary>
         /// 设置样式
@@ -330,6 +342,81 @@ namespace Suyaa.Gui.Native.Win32
         {
             this.Styles.SetStyles<T>();
             return this;
+        }
+
+        /// <summary>
+        /// 处理绘制消息
+        /// </summary>
+        /// <param name="cvs"></param>
+        /// <param name="rectangle"></param>
+        private void OnPaint(SKCanvas cvs, Rectangle rectangle)
+        {
+            // 读取背景
+            using (PaintMessage msg = new(this.Handle, cvs, rectangle, Application.GetScale()))
+            {
+                Application.SendMessage(msg);
+            }
+        }
+
+        /// <summary>
+        /// 处理绘制消息
+        /// </summary>
+        public void Repaint(bool force)
+        {
+            // 绘制中则退出
+            if (_isPainting) return;
+            _isPainting = true;
+            // 未显示状态则直接退出
+            if (!this.GetStyle(StyleType.Visible, false))
+            {
+                _isPainting = false;
+                return;
+            }
+            // 获取是否使用缓存
+            var useCache = this.GetStyle(StyleType.UseCache, false);
+            // 获取窗口工作区
+            var rect = User32.GetClientRect(this.Hwnd);
+            if (rect.Width <= 0 || rect.Height <= 0)
+            {
+                _isPainting = false;
+                return;
+            }
+            // 判断是否使用缓存
+            if (useCache)
+            {
+                // 判断是否需要重新绘制
+                if (this.CacheBitmap != null)
+                {
+                    if (this.CacheBitmap.Width != rect.Width || this.CacheBitmap.Height != rect.Height || force)
+                    {
+                        this.CacheBitmap.Dispose();
+                        this.CacheBitmap = null;
+                    }
+                }
+                // 判断是否有缓存
+                if (this.CacheBitmap is null)
+                {
+                    this.CacheBitmap = new SKBitmap((int)rect.Width, (int)rect.Height);
+                    using (SKCanvas cvs = new SKCanvas(this.CacheBitmap))
+                    {
+                        OnPaint(cvs, rect);
+                    }
+                }
+                this.CacheBitmap.BitBltToHwnd(this.Hwnd);
+            }
+            else
+            {
+                // 直接绘制
+                using (SKBitmap bmp = new SKBitmap((int)rect.Width, (int)rect.Height))
+                {
+                    using (SKCanvas cvs = new SKCanvas(bmp))
+                    {
+                        OnPaint(cvs, rect);
+                    }
+                    bmp.BitBltToHwnd(this.Hwnd);
+                }
+            }
+            _isPainting = false;
         }
 
         #endregion

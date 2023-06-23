@@ -88,6 +88,11 @@ namespace Suyaa.Gui.Native.Linux
         public T GetStyle<T>(StyleType style)
             => this.Styles.Get<T>(style);
 
+        public T GetStyle<T>(StyleType style, T defaultValue)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// 初始化
         /// </summary>
@@ -284,6 +289,11 @@ namespace Suyaa.Gui.Native.Linux
             }
         }
 
+        public void OnProcPaint()
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// 提交消息
         /// </summary>
@@ -294,9 +304,18 @@ namespace Suyaa.Gui.Native.Linux
         }
 
         /// <summary>
-        /// 重新显示
+        /// 界面刷新
         /// </summary>
         public void Refresh()
+        {
+            //throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// 界面重绘
+        /// </summary>
+        /// <param name="force"></param>
+        public void Repaint(bool force)
         {
             //throw new NotImplementedException();
         }

@@ -23,6 +23,9 @@ namespace Forms
     public abstract partial class FormBase : IForm
     {
 
+        // 是否强制刷新
+        private bool _refresh;
+
         /// <summary>
         /// 原生窗体
         /// </summary>
@@ -59,6 +62,15 @@ namespace Forms
         public IControlCollection<IControl> Controls => this.Workarea.Controls;
 
         /// <summary>
+        /// 是否需要重新绘制
+        /// </summary>
+        public bool IsNeedRepaint
+        {
+            get => _refresh;
+            protected internal set => _refresh = value;
+        }
+
+        /// <summary>
         /// 光标
         /// </summary>
         public CursorType Cursor
@@ -86,6 +98,8 @@ namespace Forms
         /// </summary>
         public FormBase()
         {
+            // 变量初始化
+            _refresh = false;
             // 初始化工作区域
             this.Workarea = new Workarea(this);
             // 创建原生窗口
@@ -198,5 +212,31 @@ namespace Forms
             this.Styles.SetStyles<T>();
             return this;
         }
+
+        /// <summary>
+        /// 界面重绘
+        /// </summary>
+        /// <param name="force"></param>
+        public void Repaint(bool force)
+        {
+            if (Application.UpdateFrameTime > 0)
+            {
+                _refresh = true;
+            }
+            else
+            {
+                this.NativeForm.Repaint(force);
+            }
+        }
+
+        /// <summary>
+        /// 获取样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
+        public T GetStyle<T>(StyleType style, T defaultValue)
+            => this.Styles.Get<T>(style, defaultValue);
     }
 }

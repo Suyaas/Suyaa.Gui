@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 namespace Suyaa.Gui
 {
     /// <summary>
-    /// 鼠标可停悬组件
+    /// 鼠标可按压组件
     /// </summary>
-    public interface IMouseHoverWidget
+    public interface IMousePressWidget
     {
         /// <summary>
-        /// 停悬样式列表
+        /// 鼠标按下样式列表
         /// </summary>
-        Styles MouseHoverStyles { get; }
+        Styles MousePressStyles { get; }
     }
 }

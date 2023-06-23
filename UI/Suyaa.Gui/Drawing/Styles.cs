@@ -12,7 +12,7 @@ namespace Suyaa.Gui.Drawing
     /// <summary>
     /// 样式列表
     /// </summary>
-    public class Styles : Dictionary<StyleType, object>
+    public class Styles : Dictionary<StyleType, object>, IDisposable
     {
         // 组件
         private readonly IWidget _widget;
@@ -155,6 +155,15 @@ namespace Suyaa.Gui.Drawing
         public void Apply()
         {
             _widget.Refresh();
+        }
+
+        /// <summary>
+        /// 释放资源
+        /// </summary>
+        public void Dispose()
+        {
+            this.Clear();
+            GC.SuppressFinalize(this);
         }
 
         /// <summary>

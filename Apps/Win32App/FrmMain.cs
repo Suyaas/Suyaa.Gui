@@ -18,6 +18,7 @@ namespace Win32App
         // 标签
         private readonly Label _labInfo;
         private readonly Button _btnHello;
+        private int num = 0;
 
         /// <summary>
         /// 主窗体
@@ -28,8 +29,8 @@ namespace Win32App
             this.UseStyles<FormStyle>();
 
             // 初始化全局控件
-            _labInfo = new Label("label");
-            _btnHello = new Button("确定");
+            _labInfo = new Label("Hello World");
+            _btnHello = new Button("点击加1");
             _btnHello.Click += btnHello_Click;
         }
 
@@ -50,7 +51,7 @@ namespace Win32App
         // 按钮事件
         private void btnHello_Click(object sender, Suyaa.Gui.Controls.EventArgs.GuiEventArgs e)
         {
-            _labInfo.Content = "Hello World";
+            _labInfo.Content = $"{++num}";
         }
 
         protected override void OnMouseMove(Point point)

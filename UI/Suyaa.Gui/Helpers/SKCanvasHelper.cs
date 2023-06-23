@@ -1257,7 +1257,8 @@ namespace Suyaa.Gui.Helpers
             //SKColor colorStyle = styles.Get<SKColor>(StyleType.BorderShadowColor);
             //SKColor color = new SKColor(colorStyle.Red, colorStyle.Green, colorStyle.Blue, 255);
             // 逐行处理像素
-            int size2 = (int)(size * 1.4);
+            //int size2 = (int)(size * 1.2);
+            int size2 = (int)(size);
             // 获取圆角值
             int[] radiuses = new int[] {
                 (int)(styles.Get<float>(StyleType.BorderRadiusLeftTop, 0) * scale ),

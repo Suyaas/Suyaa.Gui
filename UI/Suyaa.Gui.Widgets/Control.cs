@@ -32,7 +32,8 @@ namespace Suyaa.Gui.Controls
         // 最后一次鼠标点击
         private CursorType? _lastCursor;
         // 临时样式表
-        private Styles _styles;
+        private Styles? _hoverStyles;
+        private Styles? _pressStyles;
 
         /// <summary>
         /// Gui事件委托
@@ -62,7 +63,6 @@ namespace Suyaa.Gui.Controls
             _refresh = false;
             _mouseOn = false;
             _lastMouseClick = 0;
-            _styles = new Styles(this, false);
             // 初始化矩形区域
             this.Rectangle = new Rectangle();
             // 设置Z轴深度
@@ -450,11 +450,18 @@ namespace Suyaa.Gui.Controls
             if (this.GetType().HasInterface<IMouseHoverWidget>())
             {
                 IMouseHoverWidget hover = (IMouseHoverWidget)this;
+                // 清理已有的临时样式表
+                if (_hoverStyles != null)
+                {
+                    _hoverStyles.Dispose();
+                }
+                // 建立临时样式表
+                _hoverStyles = new Styles(this, false);
                 this.Styles
                     // 先进行样式备份
-                    .Cover(_styles)
+                    .Cover(_hoverStyles)
                     // 生效悬停样式
-                    .Set(hover.HoverStyles)
+                    .Set(hover.MouseHoverStyles)
                     // 应用样式
                     .Apply();
             }
@@ -474,25 +481,61 @@ namespace Suyaa.Gui.Controls
             // 调用标准的悬停事件处理
             if (this.GetType().HasInterface<IMouseHoverWidget>())
             {
+                if (_hoverStyles is null) return;
                 IMouseHoverWidget hover = (IMouseHoverWidget)this;
                 // 恢复备份的样式
-                _styles.Cover(this.Styles);
+                _hoverStyles.Cover(this.Styles);
+                _hoverStyles.Dispose();
                 // 刷新
                 this.Refresh();
             }
         }
 
         /// <summary>
-        /// 鼠标移动事件
+        /// 鼠标按下事件
         /// </summary>
         /// <param name="point"></param>
-        protected virtual void OnMouseDown(MouseOperateType button, Point point) { }
+        protected virtual void OnMouseDown(MouseOperateType button, Point point)
+        {
+            // 调用标准的鼠标按压事件处理
+            if (this.GetType().HasInterface<IMousePressWidget>())
+            {
+                IMousePressWidget hover = (IMousePressWidget)this;
+                // 清理已有的临时样式表
+                if (_pressStyles != null)
+                {
+                    _pressStyles.Dispose();
+                }
+                // 建立临时样式表
+                _pressStyles = new Styles(this, false);
+                this.Styles
+                    // 先进行样式备份
+                    .Cover(_pressStyles)
+                    // 生效悬停样式
+                    .Set(hover.MousePressStyles)
+                    // 应用样式
+                    .Apply();
+            }
+        }
 
         /// <summary>
-        /// 鼠标移动事件
+        /// 鼠标抬起事件
         /// </summary>
         /// <param name="point"></param>
-        protected virtual void OnMouseUp(MouseOperateType button, Point point) { }
+        protected virtual void OnMouseUp(MouseOperateType button, Point point)
+        {
+            // 调用标准的鼠标按压事件处理
+            if (this.GetType().HasInterface<IMousePressWidget>())
+            {
+                if (_pressStyles is null) return;
+                IMousePressWidget hover = (IMousePressWidget)this;
+                // 恢复备份的样式
+                _pressStyles.Cover(this.Styles);
+                _pressStyles.Dispose();
+                // 刷新
+                this.Refresh();
+            }
+        }
 
         /// <summary>
         /// 鼠标单击事件
@@ -517,6 +560,7 @@ namespace Suyaa.Gui.Controls
                 this.OnMouseUp(button, mouseButton.Point);
                 if (button == MouseOperateType.LButton)
                 {
+                    this.OnMouseClick();
                     var tick = Environment.TickCount;
                     var doubleClickTime = (int)User32.GetDoubleClickTime();
                     if (_lastMouseClick + doubleClickTime >= tick)
@@ -527,7 +571,6 @@ namespace Suyaa.Gui.Controls
                     else
                     {
                         _lastMouseClick = tick;
-                        this.OnMouseClick();
                     }
                 }
             }

@@ -16,15 +16,17 @@ namespace Suyaa.Gui.Controls
     /// <summary>
     /// 按钮
     /// </summary>
-    [Size(96, 24)]
+    [Size(96, 26)]
     [BackgroundColor(0xfff0f0f0)]
-    [BorderRadius(4)]
-    [BorderShadow(0, 0, 5, 0xff000000)]
-    public class Button : Block, IMouseHoverWidget
+    [BorderRadius(2)]
+    [BorderShadow(0, 0, 5, 0x66000000)]
+    [Cursor(CursorType.Hand)]
+    public class Button : Block, IMouseHoverWidget, IMousePressWidget
     {
         // 内容
         private string _content;
         private Styles? _hoverStyles;
+        private Styles? _pressStyles;
 
         /// <summary>
         /// 鼠标点击
@@ -53,9 +55,15 @@ namespace Suyaa.Gui.Controls
         }
 
         /// <summary>
-        /// 悬停样式
+        /// 鼠标悬停样式
         /// </summary>
-        public Styles HoverStyles => _hoverStyles!;
+        public Styles MouseHoverStyles => _hoverStyles!;
+
+        /// <summary>
+        /// 鼠标按下样式
+        /// </summary>
+        public Styles MousePressStyles => _pressStyles!;
+
         /// <summary>
         /// 初始化事件
         /// </summary>
@@ -66,9 +74,13 @@ namespace Suyaa.Gui.Controls
             this.IsNeedRepaint = true;
             // 设置样式
             this.Styles.SetStyles(this.GetType());
-            // 设置悬停样式
+            // 设置鼠标悬停样式
             _hoverStyles = new Styles(this, false);
             _hoverStyles
+                .Set(StyleType.BackgroundColor, new SKColor(0xffe0e0e0));
+            // 设置鼠标按下样式
+            _pressStyles = new Styles(this, false);
+            _pressStyles
                 .Set(StyleType.BackgroundColor, new SKColor(0xffff6600))
                 .Set(StyleType.TextColor, new SKColor(0xffffffff));
             // 申明默认的鼠标点击事件

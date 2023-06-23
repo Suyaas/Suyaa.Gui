@@ -222,5 +222,31 @@ namespace Suyaa.Gui.Drawing
             dasheds[11] = new RectangleDashed(start, dist, 8, isLeftDashed ? 4 : 0);
             return dasheds;
         }
+
+        /// <summary>
+        /// 样式集合覆盖
+        /// </summary>
+        /// <param name="styles"></param>
+        /// <param name="target"></param>
+        public static Styles Cover(this Styles styles, Styles target)
+        {
+            // 依次设置
+            foreach (var style in styles)
+            {
+                target.Set(style.Key, style.Value);
+            }
+            // 获取不存在的样式
+            List<StyleType> styleTypes = new List<StyleType>();
+            foreach (var key in target.Keys)
+            {
+                if (!styles.ContainsKey(key)) styleTypes.Add(key);
+            }
+            // 清理不存在的样式
+            foreach (var type in styleTypes)
+            {
+                target.Remove(type);
+            }
+            return styles;
+        }
     }
 }

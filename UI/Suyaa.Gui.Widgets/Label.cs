@@ -52,31 +52,6 @@ namespace Suyaa.Gui.Controls
         }
 
         /// <summary>
-        /// 刷新事件
-        /// </summary>
-        protected override bool OnRefresh()
-        {
-            this.IsNeedRepaint = true;
-            return base.OnRefresh();
-        }
-
-        //protected override bool OnMessage(IMessage msg)
-        //{
-        //    switch (msg)
-        //    {
-        //        case PaintMessage _:
-        //            // 判断是否带有强制刷新
-        //            if (_refresh)
-        //            {
-        //                //this.Resize();
-        //                _refresh = false;
-        //            }
-        //            break;
-        //    }
-        //    return base.OnMessage(msg);
-        //}
-
-        /// <summary>
         /// 内容
         /// </summary>
         public string Content

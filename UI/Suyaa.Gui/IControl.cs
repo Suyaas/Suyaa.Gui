@@ -75,5 +75,18 @@ namespace Suyaa.Gui
         /// <param name="style"></param>
         /// <returns></returns>
         T GetInheritableStyle<T>(StyleType style);
+
+        /// <summary>
+        /// 设置样式
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        new IControl UseStyles(Action<Styles> action);
+
+        /// <summary>
+        /// 设置样式
+        /// </summary>
+        /// <returns></returns>
+        new IControl UseStyles<T>();
     }
 }

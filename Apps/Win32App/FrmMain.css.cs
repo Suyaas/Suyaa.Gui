@@ -63,5 +63,9 @@ namespace Win32App
                     .Set<float>(StyleType.Height, 120);
             }
         }
+
+        // Hello 按钮
+        [Position(10, 40)]
+        class BtnHelloStyle { }
     }
 }

@@ -187,5 +187,16 @@ namespace Forms
             action(this.Styles);
             return this;
         }
+
+        /// <summary>
+        /// 设置样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IWidget UseStyles<T>()
+        {
+            this.Styles.SetStyles<T>();
+            return this;
+        }
     }
 }

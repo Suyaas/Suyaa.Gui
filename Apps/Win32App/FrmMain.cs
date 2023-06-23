@@ -17,6 +17,7 @@ namespace Win32App
     {
         // 标签
         private readonly Label _labInfo;
+        private readonly Button _btnHello;
 
         /// <summary>
         /// 主窗体
@@ -24,33 +25,38 @@ namespace Win32App
         public FrmMain()
         {
             this.Title = "Win32App 测试";
-            this.Styles.SetStyles<FormStyle>();
+            this.UseStyles<FormStyle>();
 
-            // 设置内容标签
-            _labInfo = new Label("Label");
+            // 初始化全局控件
+            _labInfo = new Label("label");
+            _btnHello = new Button("确定");
+            _btnHello.Click += btnHello_Click;
         }
 
+        /// <summary>
+        /// 加载事件
+        /// </summary>
         protected override void OnLoad()
         {
             base.OnLoad();
 
             // 添加控件
             this.Controls.AddRange(
-                Control.Create<Block>().UseStyles(d => d.SetStyles<TestBlock2Style>()).AsControl(),
-                Control.Create<Block>().UseStyles(d => d.SetStyles<TestBlockStyle>()).AsControl(),
-                Control.Create<MouseTestPanel>(),
-                _labInfo.UseStyles(d => d
-                    .Set<float>(StyleType.X, 5)
-                    .Set<float>(StyleType.Y, 5)
-                //.Set(StyleType.BackgroundColor, new SKColor(0xff990000))
-                ).AsControl()
+                _labInfo,
+                _btnHello.UseStyles<BtnHelloStyle>()
                 );
+        }
+
+        // 按钮事件
+        private void btnHello_Click(object sender, Suyaa.Gui.Controls.EventArgs.GuiEventArgs e)
+        {
+            _labInfo.Content = "Hello World";
         }
 
         protected override void OnMouseMove(Point point)
         {
             base.OnMouseMove(point);
-            _labInfo!.Content = $"{point.X}:{point.Y}";
+            //_labInfo!.Content = $"{point.X}:{point.Y}";
         }
     }
 }

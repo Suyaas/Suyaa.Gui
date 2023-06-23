@@ -31,6 +31,15 @@ namespace Suyaa.Gui.Controls
         private int _lastMouseClick;
         // 最后一次鼠标点击
         private CursorType? _lastCursor;
+        // 临时样式表
+        private Styles _styles;
+
+        /// <summary>
+        /// Gui事件委托
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public delegate void GuiEventDelegate(object sender, GuiEventArgs e);
 
         /// <summary>
         /// 创建一个控件
@@ -53,14 +62,17 @@ namespace Suyaa.Gui.Controls
             _refresh = false;
             _mouseOn = false;
             _lastMouseClick = 0;
+            _styles = new Styles(this, false);
             // 初始化矩形区域
             this.Rectangle = new Rectangle();
             // 设置Z轴深度
             this.ZIndex = 0;
             // 初始化样式表
-            this.Styles = new Styles(this);
+            this.Styles = new Styles(this, true);
             // 生成新的唯一句柄
             this.Handle = Application.GetNewHandle();
+            // 触发初始化事件
+            this.OnInitialize();
         }
 
         #region 公用属性
@@ -237,6 +249,11 @@ namespace Suyaa.Gui.Controls
         #endregion
 
         #region 事件处理
+
+        /// <summary>
+        /// 初始化事件
+        /// </summary>
+        protected virtual void OnInitialize() { }
 
         /// <summary>
         /// 绘制中事件
@@ -420,12 +437,27 @@ namespace Suyaa.Gui.Controls
         {
             if (!this.IsVaild) return;
             // 兼容鼠标处理
-            if (!this.Styles.ContainsKey(StyleType.Cursor)) return;
-            //_lastCursor = null;
-            var cur = this.Styles.Get<CursorType>(StyleType.Cursor);
-            //if (_form!.Cursor.Equals(cur)) return;
-            _lastCursor = this.Form.Cursor;
-            this.Form.Cursor = cur;
+            if (this.Styles.ContainsKey(StyleType.Cursor))
+            {
+
+                //_lastCursor = null;
+                var cur = this.Styles.Get<CursorType>(StyleType.Cursor);
+                //if (_form!.Cursor.Equals(cur)) return;
+                _lastCursor = this.Form.Cursor;
+                this.Form.Cursor = cur;
+            }
+            // 调用标准的悬停事件处理
+            if (this.GetType().HasInterface<IMouseHoverWidget>())
+            {
+                IMouseHoverWidget hover = (IMouseHoverWidget)this;
+                this.Styles
+                    // 先进行样式备份
+                    .Cover(_styles)
+                    // 生效悬停样式
+                    .Set(hover.HoverStyles)
+                    // 应用样式
+                    .Apply();
+            }
         }
 
         /// <summary>
@@ -435,8 +467,19 @@ namespace Suyaa.Gui.Controls
         {
             if (!this.IsVaild) return;
             // 兼容鼠标处理
-            if (!_lastCursor.HasValue) return;
-            this.Form.Cursor = _lastCursor.Value;
+            if (_lastCursor.HasValue)
+            {
+                this.Form.Cursor = _lastCursor.Value;
+            }
+            // 调用标准的悬停事件处理
+            if (this.GetType().HasInterface<IMouseHoverWidget>())
+            {
+                IMouseHoverWidget hover = (IMouseHoverWidget)this;
+                // 恢复备份的样式
+                _styles.Cover(this.Styles);
+                // 刷新
+                this.Refresh();
+            }
         }
 
         /// <summary>
@@ -585,6 +628,8 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         protected virtual bool OnRefresh()
         {
+            // 设置需要重绘
+            this.IsNeedRepaint = true;
             // 计算dpi比例
             var scale = Application.GetScale();
             // 触发重设大小
@@ -681,9 +726,41 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public IWidget UseStyles(Action<Styles> action)
+        public IControl UseStyles(Action<Styles> action)
         {
             action(this.Styles);
+            return this;
+        }
+
+        /// <summary>
+        /// 设置样式
+        /// </summary>
+        /// <returns></returns>
+        public IControl UseStyles<T>()
+        {
+            this.Styles.SetStyles<T>();
+            return this;
+        }
+
+        /// <summary>
+        /// 设置样式
+        /// </summary>
+        /// <param name="action"></param>
+        /// <returns></returns>
+        IWidget IWidget.UseStyles(Action<Styles> action)
+        {
+            action(this.Styles);
+            return this;
+        }
+
+        /// <summary>
+        /// 设置样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        IWidget IWidget.UseStyles<T>()
+        {
+            this.Styles.SetStyles<T>();
             return this;
         }
 

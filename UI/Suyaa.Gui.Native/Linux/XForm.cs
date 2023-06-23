@@ -31,7 +31,7 @@ namespace Suyaa.Gui.Native.Linux
             // 申请句柄
             this.Handle = Application.GetNewHandle();
             // 初始化样式表
-            this.Styles = new Styles(this);
+            this.Styles = new Styles(this, true);
             this.Styles.Set<float>(StyleType.Width, 300);
             this.Styles.Set<float>(StyleType.Height, 300);
         }
@@ -329,6 +329,17 @@ namespace Suyaa.Gui.Native.Linux
         public IWidget UseStyles(Action<Styles> action)
         {
             action(this.Styles);
+            return this;
+        }
+
+        /// <summary>
+        /// 设置样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public IWidget UseStyles<T>()
+        {
+            this.Styles.SetStyles<T>();
             return this;
         }
     }

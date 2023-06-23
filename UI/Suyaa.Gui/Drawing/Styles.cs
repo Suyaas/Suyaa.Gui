@@ -112,26 +112,11 @@ namespace Suyaa.Gui.Drawing
         /// <param name="style"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Styles Set(params Style[] styles)
+        public Styles Set(Styles styles)
         {
             foreach (var style in styles)
             {
-                Set(style.StyleType, style.Value);
-            }
-            return this;
-        }
-
-        /// <summary>
-        /// 设置样式
-        /// </summary>
-        /// <param name="style"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public Styles Set(List<Style> styles)
-        {
-            foreach (var style in styles)
-            {
-                Set(style.StyleType, style.Value);
+                Set(style.Key, style.Value);
             }
             return this;
         }
@@ -173,45 +158,40 @@ namespace Suyaa.Gui.Drawing
         }
 
         /// <summary>
-        /// 删除样式
-        /// </summary>
-        /// <param name="style"></param>
-        /// <returns></returns>
-        public new Styles Remove(StyleType style)
-        {
-            if (this.ContainsKey(style)) this.Remove(style);
-            return this;
-        }
-
-        /// <summary>
         /// 样式列表
         /// </summary>
-        public Styles(IWidget widget)
+        /// <param name="widget">所属组件</param>
+        /// <param name="hasStandardStyles">是否拥有标准样式</param>
+        public Styles(IWidget widget, bool hasStandardStyles)
         {
             // 所属组件
             _widget = widget;
-            // 可见性
-            Set(StyleType.Visible, false);
-            // 是否启用缓存
-            Set(StyleType.UseCache, false);
-            // 是否启用抗锯齿
-            Set(StyleType.Antialias, true);
-            // 对齐方式
-            Set(StyleType.XAlign, AlignType.Normal);
-            Set(StyleType.YAlign, AlignType.Normal);
-            // 显示单位
-            Set(StyleType.WidthUnit, UnitType.Pixel);
-            Set(StyleType.HeightUnit, UnitType.Pixel);
-            // 设置定位模式为浮动
-            Set(StyleType.Position, PositionType.Float);
-            //// 上边距
-            //Set<float>(StyleType.X, 0);
-            //// 左边距
-            //Set<float>(StyleType.Y, 0);
-            // 宽度
-            Set<float>(StyleType.Width, 0);
-            // 高度
-            Set<float>(StyleType.Height, 0);
+            // 设置标准样式
+            if (hasStandardStyles)
+            {
+                // 可见性
+                Set(StyleType.Visible, false);
+                // 是否启用缓存
+                Set(StyleType.UseCache, false);
+                // 是否启用抗锯齿
+                Set(StyleType.Antialias, true);
+                // 对齐方式
+                Set(StyleType.XAlign, AlignType.Normal);
+                Set(StyleType.YAlign, AlignType.Normal);
+                // 显示单位
+                Set(StyleType.WidthUnit, UnitType.Pixel);
+                Set(StyleType.HeightUnit, UnitType.Pixel);
+                // 设置定位模式为浮动
+                Set(StyleType.Position, PositionType.Float);
+                //// 上边距
+                //Set<float>(StyleType.X, 0);
+                //// 左边距
+                //Set<float>(StyleType.Y, 0);
+                // 宽度
+                Set<float>(StyleType.Width, 0);
+                // 高度
+                Set<float>(StyleType.Height, 0);
+            }
         }
     }
 }

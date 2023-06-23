@@ -52,5 +52,11 @@ namespace Suyaa.Gui
         /// <param name="action"></param>
         /// <returns></returns>
         IWidget UseStyles(Action<Styles> action);
+
+        /// <summary>
+        /// 设置样式
+        /// </summary>
+        /// <returns></returns>
+        IWidget UseStyles<T>();
     }
 }

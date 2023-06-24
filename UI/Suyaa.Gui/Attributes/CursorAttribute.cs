@@ -5,13 +5,13 @@ namespace Suyaa.Gui.Attributes
     /// <summary>
     /// 光标
     /// </summary>
-    public class CursorAttribute : ValueStyleAttribute<CursorType>
+    public class CursorAttribute : ValueStyleAttribute<Cursors>
     {
         /// <summary>
         /// 光标
         /// </summary>
         /// <param name="value"></param>
-        public CursorAttribute(CursorType value) : base(StyleType.Cursor, value)
+        public CursorAttribute(Cursors value) : base(Styles.Cursor, value)
         {
         }
     }

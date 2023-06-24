@@ -26,18 +26,18 @@ namespace Suyaa.Gui.Forms
         /// <summary>
         /// 窗体状态
         /// </summary>
-        public FormStatusType FormStatus { get; internal protected set; }
+        public FormStatuses FormStatus { get; internal protected set; }
 
         // 设置默认样式
         private void SetDefaultStyles()
         {
-            this.Styles
-                .Set<float>(StyleType.Width, 300)
-                .Set<float>(StyleType.Height, 300)
-                .Set(StyleType.TextColor, new SKColor(0xff000000))
-                .Set(StyleType.TextAntialias, true)
-                .Set(StyleType.BackgroundColor, new SKColor(0xfffdfdfd))
-                .Set(StyleType.Cursor, CursorType.Default);
+            this.Style
+                .Set<float>(Enums.Styles.Width, 300)
+                .Set<float>(Enums.Styles.Height, 300)
+                .Set(Enums.Styles.TextColor, new SKColor(0xff000000))
+                .Set(Enums.Styles.TextAntialias, true)
+                .Set(Enums.Styles.BackgroundColor, new SKColor(0xfffdfdfd))
+                .Set(Enums.Styles.Cursor, Cursors.Default);
         }
 
         // 生效样式特性
@@ -53,11 +53,11 @@ namespace Suyaa.Gui.Forms
             {
                 foreach (var style in stylesAttr.Styles)
                 {
-                    this.Styles.SetStyles(style);
+                    this.Style.SetStyles(style);
                 }
             }
             // 处理自身的具体样式特性
-            this.Styles.SetStyles(type);
+            this.Style.SetStyles(type);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Suyaa.Gui.Forms
                     break;
                 // 重置大小
                 case ResizeMessage resize:
-                    if (this.FormStatus == FormStatusType.Minimize) break;
+                    if (this.FormStatus == FormStatuses.Minimize) break;
                     // 获取dpi比例
                     scale = Application.GetScale();
                     // 重置尺寸
@@ -190,7 +190,7 @@ namespace Suyaa.Gui.Forms
             // 设置默认值
             _mouseOn = false;
             // 设置初始状态
-            this.FormStatus = FormStatusType.Normal;
+            this.FormStatus = FormStatuses.Normal;
             // 应用反射特性
             this.ApplyStyles();
             // 建立计时器

@@ -17,6 +17,7 @@ namespace Win32App
     {
         // 标签
         private readonly Label _labInfo;
+        private readonly Input _txtHello;
         private readonly Button _btnHello;
         private int num = 0;
 
@@ -30,6 +31,7 @@ namespace Win32App
 
             // 初始化全局控件
             _labInfo = new Label("Hello World");
+            _txtHello = new Input("测试");
             _btnHello = new Button("点击加1");
             _btnHello.Click += btnHello_Click;
         }
@@ -44,6 +46,7 @@ namespace Win32App
             // 添加控件
             this.Controls.AddRange(
                 _labInfo,
+                _txtHello,
                 _btnHello.UseStyles<BtnHelloStyle>()
                 );
         }

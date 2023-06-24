@@ -16,6 +16,6 @@ namespace Suyaa.Gui
         /// <summary>
         /// 鼠标按下样式列表
         /// </summary>
-        Styles MousePressStyles { get; }
+        StyleCollection MousePressStyles { get; }
     }
 }

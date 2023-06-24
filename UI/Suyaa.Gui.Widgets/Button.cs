@@ -20,13 +20,13 @@ namespace Suyaa.Gui.Controls
     [BackgroundColor(0xfff0f0f0)]
     [BorderRadius(2)]
     [BorderShadow(0, 0, 5, 0x66000000)]
-    [Cursor(CursorType.Hand)]
+    [Cursor(Cursors.Hand)]
     public class Button : Block, IMouseHoverWidget, IMousePressWidget
     {
         // 内容
         private string _content;
-        private Styles? _hoverStyles;
-        private Styles? _pressStyles;
+        private Drawing.StyleCollection? _hoverStyles;
+        private Drawing.StyleCollection? _pressStyles;
 
         /// <summary>
         /// 鼠标点击
@@ -57,12 +57,12 @@ namespace Suyaa.Gui.Controls
         /// <summary>
         /// 鼠标悬停样式
         /// </summary>
-        public Styles MouseHoverStyles => _hoverStyles!;
+        public Drawing.StyleCollection MouseHoverStyles => _hoverStyles!;
 
         /// <summary>
         /// 鼠标按下样式
         /// </summary>
-        public Styles MousePressStyles => _pressStyles!;
+        public Drawing.StyleCollection MousePressStyles => _pressStyles!;
 
         /// <summary>
         /// 初始化事件
@@ -73,16 +73,16 @@ namespace Suyaa.Gui.Controls
             // 设置需要重绘
             this.IsNeedRepaint = true;
             // 设置样式
-            this.Styles.SetStyles(this.GetType());
+            this.Style.SetStyles(this.GetType());
             // 设置鼠标悬停样式
-            _hoverStyles = new Styles(this, false);
+            _hoverStyles = new Drawing.StyleCollection(this, false);
             _hoverStyles
-                .Set(StyleType.BackgroundColor, new SKColor(0xffe0e0e0));
+                .Set(Enums.Styles.BackgroundColor, new SKColor(0xffe0e0e0));
             // 设置鼠标按下样式
-            _pressStyles = new Styles(this, false);
+            _pressStyles = new Drawing.StyleCollection(this, false);
             _pressStyles
-                .Set(StyleType.BackgroundColor, new SKColor(0xffff6600))
-                .Set(StyleType.TextColor, new SKColor(0xffffffff));
+                .Set(Enums.Styles.BackgroundColor, new SKColor(0xffff6600))
+                .Set(Enums.Styles.TextColor, new SKColor(0xffffffff));
             // 申明默认的鼠标点击事件
             this.Click += (sender, e) => { };
         }

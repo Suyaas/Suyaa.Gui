@@ -9,17 +9,14 @@ using System.Threading.Tasks;
 namespace Suyaa.Gui.Messages
 {
     /// <summary>
-    /// 光标设置消息
+    /// 键盘抬起消息
     /// </summary>
-    public sealed class CursorMessage : Message
+    public sealed class KeyUpMessage : KeyMessage
     {
-
         /// <summary>
-        /// 光标设置消息
+        /// 键盘抬起消息
         /// </summary>
         /// <param name="handle"></param>
-        public CursorMessage(long handle) : base(GuiMessages.Cursor, handle)
-        {
-        }
+        public KeyUpMessage(long handle, Keys key) : base(GuiMessages.KeyUp, handle, key) { }
     }
 }

@@ -45,7 +45,7 @@ namespace Suyaa.Gui.Enums
     /// <summary>
     /// 样式类型
     /// </summary>
-    public enum StyleType : int
+    public enum Styles : int
     {
         #region 基础样式
         /// <summary>
@@ -70,12 +70,12 @@ namespace Suyaa.Gui.Enums
         /// <summary>
         /// 定位模式
         /// </summary>
-        [StyleValue(typeof(PositionType))]
+        [StyleValue(typeof(Positions))]
         Position = 0x21,
         /// <summary>
         /// 光标
         /// </summary>
-        [StyleValue(typeof(CursorType))]
+        [StyleValue(typeof(Cursors))]
         Cursor = 0x31,
         /// <summary>
         /// 是否开启抗锯齿
@@ -181,7 +181,7 @@ namespace Suyaa.Gui.Enums
         /// <summary>
         /// 上边框类型
         /// </summary>
-        [StyleValue(typeof(BorderStyleType))]
+        [StyleValue(typeof(BorderStyles))]
         BorderTopStyle = 0x202,
         /// <summary>
         /// 上边框颜色
@@ -196,7 +196,7 @@ namespace Suyaa.Gui.Enums
         /// <summary>
         /// 右边框类型
         /// </summary>
-        [StyleValue(typeof(BorderStyleType))]
+        [StyleValue(typeof(BorderStyles))]
         BorderRightStyle = 0x205,
         /// <summary>
         /// 右边框颜色
@@ -211,7 +211,7 @@ namespace Suyaa.Gui.Enums
         /// <summary>
         /// 右边框类型
         /// </summary>
-        [StyleValue(typeof(BorderStyleType))]
+        [StyleValue(typeof(BorderStyles))]
         BorderBottomStyle = 0x208,
         /// <summary>
         /// 右边框颜色
@@ -226,7 +226,7 @@ namespace Suyaa.Gui.Enums
         /// <summary>
         /// 边框类型
         /// </summary>
-        [StyleValue(typeof(BorderStyleType))]
+        [StyleValue(typeof(BorderStyles))]
         BorderLeftStyle = 0x20b,
         /// <summary>
         /// 边框颜色
@@ -292,10 +292,15 @@ namespace Suyaa.Gui.Enums
         [StyleValue(typeof(float))]
         TextSize = 0x303,
         /// <summary>
+        /// 文本对齐方式
+        /// </summary>
+        [StyleValue(typeof(AlignType))]
+        TextAlign = 0x304,
+        /// <summary>
         /// 文本抗锯齿
         /// </summary>
         [StyleValue(typeof(bool))]
-        TextAntialias = 0x304,
+        TextAntialias = 0x311,
         #endregion
     }
 }

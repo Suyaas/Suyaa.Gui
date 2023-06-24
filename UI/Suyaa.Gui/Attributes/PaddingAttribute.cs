@@ -37,7 +37,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 内边距样式设置
         /// </summary>
-        public PaddingAttribute(float size) : base(StyleType.None)
+        public PaddingAttribute(float size) : base(Enums.Styles.None)
         {
             this.Top = size;
             this.Right = size;
@@ -48,7 +48,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 内边距样式设置
         /// </summary>
-        public PaddingAttribute(float topBottom, float leftRight) : base(StyleType.None)
+        public PaddingAttribute(float topBottom, float leftRight) : base(Enums.Styles.None)
         {
             this.Top = topBottom;
             this.Right = leftRight;
@@ -59,7 +59,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 内边距样式设置
         /// </summary>
-        public PaddingAttribute(float top, float right, float bottom, float left) : base(StyleType.None)
+        public PaddingAttribute(float top, float right, float bottom, float left) : base(Enums.Styles.None)
         {
             this.Top = top;
             this.Right = right;
@@ -71,13 +71,13 @@ namespace Suyaa.Gui.Attributes
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        protected override void OnApply(Styles styles)
+        protected override void OnApply(Drawing.StyleCollection styles)
         {
             styles
-                .Set(StyleType.PaddingTop, this.Top)
-                .Set(StyleType.PaddingRight, this.Right)
-                .Set(StyleType.PaddingBottom, this.Bottom)
-                .Set(StyleType.PaddingLeft, this.Left);
+                .Set(Enums.Styles.PaddingTop, this.Top)
+                .Set(Enums.Styles.PaddingRight, this.Right)
+                .Set(Enums.Styles.PaddingBottom, this.Bottom)
+                .Set(Enums.Styles.PaddingLeft, this.Left);
         }
     }
 }

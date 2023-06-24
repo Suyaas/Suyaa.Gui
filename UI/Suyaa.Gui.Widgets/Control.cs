@@ -30,10 +30,10 @@ namespace Suyaa.Gui.Controls
         // 最后一次鼠标点击
         private int _lastMouseClick;
         // 最后一次鼠标点击
-        private CursorType? _lastCursor;
+        private Enums.Cursors? _lastCursor;
         // 临时样式表
-        private Styles? _hoverStyles;
-        private Styles? _pressStyles;
+        private Drawing.StyleCollection? _hoverStyles;
+        private Drawing.StyleCollection? _pressStyles;
 
         /// <summary>
         /// Gui事件委托
@@ -68,7 +68,7 @@ namespace Suyaa.Gui.Controls
             // 设置Z轴深度
             this.ZIndex = 0;
             // 初始化样式表
-            this.Styles = new Styles(this, true);
+            this.Style = new Drawing.StyleCollection(this, true);
             // 生成新的唯一句柄
             this.Handle = Application.GetNewHandle();
             // 触发初始化事件
@@ -127,7 +127,7 @@ namespace Suyaa.Gui.Controls
         /// <summary>
         /// 样式列表
         /// </summary>
-        public Styles Styles { get; }
+        public Drawing.StyleCollection Style { get; }
 
         /// <summary>
         /// 缓存图像
@@ -202,8 +202,8 @@ namespace Suyaa.Gui.Controls
             // 重新刷新有效区域
             this.Rectangle = new Rectangle(this.Rectangle.Left, this.Rectangle.Top, size.Width, size.Height);
             // 计算内外边距
-            this.Padding = this.Styles.GetPadding(scale);
-            this.Margin = this.Styles.GetMargin(scale);
+            this.Padding = this.Style.GetPadding(scale);
+            this.Margin = this.Style.GetMargin(scale);
             if (relayout)
             {
                 // 控件无效则不处理
@@ -224,7 +224,7 @@ namespace Suyaa.Gui.Controls
             get
             {
                 // 判断可见性
-                var visible = this.GetStyle<bool>(StyleType.Visible);
+                var visible = this.GetStyle<bool>(Enums.Styles.Visible);
                 if (!visible) return false;
                 // 判断是否拥有父对象
                 if (_parent is null)
@@ -273,7 +273,7 @@ namespace Suyaa.Gui.Controls
             // 组织变量
             var styles = e.Styles;
             var cvs = e.Canvas;
-            var marginDisplay = this.Styles.GetDisplayMargin(e.Scale);
+            var marginDisplay = this.Style.GetDisplayMargin(e.Scale);
             var rect = e.Rectangle.Padding(marginDisplay);
             // 绘制阴影
             cvs.DrawShadowStyles(styles, rect, e.Scale);
@@ -303,7 +303,7 @@ namespace Suyaa.Gui.Controls
             {
                 var rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
                 //cvs.DrawStyles(this.Styles, rect);
-                using (PaintEventArgs e = new(cvs, this.Styles))
+                using (PaintEventArgs e = new(cvs, this.Style))
                 {
                     e.Rectangle = rect;
                     e.Scale = scale;
@@ -312,11 +312,11 @@ namespace Suyaa.Gui.Controls
                     this.OnPainted(e);
                 }
 #if DEBUG
-                var marginShadow = this.Styles.GetShadowMargin(scale);
-                var marginDisplay = this.Styles.GetDisplayMargin(scale);
+                var marginShadow = this.Style.GetShadowMargin(scale);
+                var marginDisplay = this.Style.GetDisplayMargin(scale);
                 var rectDisplay = this.Rectangle.Margin(marginDisplay);
                 // 调试输出
-                if (this.Styles.Get(StyleType.UseDebug, false))
+                if (this.Style.Get(Enums.Styles.UseDebug, false))
                 {
                     int lineHeight = 12;
                     List<string> debugs = new List<string>() {
@@ -326,7 +326,7 @@ namespace Suyaa.Gui.Controls
                         $"{this.Padding.ToString("Padding")}",
                         $"{marginShadow.ToString("Shadow")}",
                         $"{marginDisplay.ToString("Display")}",
-                        $"Cache:{this.Styles.Get(StyleType.UseCache,false)}",
+                        $"Cache:{this.Style.Get(Enums.Styles.UseCache,false)}",
                     };
                     using (SKPaint paint = new SKPaint(new SKFont(SKTypeface.FromFamilyName("Consolas")))
                     {
@@ -369,12 +369,12 @@ namespace Suyaa.Gui.Controls
             if (!this.IsVaild) return;
 
             // 获取 是否使用缓存 样式
-            var useCache = this.Styles.Get<bool>(StyleType.UseCache);
+            var useCache = this.Style.Get<bool>(Enums.Styles.UseCache);
             //var rect = pm.Rectangle;
 
             // 获取属性信息
             var margin = this.Margin;
-            var marginDisplay = this.Styles.GetDisplayMargin(pm.Scale);
+            var marginDisplay = this.Style.GetDisplayMargin(pm.Scale);
             var rectDisplay = this.Rectangle.Margin(marginDisplay);
 
             //var drawWidth = this.Width + margin.Left + margin.Right;
@@ -437,11 +437,11 @@ namespace Suyaa.Gui.Controls
         {
             if (!this.IsVaild) return;
             // 兼容鼠标处理
-            if (this.Styles.ContainsKey(StyleType.Cursor))
+            if (this.Style.ContainsKey(Enums.Styles.Cursor))
             {
 
                 //_lastCursor = null;
-                var cur = this.Styles.Get<CursorType>(StyleType.Cursor);
+                var cur = this.Style.Get<Enums.Cursors>(Enums.Styles.Cursor);
                 //if (_form!.Cursor.Equals(cur)) return;
                 _lastCursor = this.Form.Cursor;
                 this.Form.Cursor = cur;
@@ -456,12 +456,12 @@ namespace Suyaa.Gui.Controls
                     _hoverStyles.Dispose();
                 }
                 // 建立临时样式表
-                _hoverStyles = new Styles(this, false);
-                this.Styles
+                _hoverStyles = new Drawing.StyleCollection(this, false);
+                this.Style
                     // 先进行样式备份
                     .Cover(_hoverStyles)
                     // 生效悬停样式
-                    .Set(hover.MouseHoverStyles)
+                    .Set((Drawing.StyleCollection)hover.MouseHoverStyles)
                     // 应用样式
                     .Apply();
             }
@@ -484,7 +484,7 @@ namespace Suyaa.Gui.Controls
                 if (_hoverStyles is null) return;
                 IMouseHoverWidget hover = (IMouseHoverWidget)this;
                 // 恢复备份的样式
-                _hoverStyles.Cover(this.Styles);
+                _hoverStyles.Cover(this.Style);
                 _hoverStyles.Dispose();
                 // 刷新
                 this.Refresh();
@@ -495,7 +495,7 @@ namespace Suyaa.Gui.Controls
         /// 鼠标按下事件
         /// </summary>
         /// <param name="point"></param>
-        protected virtual void OnMouseDown(MouseOperateType button, Point point)
+        protected virtual void OnMouseDown(MouseOperates button, Point point)
         {
             // 调用标准的鼠标按压事件处理
             if (this.GetType().HasInterface<IMousePressWidget>())
@@ -507,12 +507,12 @@ namespace Suyaa.Gui.Controls
                     _pressStyles.Dispose();
                 }
                 // 建立临时样式表
-                _pressStyles = new Styles(this, false);
-                this.Styles
+                _pressStyles = new Drawing.StyleCollection(this, false);
+                this.Style
                     // 先进行样式备份
                     .Cover(_pressStyles)
                     // 生效悬停样式
-                    .Set(hover.MousePressStyles)
+                    .Set((Drawing.StyleCollection)hover.MousePressStyles)
                     // 应用样式
                     .Apply();
             }
@@ -522,7 +522,7 @@ namespace Suyaa.Gui.Controls
         /// 鼠标抬起事件
         /// </summary>
         /// <param name="point"></param>
-        protected virtual void OnMouseUp(MouseOperateType button, Point point)
+        protected virtual void OnMouseUp(MouseOperates button, Point point)
         {
             // 调用标准的鼠标按压事件处理
             if (this.GetType().HasInterface<IMousePressWidget>())
@@ -530,7 +530,7 @@ namespace Suyaa.Gui.Controls
                 if (_pressStyles is null) return;
                 IMousePressWidget hover = (IMousePressWidget)this;
                 // 恢复备份的样式
-                _pressStyles.Cover(this.Styles);
+                _pressStyles.Cover(this.Style);
                 _pressStyles.Dispose();
                 // 刷新
                 this.Refresh();
@@ -552,13 +552,13 @@ namespace Suyaa.Gui.Controls
         // 处理绘制消息
         private void OnMouseButtonMessage(MouseButtonMessage mouseButton)
         {
-            var button = (MouseOperateType)((int)mouseButton.OperateType & 0xf0);
-            var opreate = (MouseOperateType)((int)mouseButton.OperateType & 0xf);
-            if (opreate == MouseOperateType.Down) this.OnMouseDown(button, mouseButton.Point);
-            if (opreate == MouseOperateType.Up)
+            var button = (MouseOperates)((int)mouseButton.OperateType & 0xf0);
+            var opreate = (MouseOperates)((int)mouseButton.OperateType & 0xf);
+            if (opreate == MouseOperates.Down) this.OnMouseDown(button, mouseButton.Point);
+            if (opreate == MouseOperates.Up)
             {
                 this.OnMouseUp(button, mouseButton.Point);
-                if (button == MouseOperateType.LButton)
+                if (button == MouseOperates.LButton)
                 {
                     this.OnMouseClick();
                     var tick = Environment.TickCount;
@@ -693,9 +693,9 @@ namespace Suyaa.Gui.Controls
         /// <typeparam name="T"></typeparam>
         /// <param name="style"></param>
         /// <returns></returns>
-        public T GetInheritableStyle<T>(StyleType style)
+        public T GetInheritableStyle<T>(Enums.Styles style)
         {
-            if (this.Styles.ContainsKey(style)) return this.Styles.Get<T>(style);
+            if (this.Style.ContainsKey(style)) return this.Style.Get<T>(style);
             if (_parent is null) return this.Form.GetStyle<T>(style);
             return _parent.GetInheritableStyle<T>(style);
         }
@@ -761,17 +761,17 @@ namespace Suyaa.Gui.Controls
         /// <typeparam name="T"></typeparam>
         /// <param name="style"></param>
         /// <returns></returns>
-        public T GetStyle<T>(StyleType style)
-            => this.Styles.Get<T>(style);
+        public T GetStyle<T>(Enums.Styles style)
+            => this.Style.Get<T>(style);
 
         /// <summary>
         /// 设置样式
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public IControl UseStyles(Action<Styles> action)
+        public IControl UseStyles(Action<Drawing.StyleCollection> action)
         {
-            action(this.Styles);
+            action(this.Style);
             return this;
         }
 
@@ -781,7 +781,7 @@ namespace Suyaa.Gui.Controls
         /// <returns></returns>
         public IControl UseStyles<T>()
         {
-            this.Styles.SetStyles<T>();
+            this.Style.SetStyles<T>();
             return this;
         }
 
@@ -790,9 +790,9 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        IWidget IWidget.UseStyles(Action<Styles> action)
+        IWidget IWidget.UseStyles(Action<Drawing.StyleCollection> action)
         {
-            action(this.Styles);
+            action(this.Style);
             return this;
         }
 
@@ -803,7 +803,7 @@ namespace Suyaa.Gui.Controls
         /// <returns></returns>
         IWidget IWidget.UseStyles<T>()
         {
-            this.Styles.SetStyles<T>();
+            this.Style.SetStyles<T>();
             return this;
         }
 
@@ -814,8 +814,8 @@ namespace Suyaa.Gui.Controls
         /// <param name="style"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public T GetStyle<T>(StyleType style, T defaultValue)
-            => this.Styles.Get<T>(style, defaultValue);
+        public T GetStyle<T>(Enums.Styles style, T defaultValue)
+            => this.Style.Get<T>(style, defaultValue);
 
         #endregion
     }

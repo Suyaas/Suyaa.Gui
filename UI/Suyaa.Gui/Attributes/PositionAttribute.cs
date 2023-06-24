@@ -16,7 +16,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 定位方式
         /// </summary>
-        public PositionType Position { get; }
+        public Positions Position { get; }
 
         /// <summary>
         /// 水平偏移
@@ -43,13 +43,13 @@ namespace Suyaa.Gui.Attributes
         /// </summary>
         /// <param name="style"></param>
         /// <param name="value"></param>
-        public PositionAttribute(float x, float y) : base(StyleType.None)
+        public PositionAttribute(float x, float y) : base(Enums.Styles.None)
         {
             this.X = x;
             this.Y = y;
             this.XAlign = AlignType.Normal;
             this.YAlign = AlignType.Normal;
-            this.Position = PositionType.Fixed;
+            this.Position = Positions.Fixed;
         }
 
         /// <summary>
@@ -57,13 +57,13 @@ namespace Suyaa.Gui.Attributes
         /// </summary>
         /// <param name="style"></param>
         /// <param name="value"></param>
-        public PositionAttribute(float x, float y, AlignType xAlign, AlignType yAlign) : base(StyleType.None)
+        public PositionAttribute(float x, float y, AlignType xAlign, AlignType yAlign) : base(Enums.Styles.None)
         {
             this.X = x;
             this.Y = y;
             this.XAlign = xAlign;
             this.YAlign = yAlign;
-            this.Position = PositionType.Fixed;
+            this.Position = Positions.Fixed;
         }
 
         /// <summary>
@@ -71,27 +71,27 @@ namespace Suyaa.Gui.Attributes
         /// </summary>
         /// <param name="style"></param>
         /// <param name="value"></param>
-        public PositionAttribute(AlignType xAlign, AlignType yAlign) : base(StyleType.None)
+        public PositionAttribute(AlignType xAlign, AlignType yAlign) : base(Enums.Styles.None)
         {
             this.X = 0;
             this.Y = 0;
             this.XAlign = xAlign;
             this.YAlign = yAlign;
-            this.Position = PositionType.Float;
+            this.Position = Positions.Float;
         }
 
         /// <summary>
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        protected override void OnApply(Styles styles)
+        protected override void OnApply(Drawing.StyleCollection styles)
         {
             styles
-                .Set(StyleType.X, this.X)
-                .Set(StyleType.Y, this.Y)
-                .Set(StyleType.XAlign, this.XAlign)
-                .Set(StyleType.YAlign, this.YAlign)
-                .Set(StyleType.Position, this.Position);
+                .Set(Enums.Styles.X, this.X)
+                .Set(Enums.Styles.Y, this.Y)
+                .Set(Enums.Styles.XAlign, this.XAlign)
+                .Set(Enums.Styles.YAlign, this.YAlign)
+                .Set(Enums.Styles.Position, this.Position);
         }
     }
 }

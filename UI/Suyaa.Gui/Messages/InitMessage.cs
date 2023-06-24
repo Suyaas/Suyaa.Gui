@@ -11,12 +11,12 @@ namespace Suyaa.Gui.Messages
     /// <summary>
     /// 初始化消息
     /// </summary>
-    public class InitMessage : Message
+    public sealed class InitMessage : Message
     {
         /// <summary>
         /// 初始化消息
         /// </summary>
         /// <param name="handle"></param>
-        public InitMessage(long handle) : base(GuiMessageType.Init, handle) { }
+        public InitMessage(long handle) : base(GuiMessages.Init, handle) { }
     }
 }

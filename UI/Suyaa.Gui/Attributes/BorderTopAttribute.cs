@@ -17,7 +17,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 上边框样式设置
         /// </summary>
-        public BorderTopAttribute(float size, uint color, BorderStyleType style = BorderStyleType.Solid) : base(size, color, style)
+        public BorderTopAttribute(float size, uint color, BorderStyles style = BorderStyles.Solid) : base(size, color, style)
         {
         }
 
@@ -25,12 +25,12 @@ namespace Suyaa.Gui.Attributes
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        protected override void OnApply(Styles styles)
+        protected override void OnApply(Drawing.StyleCollection styles)
         {
             styles
-                .Set(StyleType.BorderTopSize, this.Size)
-                .Set(StyleType.BorderTopStyle, this.BorderStyle)
-                .Set(StyleType.BorderTopColor, this.Color);
+                .Set(Enums.Styles.BorderTopSize, this.Size)
+                .Set(Enums.Styles.BorderTopStyle, this.BorderStyle)
+                .Set(Enums.Styles.BorderTopColor, this.Color);
         }
     }
 }

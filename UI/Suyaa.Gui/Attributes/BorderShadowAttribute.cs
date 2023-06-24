@@ -37,7 +37,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 边框样式设置
         /// </summary>
-        public BorderShadowAttribute(float x, float y, int size, uint color) : base(StyleType.None)
+        public BorderShadowAttribute(float x, float y, int size, uint color) : base(Enums.Styles.None)
         {
             this.Size = size;
             this.Color = new SKColor(color);
@@ -49,13 +49,13 @@ namespace Suyaa.Gui.Attributes
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        protected override void OnApply(Styles styles)
+        protected override void OnApply(Drawing.StyleCollection styles)
         {
             styles
-                .Set(StyleType.BorderShadowSize, this.Size)
-                .Set(StyleType.BorderShadowColor, this.Color)
-                .Set(StyleType.BorderShadowX, this.X)
-                .Set(StyleType.BorderShadowY, this.Y);
+                .Set(Enums.Styles.BorderShadowSize, this.Size)
+                .Set(Enums.Styles.BorderShadowColor, this.Color)
+                .Set(Enums.Styles.BorderShadowX, this.X)
+                .Set(Enums.Styles.BorderShadowY, this.Y);
         }
     }
 }

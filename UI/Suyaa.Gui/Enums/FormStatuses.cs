@@ -9,7 +9,7 @@ namespace Suyaa.Gui.Enums
     /// <summary>
     /// 窗体状态类型
     /// </summary>
-    public enum FormStatusType : int
+    public enum FormStatuses : int
     {
         /// <summary>
         /// 正常

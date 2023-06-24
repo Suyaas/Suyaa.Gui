@@ -20,6 +20,6 @@ namespace Suyaa.Gui
         /// <summary>
         /// 消息类型
         /// </summary>
-        GuiMessageType MessageType { get; }
+        GuiMessages MessageType { get; }
     }
 }

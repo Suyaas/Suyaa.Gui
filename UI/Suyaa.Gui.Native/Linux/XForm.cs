@@ -31,9 +31,10 @@ namespace Suyaa.Gui.Native.Linux
             // 申请句柄
             this.Handle = Application.GetNewHandle();
             // 初始化样式表
-            this.Styles = new Styles(this, true);
-            this.Styles.Set<float>(StyleType.Width, 300);
-            this.Styles.Set<float>(StyleType.Height, 300);
+            this.Style = new Drawing.StyleCollection(this, true);
+            this.Style
+                .Set<float>(Enums.Styles.Width, 300)
+                .Set<float>(Enums.Styles.Height, 300);
         }
 
         #endregion
@@ -58,7 +59,7 @@ namespace Suyaa.Gui.Native.Linux
         /// <summary>
         /// 样式列表
         /// </summary>
-        public Styles Styles { get; }
+        public Drawing.StyleCollection Style { get; }
 
         /// <summary>
         /// 绘制缓存
@@ -68,7 +69,7 @@ namespace Suyaa.Gui.Native.Linux
         /// <summary>
         /// 光标
         /// </summary>
-        public CursorType Cursor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        public Cursors Cursor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         /// <summary>
         /// 释放资源
@@ -85,10 +86,10 @@ namespace Suyaa.Gui.Native.Linux
         /// <typeparam name="T"></typeparam>
         /// <param name="style"></param>
         /// <returns></returns>
-        public T GetStyle<T>(StyleType style)
-            => this.Styles.Get<T>(style);
+        public T GetStyle<T>(Enums.Styles style)
+            => this.Style.Get<T>(style);
 
-        public T GetStyle<T>(StyleType style, T defaultValue)
+        public T GetStyle<T>(Enums.Styles style, T defaultValue)
         {
             throw new NotImplementedException();
         }
@@ -99,10 +100,10 @@ namespace Suyaa.Gui.Native.Linux
         public void Initialize()
         {
             // 获取宽高
-            var top = this.Styles.Get<float>(StyleType.X);
-            var left = this.Styles.Get<float>(StyleType.X);
-            var width = this.Styles.Get<float>(StyleType.Width);
-            var height = this.Styles.Get<float>(StyleType.Height);
+            var top = this.Style.Get<float>(Enums.Styles.X);
+            var left = this.Style.Get<float>(Enums.Styles.X);
+            var width = this.Style.Get<float>(Enums.Styles.Width);
+            var height = this.Style.Get<float>(Enums.Styles.Height);
 
             //Console.WriteLine($"SizeOfInt = {sizeof.SizeOfInt()}");
             //Console.WriteLine($"SizeOfInt = {LibX11Helper.SizeOfInt()}");
@@ -345,9 +346,9 @@ namespace Suyaa.Gui.Native.Linux
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public IWidget UseStyles(Action<Styles> action)
+        public IWidget UseStyles(Action<Drawing.StyleCollection> action)
         {
-            action(this.Styles);
+            action(this.Style);
             return this;
         }
 
@@ -358,7 +359,7 @@ namespace Suyaa.Gui.Native.Linux
         /// <returns></returns>
         public IWidget UseStyles<T>()
         {
-            this.Styles.SetStyles<T>();
+            this.Style.SetStyles<T>();
             return this;
         }
     }

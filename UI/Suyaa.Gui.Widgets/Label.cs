@@ -70,6 +70,16 @@ namespace Suyaa.Gui.Controls
         /// <summary>
         /// 文本
         /// </summary>
+        public Label()
+        {
+            _content = string.Empty;
+            // 设置需要重绘
+            this.IsNeedRepaint = true;
+        }
+
+        /// <summary>
+        /// 文本
+        /// </summary>
         public Label(string? content = null)
         {
             _content = content ?? string.Empty;

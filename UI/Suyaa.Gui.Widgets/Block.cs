@@ -30,7 +30,7 @@ namespace Suyaa.Gui.Controls
         {
             get
             {
-                var fontNames = this.GetInheritableStyle<string>(StyleType.TextFont);
+                var fontNames = this.GetInheritableStyle<string>(Enums.Styles.TextFont);
                 if (fontNames.IsNullOrWhiteSpace()) throw new GuiException($"Font not set");
                 // 字体无变化时使用缓存
                 if (_fontNames == fontNames) return _font!;
@@ -63,7 +63,7 @@ namespace Suyaa.Gui.Controls
                 _font = value;
                 string fontName = _font.Typeface.FamilyName;
                 _fontNames = fontName;
-                this.Styles.Set(StyleType.TextFont, fontName);
+                this.Style.Set(Enums.Styles.TextFont, fontName);
                 // 刷新显示
                 this.Refresh();
             }
@@ -74,10 +74,10 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public SKColor Color
         {
-            get => this.GetInheritableStyle<SKColor>(StyleType.TextColor);
+            get => this.GetInheritableStyle<SKColor>(Enums.Styles.TextColor);
             set
             {
-                this.Styles.Set(StyleType.TextColor, value);
+                this.Style.Set(Enums.Styles.TextColor, value);
                 // 刷新显示
                 this.Refresh();
             }
@@ -88,10 +88,10 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public bool IsAntialias
         {
-            get => this.GetInheritableStyle<bool>(StyleType.TextAntialias);
+            get => this.GetInheritableStyle<bool>(Enums.Styles.TextAntialias);
             set
             {
-                this.Styles.Set(StyleType.TextAntialias, value);
+                this.Style.Set(Enums.Styles.TextAntialias, value);
                 // 刷新显示
                 this.Refresh();
             }
@@ -103,10 +103,10 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public float FontSize
         {
-            get => this.GetInheritableStyle<float>(StyleType.TextSize);
+            get => this.GetInheritableStyle<float>(Enums.Styles.TextSize);
             set
             {
-                this.Styles.Set(StyleType.TextSize, value);
+                this.Style.Set(Enums.Styles.TextSize, value);
                 // 刷新显示
                 this.Refresh();
             }
@@ -117,10 +117,10 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public bool Visible
         {
-            get => this.GetStyle<bool>(StyleType.Visible);
+            get => this.GetStyle<bool>(Enums.Styles.Visible);
             set
             {
-                this.Styles.Set(StyleType.Visible, value);
+                this.Style.Set(Enums.Styles.Visible, value);
                 // 刷新显示
                 this.Refresh();
             }

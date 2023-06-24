@@ -124,21 +124,21 @@ namespace Suyaa.Gui.Native.Win32
             {
                 // 还原
                 case User32.SC.RESTORE:
-                    using (StatusChangeMessage msg = new(form.Handle, FormStatusType.Normal))
+                    using (StatusChangeMessage msg = new(form.Handle, FormStatuses.Normal))
                     {
                         form.SendMessage(msg);
                     }
                     break;
                 // 最小化
                 case User32.SC.MINIMIZE:
-                    using (StatusChangeMessage msg = new(form.Handle, FormStatusType.Minimize))
+                    using (StatusChangeMessage msg = new(form.Handle, FormStatuses.Minimize))
                     {
                         form.SendMessage(msg);
                     }
                     break;
                 // 最大化
                 case User32.SC.MAXIMIZE:
-                    using (StatusChangeMessage msg = new(form.Handle, FormStatusType.Maximize))
+                    using (StatusChangeMessage msg = new(form.Handle, FormStatuses.Maximize))
                     {
                         form.SendMessage(msg);
                     }
@@ -175,7 +175,7 @@ namespace Suyaa.Gui.Native.Win32
         }
 
         // 接收到鼠标操作消息
-        public unsafe static void ProcMouseOperate(IntPtr hwnd, IntPtr lParam, MouseOperateType mouseOperate)
+        public unsafe static void ProcMouseOperate(IntPtr hwnd, IntPtr lParam, MouseOperates mouseOperate)
         {
             // 获取关联窗体
             var form = GetFormByHwnd(hwnd);
@@ -200,6 +200,24 @@ namespace Suyaa.Gui.Native.Win32
             Debug.WriteLine($"[Win32Message] Cursor - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, Cursor: {form.Cursor})");
             //form.Cursor = form.Cursor;
             using (CursorMessage msg = new(form.Handle))
+            {
+                form.SendMessage(msg);
+            }
+        }
+
+        /// <summary>
+        /// 处理键盘按下事件
+        /// </summary>
+        /// <param name="hwnd"></param>
+        /// <param name="wParam"></param>
+        public static void ProcKeyDown(IntPtr hwnd, IntPtr wParam)
+        {
+            // 获取窗体
+            var form = GetFormByHwnd(hwnd);
+            var key = (Keys)wParam;
+            Debug.WriteLine($"[Win32Message] KeyDown - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, Key: {key})");
+            //form.Cursor = form.Cursor;
+            using (KeyDownMessage msg = new(form.Handle, key))
             {
                 form.SendMessage(msg);
             }
@@ -235,12 +253,12 @@ namespace Suyaa.Gui.Native.Win32
                 case User32.WM.MOUSEMOVE: ProcMouseMove(hwnd, lParam); break;
                 //case User32.WM.MOUSELEAVE: ProcMouseLeave(hwnd, lParam); break;
                 //case User32.WM.MOUSEHOVER: ProcMouseHover(hwnd, lParam); break;
-                case User32.WM.LBUTTONDOWN: ProcMouseOperate(hwnd, lParam, MouseOperateType.LButtonDown); break;
-                case User32.WM.LBUTTONUP: ProcMouseOperate(hwnd, lParam, MouseOperateType.LButtonUp); break;
-                case User32.WM.RBUTTONDOWN: ProcMouseOperate(hwnd, lParam, MouseOperateType.RButtonDown); break;
-                case User32.WM.RBUTTONUP: ProcMouseOperate(hwnd, lParam, MouseOperateType.RButtonUp); break;
-                case User32.WM.MBUTTONDOWN: ProcMouseOperate(hwnd, lParam, MouseOperateType.MButtonDown); break;
-                case User32.WM.MBUTTONUP: ProcMouseOperate(hwnd, lParam, MouseOperateType.MButtonUp); break;
+                case User32.WM.LBUTTONDOWN: ProcMouseOperate(hwnd, lParam, MouseOperates.LButtonDown); break;
+                case User32.WM.LBUTTONUP: ProcMouseOperate(hwnd, lParam, MouseOperates.LButtonUp); break;
+                case User32.WM.RBUTTONDOWN: ProcMouseOperate(hwnd, lParam, MouseOperates.RButtonDown); break;
+                case User32.WM.RBUTTONUP: ProcMouseOperate(hwnd, lParam, MouseOperates.RButtonUp); break;
+                case User32.WM.MBUTTONDOWN: ProcMouseOperate(hwnd, lParam, MouseOperates.MButtonDown); break;
+                case User32.WM.MBUTTONUP: ProcMouseOperate(hwnd, lParam, MouseOperates.MButtonUp); break;
                 // 非活动区鼠标移动
                 case User32.WM.NCMOUSEMOVE: ProcNCMouseMove(hwnd, lParam); break;
                 case User32.WM.NCMOUSEHOVER: break;
@@ -251,7 +269,11 @@ namespace Suyaa.Gui.Native.Win32
                     Win32Application win32 = (Win32Application)Application.GetCurrent();
                     Application.PostMessage(new CloseMessage(win32.GetHandleByHwnd(hwnd)));
                     break;
+                // 光标设置
                 case User32.WM.SETCURSOR: ProcCursor(hwnd); break;
+                // 键盘操作
+                case User32.WM.KEYDOWN: ProcKeyDown(hwnd, wParam); break;
+                case User32.WM.KEYUP: break;
                 default:
                     //Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
                     break;

@@ -37,7 +37,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 圆角样式设置
         /// </summary>
-        public BorderRadiusAttribute(float size) : base(StyleType.None)
+        public BorderRadiusAttribute(float size) : base(Enums.Styles.None)
         {
             this.LeftTop = size;
             this.RightTop = size;
@@ -48,7 +48,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 圆角样式设置
         /// </summary>
-        public BorderRadiusAttribute(float leftTop, float rightTop, float rightBottom, float leftBottom) : base(StyleType.None)
+        public BorderRadiusAttribute(float leftTop, float rightTop, float rightBottom, float leftBottom) : base(Enums.Styles.None)
         {
             this.LeftTop = leftTop;
             this.RightTop = rightTop;
@@ -60,13 +60,13 @@ namespace Suyaa.Gui.Attributes
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        protected override void OnApply(Styles styles)
+        protected override void OnApply(Drawing.StyleCollection styles)
         {
             styles
-                .Set(StyleType.BorderRadiusLeftTop, this.LeftTop)
-                .Set(StyleType.BorderRadiusRightTop, this.RightTop)
-                .Set(StyleType.BorderRadiusRightBottom, this.RightBottom)
-                .Set(StyleType.BorderRadiusLeftBottom, this.LeftBottom);
+                .Set(Enums.Styles.BorderRadiusLeftTop, this.LeftTop)
+                .Set(Enums.Styles.BorderRadiusRightTop, this.RightTop)
+                .Set(Enums.Styles.BorderRadiusRightBottom, this.RightBottom)
+                .Set(Enums.Styles.BorderRadiusLeftBottom, this.LeftBottom);
         }
     }
 }

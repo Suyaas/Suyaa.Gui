@@ -39,7 +39,7 @@ namespace Forms
         /// <summary>
         /// 样式列表
         /// </summary>
-        public Styles Styles => NativeForm.Styles;
+        public StyleCollection Style => NativeForm.Style;
 
         /// <summary>
         /// 缓存图像
@@ -73,7 +73,7 @@ namespace Forms
         /// <summary>
         /// 光标
         /// </summary>
-        public CursorType Cursor
+        public Cursors Cursor
         {
             get => this.NativeForm.Cursor;
             set => this.NativeForm.Cursor = value;
@@ -188,17 +188,17 @@ namespace Forms
         /// <typeparam name="T"></typeparam>
         /// <param name="style"></param>
         /// <returns></returns>
-        public T GetStyle<T>(StyleType style)
-            => this.Styles.Get<T>(style);
+        public T GetStyle<T>(Suyaa.Gui.Enums.Styles style)
+            => this.Style.Get<T>(style);
 
         /// <summary>
         /// 设置样式
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public IWidget UseStyles(Action<Styles> action)
+        public IWidget UseStyles(Action<Suyaa.Gui.Drawing.StyleCollection> action)
         {
-            action(this.Styles);
+            action(this.Style);
             return this;
         }
 
@@ -209,7 +209,7 @@ namespace Forms
         /// <returns></returns>
         public IWidget UseStyles<T>()
         {
-            this.Styles.SetStyles<T>();
+            this.Style.SetStyles<T>();
             return this;
         }
 
@@ -236,7 +236,7 @@ namespace Forms
         /// <param name="style"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public T GetStyle<T>(StyleType style, T defaultValue)
-            => this.Styles.Get<T>(style, defaultValue);
+        public T GetStyle<T>(Suyaa.Gui.Enums.Styles style, T defaultValue)
+            => this.Style.Get<T>(style, defaultValue);
     }
 }

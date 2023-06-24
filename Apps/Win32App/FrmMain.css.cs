@@ -33,10 +33,10 @@ namespace Win32App
         //[UseDebug]
         [UseCache]
         [BorderShadow(0, 0, 50, 0xff000000)]
-        [BorderTop(1, 0xffffffff, BorderStyleType.Dashed)]
-        [BorderRight(2, 0xffffff00, BorderStyleType.Dashed)]
-        [BorderBottom(3, 0xffff0000, BorderStyleType.Dashed)]
-        [BorderLeft(4, 0xffff00ff, BorderStyleType.Solid)]
+        [BorderTop(1, 0xffffffff, BorderStyles.Dashed)]
+        [BorderRight(2, 0xffffff00, BorderStyles.Dashed)]
+        [BorderBottom(3, 0xffff0000, BorderStyles.Dashed)]
+        [BorderLeft(4, 0xffff00ff, BorderStyles.Solid)]
         [BorderRadius(10)]
         class TestBlockStyle { }
 
@@ -50,17 +50,17 @@ namespace Win32App
         [UseCache]
         [BorderRadius(40, 10, 20, 30)]
         [Margin(0, 0, 20, 0)]
-        [BorderTop(2, 0xffffffff, BorderStyleType.Dashed)]
-        [BorderRight(4, 0xffffff00, BorderStyleType.Dashed)]
-        [BorderBottom(8, 0xffff0000, BorderStyleType.Dashed)]
-        [BorderLeft(16, 0xffff00ff, BorderStyleType.Dashed)]
+        [BorderTop(2, 0xffffffff, BorderStyles.Dashed)]
+        [BorderRight(4, 0xffffff00, BorderStyles.Dashed)]
+        [BorderBottom(8, 0xffff0000, BorderStyles.Dashed)]
+        [BorderLeft(16, 0xffff00ff, BorderStyles.Dashed)]
         class TestBlock2Style : IStyles
         {
-            public void Apply(Styles styles)
+            public void Apply(Suyaa.Gui.Drawing.StyleCollection styles)
             {
                 styles
-                    .Set<float>(StyleType.Width, 200)
-                    .Set<float>(StyleType.Height, 120);
+                    .Set<float>(Suyaa.Gui.Enums.Styles.Width, 200)
+                    .Set<float>(Suyaa.Gui.Enums.Styles.Height, 120);
             }
         }
 

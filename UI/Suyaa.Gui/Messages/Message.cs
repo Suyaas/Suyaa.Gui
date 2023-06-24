@@ -15,7 +15,7 @@ namespace Suyaa.Gui.Messages
         /// <summary>
         /// 消息
         /// </summary>
-        public GuiMessageType MessageType { get; }
+        public GuiMessages MessageType { get; }
 
         /// <summary>
         /// 对象句柄
@@ -27,7 +27,7 @@ namespace Suyaa.Gui.Messages
         /// </summary>
         /// <param name="handle"></param>
         /// <param name="canvas"></param>
-        public Message(GuiMessageType messageType, long handle)
+        public Message(GuiMessages messageType, long handle)
         {
             this.Handle = handle;
             this.MessageType = messageType;

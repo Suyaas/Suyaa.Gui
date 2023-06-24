@@ -9,7 +9,7 @@ namespace Suyaa.Gui.Enums
     /// <summary>
     /// 界面消息类型
     /// </summary>
-    public enum GuiMessageType
+    public enum GuiMessages
     {
         /// <summary>
         /// 未知消息
@@ -47,5 +47,13 @@ namespace Suyaa.Gui.Enums
         /// 光标设置
         /// </summary>
         Cursor = 0x311,
+        /// <summary>
+        /// 鼠标按下
+        /// </summary>
+        KeyDown = 0x401,
+        /// <summary>
+        /// 鼠标抬起
+        /// </summary>
+        KeyUp = 0x402,
     }
 }

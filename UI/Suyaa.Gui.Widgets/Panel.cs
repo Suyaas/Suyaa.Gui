@@ -95,7 +95,7 @@ namespace Suyaa.Gui.Controls
             // 获取对象尺寸
             //var size = this.Size;
             var rect = new Rectangle(0, 0, this.Width, this.Height)
-                .Padding(this.Styles.GetBorders(resize.Scale)) // 去掉边框
+                .Padding(this.Style.GetBorders(resize.Scale)) // 去掉边框
                 .Padding(this.Padding); //去掉内边距
 
             if (rect.Width <= 0 || rect.Height <= 0)
@@ -105,7 +105,7 @@ namespace Suyaa.Gui.Controls
             var controls = Controls.Where(d => d.IsVaild).ToList();
             foreach (Control ctl in controls)
             {
-                var ctlSize = ctl.Styles.GetSize(rect.Size, resize.Scale);
+                var ctlSize = ctl.Style.GetSize(rect.Size, resize.Scale);
                 // 发送绘制消息
                 using (ResizeMessage msg = new(ctl.Handle, ctlSize, resize.Scale))
                 {
@@ -122,12 +122,12 @@ namespace Suyaa.Gui.Controls
             foreach (var ctl in floatControls)
             {
                 // 跳过不是浮动的定位
-                if (ctl.Styles.Get<PositionType>(StyleType.Position) != PositionType.Float) continue;
+                if (ctl.Style.Get<Positions>(Enums.Styles.Position) != Positions.Float) continue;
                 // 获取控件的外边距及真实占位矩形
                 var ctlMargin = ctl.Margin;
                 var ctlRect = ctl.Rectangle.Margin(ctlMargin, AlignType.Normal, AlignType.Normal);
                 // 获取对齐方式
-                var xAlign = ctl.Styles.Get<AlignType>(StyleType.XAlign);
+                var xAlign = ctl.Style.Get<AlignType>(Enums.Styles.XAlign);
                 // 浮动不支持居中
                 if (xAlign == AlignType.Center) throw new GuiException("Float position not support center align.");
                 // 计算左边距
@@ -209,11 +209,11 @@ namespace Suyaa.Gui.Controls
             foreach (var ctl in fixedControls)
             {
                 // 跳过不是浮动的定位
-                if (ctl.Styles.Get<PositionType>(StyleType.Position) != PositionType.Fixed) continue;
-                var x = ctl.Styles.Get<float>(StyleType.X) * resize.Scale;
-                var y = ctl.Styles.Get<float>(StyleType.Y) * resize.Scale;
-                var xAlign = ctl.Styles.Get<AlignType>(StyleType.XAlign);
-                var yAlign = ctl.Styles.Get<AlignType>(StyleType.YAlign);
+                if (ctl.Style.Get<Positions>(Enums.Styles.Position) != Positions.Fixed) continue;
+                var x = ctl.Style.Get<float>(Enums.Styles.X) * resize.Scale;
+                var y = ctl.Style.Get<float>(Enums.Styles.Y) * resize.Scale;
+                var xAlign = ctl.Style.Get<AlignType>(Enums.Styles.XAlign);
+                var yAlign = ctl.Style.Get<AlignType>(Enums.Styles.YAlign);
                 switch (xAlign)
                 {
                     case AlignType.Center:

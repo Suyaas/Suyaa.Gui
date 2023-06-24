@@ -12,12 +12,12 @@ namespace Suyaa.Gui.Messages
     /// <summary>
     /// 鼠标键消息
     /// </summary>
-    public class MouseButtonMessage : Message
+    public sealed class MouseButtonMessage : Message
     {
         /// <summary>
         /// 操作类型
         /// </summary>
-        public MouseOperateType OperateType { get; }
+        public MouseOperates OperateType { get; }
 
         /// <summary>
         /// 坐标
@@ -28,7 +28,7 @@ namespace Suyaa.Gui.Messages
         /// 消息
         /// </summary>
         /// <param name="handle"></param>
-        public MouseButtonMessage(long handle, MouseOperateType operateType, Point point) : base(GuiMessageType.MouseButton, handle)
+        public MouseButtonMessage(long handle, MouseOperates operateType, Point point) : base(GuiMessages.MouseButton, handle)
         {
             this.OperateType = operateType;
             this.Point = point;

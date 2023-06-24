@@ -37,7 +37,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 内边距样式设置
         /// </summary>
-        public MarginAttribute(float size) : base(StyleType.None)
+        public MarginAttribute(float size) : base(Enums.Styles.None)
         {
             this.Top = size;
             this.Right = size;
@@ -48,7 +48,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 内边距样式设置
         /// </summary>
-        public MarginAttribute(float topBottom, float leftRight) : base(StyleType.None)
+        public MarginAttribute(float topBottom, float leftRight) : base(Enums.Styles.None)
         {
             this.Top = topBottom;
             this.Right = leftRight;
@@ -59,7 +59,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 内边距样式设置
         /// </summary>
-        public MarginAttribute(float top, float right, float bottom, float left) : base(StyleType.None)
+        public MarginAttribute(float top, float right, float bottom, float left) : base(Enums.Styles.None)
         {
             this.Top = top;
             this.Right = right;
@@ -71,13 +71,13 @@ namespace Suyaa.Gui.Attributes
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        protected override void OnApply(Styles styles)
+        protected override void OnApply(Drawing.StyleCollection styles)
         {
             styles
-                .Set(StyleType.MarginTop, this.Top)
-                .Set(StyleType.MarginRight, this.Right)
-                .Set(StyleType.MarginBottom, this.Bottom)
-                .Set(StyleType.MarginLeft, this.Left);
+                .Set(Enums.Styles.MarginTop, this.Top)
+                .Set(Enums.Styles.MarginRight, this.Right)
+                .Set(Enums.Styles.MarginBottom, this.Bottom)
+                .Set(Enums.Styles.MarginLeft, this.Left);
         }
     }
 }

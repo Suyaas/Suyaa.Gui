@@ -11,6 +11,6 @@ namespace Suyaa.Gui.Drawing
     /// </summary>
     public interface IStyles
     {
-        void Apply(Styles styles);
+        void Apply(StyleCollection styles);
     }
 }

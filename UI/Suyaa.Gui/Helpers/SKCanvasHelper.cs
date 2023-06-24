@@ -146,17 +146,17 @@ namespace Suyaa.Gui.Helpers
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
         /// <param name="rect"></param>
-        public static void DrawBorderLeftTopStyles(this SKCanvas cvs, Styles styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds)
+        public static void DrawBorderLeftTopStyles(this SKCanvas cvs, Drawing.StyleCollection styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds)
         {
             // 没有边框尺寸，则退出
             float sizeX = borders[3];
             float sizeY = borders[0];
             if (sizeX <= 0 && sizeY <= 0) return;
             // 获取抗锯齿设定
-            bool isAntialias = styles.Get(StyleType.Antialias, false);
+            bool isAntialias = styles.Get(Enums.Styles.Antialias, false);
             // 获取颜色
-            SKColor colorX = styles.Get(StyleType.BorderLeftColor, new SKColor());
-            SKColor colorY = styles.Get(StyleType.BorderTopColor, new SKColor());
+            SKColor colorX = styles.Get(Enums.Styles.BorderLeftColor, new SKColor());
+            SKColor colorY = styles.Get(Enums.Styles.BorderTopColor, new SKColor());
             // 获取外圆角半径及圆心坐标
             float radiusOuter = radiuses[0];
             Point opOuter = new Point(rect.Left + radiusOuter, rect.Top + radiusOuter);
@@ -331,17 +331,17 @@ namespace Suyaa.Gui.Helpers
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
         /// <param name="rect"></param>
-        public static void DrawBorderRightTopStyles(this SKCanvas cvs, Styles styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds)
+        public static void DrawBorderRightTopStyles(this SKCanvas cvs, Drawing.StyleCollection styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds)
         {
             // 没有边框尺寸，则退出
             float sizeX = borders[1];
             float sizeY = borders[0];
             if (sizeX <= 0 && sizeY <= 0) return;
             // 获取抗锯齿设定
-            bool isAntialias = styles.Get(StyleType.Antialias, false);
+            bool isAntialias = styles.Get(Enums.Styles.Antialias, false);
             // 获取颜色
-            SKColor colorX = styles.Get(StyleType.BorderRightColor, new SKColor());
-            SKColor colorY = styles.Get(StyleType.BorderTopColor, new SKColor());
+            SKColor colorX = styles.Get(Enums.Styles.BorderRightColor, new SKColor());
+            SKColor colorY = styles.Get(Enums.Styles.BorderTopColor, new SKColor());
             // 获取外圆角半径及圆心坐标
             float radiusOuter = radiuses[1];
             Point opOuter = new Point(rect.Right - radiusOuter - 1, rect.Top + radiusOuter);
@@ -525,17 +525,17 @@ namespace Suyaa.Gui.Helpers
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
         /// <param name="rect"></param>
-        public static void DrawBorderRightBottomStyles(this SKCanvas cvs, Styles styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds)
+        public static void DrawBorderRightBottomStyles(this SKCanvas cvs, Drawing.StyleCollection styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds)
         {
             // 没有边框尺寸，则退出
             float sizeX = borders[1];
             float sizeY = borders[2];
             if (sizeX <= 0 && sizeY <= 0) return;
             // 获取抗锯齿设定
-            bool isAntialias = styles.Get(StyleType.Antialias, false);
+            bool isAntialias = styles.Get(Enums.Styles.Antialias, false);
             // 获取颜色
-            SKColor colorX = styles.Get(StyleType.BorderRightColor, new SKColor());
-            SKColor colorY = styles.Get(StyleType.BorderBottomColor, new SKColor());
+            SKColor colorX = styles.Get(Enums.Styles.BorderRightColor, new SKColor());
+            SKColor colorY = styles.Get(Enums.Styles.BorderBottomColor, new SKColor());
             // 获取外圆角半径及圆心坐标
             float radiusOuter = radiuses[2];
             Point opOuter = new Point(rect.Right - radiusOuter - 1, rect.Bottom - radiusOuter - 1);
@@ -725,17 +725,17 @@ namespace Suyaa.Gui.Helpers
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
         /// <param name="rect"></param>
-        public static void DrawBorderLeftBottomStyles(this SKCanvas cvs, Styles styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds)
+        public static void DrawBorderLeftBottomStyles(this SKCanvas cvs, Drawing.StyleCollection styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds)
         {
             // 没有边框尺寸，则退出
             float sizeX = borders[3];
             float sizeY = borders[2];
             if (sizeX <= 0 && sizeY <= 0) return;
             // 获取抗锯齿设定
-            bool isAntialias = styles.Get(StyleType.Antialias, false);
+            bool isAntialias = styles.Get(Enums.Styles.Antialias, false);
             // 获取颜色
-            SKColor colorX = styles.Get(StyleType.BorderLeftColor, new SKColor());
-            SKColor colorY = styles.Get(StyleType.BorderBottomColor, new SKColor());
+            SKColor colorX = styles.Get(Enums.Styles.BorderLeftColor, new SKColor());
+            SKColor colorY = styles.Get(Enums.Styles.BorderBottomColor, new SKColor());
             // 获取外圆角半径及圆心坐标
             float radiusOuter = radiuses[3];
             Point opOuter = new Point(rect.Left + radiusOuter, rect.Bottom - radiusOuter - 1);
@@ -923,7 +923,7 @@ namespace Suyaa.Gui.Helpers
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
         /// <param name="rect"></param>
-        public static void DrawBorderTopStyles(this SKCanvas cvs, Styles styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds, SKPaint? paint)
+        public static void DrawBorderTopStyles(this SKCanvas cvs, Drawing.StyleCollection styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds, SKPaint? paint)
         {
             if (paint is null) return;
             if (borders[0] <= 0) return;
@@ -963,7 +963,7 @@ namespace Suyaa.Gui.Helpers
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
         /// <param name="rect"></param>
-        public static void DrawBorderRightStyles(this SKCanvas cvs, Styles styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds, SKPaint? paint)
+        public static void DrawBorderRightStyles(this SKCanvas cvs, Drawing.StyleCollection styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds, SKPaint? paint)
         {
             if (paint is null) return;
             if (borders[1] <= 0) return;
@@ -1004,7 +1004,7 @@ namespace Suyaa.Gui.Helpers
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
         /// <param name="rect"></param>
-        public static void DrawBorderBottomStyles(this SKCanvas cvs, Styles styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds, SKPaint? paint)
+        public static void DrawBorderBottomStyles(this SKCanvas cvs, Drawing.StyleCollection styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds, SKPaint? paint)
         {
             if (paint is null) return;
             // 转为内边距
@@ -1047,7 +1047,7 @@ namespace Suyaa.Gui.Helpers
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
         /// <param name="rect"></param>
-        public static void DrawBorderLeftStyles(this SKCanvas cvs, Styles styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds, SKPaint? paint)
+        public static void DrawBorderLeftStyles(this SKCanvas cvs, Drawing.StyleCollection styles, Rectangle rect, int[] borders, int[] radiuses, RectangleDashed[] dasheds, SKPaint? paint)
         {
             if (paint is null) return;
             if (borders[3] <= 0) return;
@@ -1088,21 +1088,21 @@ namespace Suyaa.Gui.Helpers
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
         /// <param name="rect"></param>
-        public static void DrawBorderStyles(this SKCanvas cvs, Styles styles, Rectangle rect, float scale)
+        public static void DrawBorderStyles(this SKCanvas cvs, Drawing.StyleCollection styles, Rectangle rect, float scale)
         {
             // 获取圆角值
             int[] radiuses = new int[] {
-                (int)(styles.Get<float>(StyleType.BorderRadiusLeftTop, 0) * scale ),
-                (int)(styles.Get<float>(StyleType.BorderRadiusRightTop, 0) * scale ),
-                (int)(styles.Get<float>(StyleType.BorderRadiusRightBottom, 0) * scale ),
-                (int)(styles.Get<float>(StyleType.BorderRadiusLeftBottom, 0) * scale),
+                (int)(styles.Get<float>(Enums.Styles.BorderRadiusLeftTop, 0) * scale ),
+                (int)(styles.Get<float>(Enums.Styles.BorderRadiusRightTop, 0) * scale ),
+                (int)(styles.Get<float>(Enums.Styles.BorderRadiusRightBottom, 0) * scale ),
+                (int)(styles.Get<float>(Enums.Styles.BorderRadiusLeftBottom, 0) * scale),
             };
             // 获取边框尺寸值
             int[] borders = new int[] {
-                (int)(styles.Get<float>(StyleType.BorderTopSize, 0) * scale ),
-                (int)(styles.Get<float>(StyleType.BorderRightSize, 0) * scale ),
-                (int)(styles.Get<float>(StyleType.BorderBottomSize, 0) * scale ),
-                (int)(styles.Get<float>(StyleType.BorderLeftSize, 0) * scale),
+                (int)(styles.Get<float>(Enums.Styles.BorderTopSize, 0) * scale ),
+                (int)(styles.Get<float>(Enums.Styles.BorderRightSize, 0) * scale ),
+                (int)(styles.Get<float>(Enums.Styles.BorderBottomSize, 0) * scale ),
+                (int)(styles.Get<float>(Enums.Styles.BorderLeftSize, 0) * scale),
             };
             // 获取虚线描述
             var dasheds = styles.GetDasheds(rect, radiuses);
@@ -1115,10 +1115,10 @@ namespace Suyaa.Gui.Helpers
             }
 #endif
             // 建立画笔
-            using (var paintTop = styles.GetFillPaint(StyleType.BorderTopColor))
-            using (var paintRight = styles.GetFillPaint(StyleType.BorderRightColor))
-            using (var paintBottom = styles.GetFillPaint(StyleType.BorderBottomColor))
-            using (var paintLeft = styles.GetFillPaint(StyleType.BorderLeftColor))
+            using (var paintTop = styles.GetFillPaint(Enums.Styles.BorderTopColor))
+            using (var paintRight = styles.GetFillPaint(Enums.Styles.BorderRightColor))
+            using (var paintBottom = styles.GetFillPaint(Enums.Styles.BorderBottomColor))
+            using (var paintLeft = styles.GetFillPaint(Enums.Styles.BorderLeftColor))
             using (var bmp = new SKBitmap((int)rect.Width, (int)rect.Height))
             using (var bmpCvs = new SKCanvas(bmp))
             {
@@ -1152,23 +1152,23 @@ namespace Suyaa.Gui.Helpers
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
         /// <param name="rect"></param>
-        public static void DrawBackgroundStyles(this SKCanvas cvs, Styles styles, Rectangle rect, float scale)
+        public static void DrawBackgroundStyles(this SKCanvas cvs, Drawing.StyleCollection styles, Rectangle rect, float scale)
         {
-            if (styles.ContainsKey(StyleType.BackgroundColor))
+            if (styles.ContainsKey(Enums.Styles.BackgroundColor))
             {
                 // 获取圆角值
                 float[] radiuses = new float[] {
-                    styles.Get<float>(StyleType.BorderRadiusLeftTop, 0) * scale,
-                    styles.Get<float>(StyleType.BorderRadiusRightTop, 0) * scale,
-                    styles.Get<float>(StyleType.BorderRadiusRightBottom, 0) * scale,
-                    styles.Get<float>(StyleType.BorderRadiusLeftBottom, 0) * scale,
+                    styles.Get<float>(Enums.Styles.BorderRadiusLeftTop, 0) * scale,
+                    styles.Get<float>(Enums.Styles.BorderRadiusRightTop, 0) * scale,
+                    styles.Get<float>(Enums.Styles.BorderRadiusRightBottom, 0) * scale,
+                    styles.Get<float>(Enums.Styles.BorderRadiusLeftBottom, 0) * scale,
                 };
                 using (SKPaint paint = new SKPaint()
                 {
-                    Color = styles.Get<SKColor>(StyleType.BackgroundColor),
+                    Color = styles.Get<SKColor>(Enums.Styles.BackgroundColor),
                     Style = SKPaintStyle.Fill,
                     //StrokeWidth = 10,
-                    IsAntialias = styles.Get(StyleType.Antialias, false),
+                    IsAntialias = styles.Get(Enums.Styles.Antialias, false),
                 })
                 {
                     // 左上+上
@@ -1245,15 +1245,15 @@ namespace Suyaa.Gui.Helpers
         /// </summary>
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
-        public static void DrawShadowStyles(this SKCanvas cvs, Styles styles, Rectangle rect, float scale)
+        public static void DrawShadowStyles(this SKCanvas cvs, Drawing.StyleCollection styles, Rectangle rect, float scale)
         {
             // 获取配置
-            if (!styles.ContainsKey(StyleType.BorderShadowColor)) return;
-            int size = (int)(styles.Get(StyleType.BorderShadowSize, 0) * scale);
+            if (!styles.ContainsKey(Enums.Styles.BorderShadowColor)) return;
+            int size = (int)(styles.Get(Enums.Styles.BorderShadowSize, 0) * scale);
             if (size <= 0) return;
-            int offsetX = (int)(styles.Get<float>(StyleType.BorderShadowX, 0) * scale);
-            int offsetY = (int)(styles.Get<float>(StyleType.BorderShadowY, 0) * scale);
-            SKColor color = styles.Get<SKColor>(StyleType.BorderShadowColor);
+            int offsetX = (int)(styles.Get<float>(Enums.Styles.BorderShadowX, 0) * scale);
+            int offsetY = (int)(styles.Get<float>(Enums.Styles.BorderShadowY, 0) * scale);
+            SKColor color = styles.Get<SKColor>(Enums.Styles.BorderShadowColor);
             //SKColor colorStyle = styles.Get<SKColor>(StyleType.BorderShadowColor);
             //SKColor color = new SKColor(colorStyle.Red, colorStyle.Green, colorStyle.Blue, 255);
             // 逐行处理像素
@@ -1261,10 +1261,10 @@ namespace Suyaa.Gui.Helpers
             int size2 = (int)(size);
             // 获取圆角值
             int[] radiuses = new int[] {
-                (int)(styles.Get<float>(StyleType.BorderRadiusLeftTop, 0) * scale ),
-                (int)(styles.Get<float>(StyleType.BorderRadiusRightTop, 0) * scale ),
-                (int)(styles.Get<float>(StyleType.BorderRadiusRightBottom, 0) * scale ),
-                (int)(styles.Get<float>(StyleType.BorderRadiusLeftBottom, 0) * scale),
+                (int)(styles.Get<float>(Enums.Styles.BorderRadiusLeftTop, 0) * scale ),
+                (int)(styles.Get<float>(Enums.Styles.BorderRadiusRightTop, 0) * scale ),
+                (int)(styles.Get<float>(Enums.Styles.BorderRadiusRightBottom, 0) * scale ),
+                (int)(styles.Get<float>(Enums.Styles.BorderRadiusLeftBottom, 0) * scale),
             };
             int[] dists = new int[4];
             int[] radiusDists = new int[4];

@@ -24,7 +24,7 @@ namespace Win32App
     //[BorderLeft(2, 0xffffffff, BorderStyleType.Solid)]
     //[UserDebug]
     [BorderShadow(0, 0, 10, 0xff333333)]
-    [Cursor(CursorType.Hand)]
+    [Cursor(Cursors.Hand)]
     [UseCache]
     class MouseTestPanelStyles { }
 
@@ -49,7 +49,7 @@ namespace Win32App
         /// </summary>
         public MouseTestPanel()
         {
-            this.Styles.SetStyles<MouseTestPanelStyles>();
+            this.Style.SetStyles<MouseTestPanelStyles>();
 
             // 设置内容标签
             _labInfo = new Label("Label");
@@ -58,9 +58,9 @@ namespace Win32App
             this.Controls.AddRange(
                 _labInfo.UseStyles(d => d
                     .SetStyles<MouseTestPanelLabelStyles>()
-                    .Set<float>(StyleType.X, 5)
-                    .Set<float>(StyleType.Y, 5)
-                    .Set(StyleType.TextColor, SKColors.White)
+                    .Set<float>(Styles.X, 5)
+                    .Set<float>(Styles.Y, 5)
+                    .Set(Styles.TextColor, SKColors.White)
                 //.Set(StyleType.BackgroundColor, new SKColor(0xff990000))
                 ).AsControl()
                 );
@@ -83,14 +83,14 @@ namespace Win32App
         protected override void OnMouseHover()
         {
             base.OnMouseHover();
-            _backgroundColor = this.GetStyle<SKColor>(StyleType.BackgroundColor);
-            this.Styles.Set(StyleType.BackgroundColor, new SKColor(0xffff6600)).Apply();
+            _backgroundColor = this.GetStyle<SKColor>(Suyaa.Gui.Enums.Styles.BackgroundColor);
+            this.Style.Set(Suyaa.Gui.Enums.Styles.BackgroundColor, new SKColor(0xffff6600)).Apply();
         }
 
         protected override void OnMouseLeave()
         {
             base.OnMouseLeave();
-            this.Styles.Set(StyleType.BackgroundColor, _backgroundColor).Apply();
+            this.Style.Set(Suyaa.Gui.Enums.Styles.BackgroundColor, _backgroundColor).Apply();
         }
 
         protected override void OnMouseClick()

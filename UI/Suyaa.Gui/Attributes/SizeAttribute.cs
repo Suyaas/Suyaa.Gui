@@ -38,7 +38,7 @@ namespace Suyaa.Gui.Attributes
         /// </summary>
         /// <param name="style"></param>
         /// <param name="value"></param>
-        public SizeAttribute(float width, float height) : base(StyleType.None)
+        public SizeAttribute(float width, float height) : base(Enums.Styles.None)
         {
             this.WidthUnit = UnitType.Pixel;
             this.HeightUnit = UnitType.Pixel;
@@ -51,7 +51,7 @@ namespace Suyaa.Gui.Attributes
         /// </summary>
         /// <param name="style"></param>
         /// <param name="value"></param>
-        public SizeAttribute(float width, float height, UnitType widthUnit, UnitType heightUnit) : base(StyleType.None)
+        public SizeAttribute(float width, float height, UnitType widthUnit, UnitType heightUnit) : base(Enums.Styles.None)
         {
             this.WidthUnit = widthUnit;
             this.HeightUnit = heightUnit;
@@ -63,13 +63,13 @@ namespace Suyaa.Gui.Attributes
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        protected override void OnApply(Styles styles)
+        protected override void OnApply(Drawing.StyleCollection styles)
         {
             styles
-                .Set(StyleType.WidthUnit, this.WidthUnit)
-                .Set(StyleType.HeightUnit, this.HeightUnit)
-                .Set(StyleType.Width, this.Width)
-                .Set(StyleType.Height, this.Height);
+                .Set(Enums.Styles.WidthUnit, this.WidthUnit)
+                .Set(Enums.Styles.HeightUnit, this.HeightUnit)
+                .Set(Enums.Styles.Width, this.Width)
+                .Set(Enums.Styles.Height, this.Height);
         }
     }
 }

@@ -16,14 +16,14 @@ namespace Suyaa.Gui.Attributes
         /// 是否使用调试
         /// </summary>
         /// <param name="value"></param>
-        public UseDebugAttribute(bool value) : base(StyleType.UseDebug, value)
+        public UseDebugAttribute(bool value) : base(Styles.UseDebug, value)
         {
         }
 
         /// <summary>
         /// 是否使用调试
         /// </summary>
-        public UseDebugAttribute() : base(StyleType.UseDebug, true)
+        public UseDebugAttribute() : base(Styles.UseDebug, true)
         {
         }
     }

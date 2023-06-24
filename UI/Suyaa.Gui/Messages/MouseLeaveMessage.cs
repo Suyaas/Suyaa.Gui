@@ -12,13 +12,13 @@ namespace Suyaa.Gui.Messages
     /// <summary>
     /// 鼠标移开消息
     /// </summary>
-    public class MouseLeaveMessage : Message
+    public sealed class MouseLeaveMessage : Message
     {
         /// <summary>
         /// 消息
         /// </summary>
         /// <param name="handle"></param>
-        public MouseLeaveMessage(long handle) : base(GuiMessageType.MouseMove, handle)
+        public MouseLeaveMessage(long handle) : base(GuiMessages.MouseMove, handle)
         {
         }
     }

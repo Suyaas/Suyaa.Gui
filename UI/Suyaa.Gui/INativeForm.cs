@@ -26,7 +26,7 @@ namespace Forms
         /// <summary>
         /// 光标类型
         /// </summary>
-        CursorType Cursor { get; set; }
+        Cursors Cursor { get; set; }
 
         /// <summary>
         /// 处理系统绘制消息

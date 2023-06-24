@@ -12,15 +12,15 @@ namespace Suyaa.Gui.Drawing
     /// <summary>
     /// 样式列表
     /// </summary>
-    public class Styles : Dictionary<StyleType, object>, IDisposable
+    public class StyleCollection : Dictionary<Styles, object>, IDisposable
     {
         // 组件
         private readonly IWidget _widget;
 
         // 检测值类型
-        private void CheckValueType(StyleType style, Type type)
+        private void CheckValueType(Enums.Styles style, Type type)
         {
-            var typeStyle = typeof(StyleType);
+            var typeStyle = typeof(Enums.Styles);
             string columnTypeName = style.ToString();
             var field = typeStyle.GetFields().Where(d => d.Name == columnTypeName).FirstOrDefault();
             if (field is null) throw new GuiException($"Style type '{columnTypeName}' not found.");
@@ -33,7 +33,7 @@ namespace Suyaa.Gui.Drawing
         /// 设置样式设置集合
         /// </summary>
         /// <returns></returns>
-        public Styles SetStyles(Type type)
+        public StyleCollection SetStyles(Type type)
         {
             // 获取所有样式特性
             var styleAttrs = type.GetCustomAttributes<StyleAttribute>(true);
@@ -57,7 +57,7 @@ namespace Suyaa.Gui.Drawing
         /// 设置样式设置集合
         /// </summary>
         /// <returns></returns>
-        public Styles SetStyles<T>()
+        public StyleCollection SetStyles<T>()
         {
             Type type = typeof(T);
             // 获取所有样式特性
@@ -84,7 +84,7 @@ namespace Suyaa.Gui.Drawing
         /// <param name="style"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Styles Set(StyleType style, object value)
+        public StyleCollection Set(Enums.Styles style, object value)
         {
             // 检测值类型
             CheckValueType(style, value.GetType());
@@ -98,7 +98,7 @@ namespace Suyaa.Gui.Drawing
         /// <param name="style"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Styles Set<T>(StyleType style, T value) where T : notnull
+        public StyleCollection Set<T>(Enums.Styles style, T value) where T : notnull
         {
             // 检测值类型
             CheckValueType(style, typeof(T));
@@ -112,7 +112,7 @@ namespace Suyaa.Gui.Drawing
         /// <param name="style"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Styles Set(Styles styles)
+        public StyleCollection Set(StyleCollection styles)
         {
             foreach (var style in styles)
             {
@@ -127,7 +127,7 @@ namespace Suyaa.Gui.Drawing
         /// <typeparam name="T"></typeparam>
         /// <param name="style"></param>
         /// <returns></returns>
-        public T Get<T>(StyleType style)
+        public T Get<T>(Enums.Styles style)
         {
             if (!this.ContainsKey(style)) throw new GuiException($"Style '{style}' not set.");
             // 检测值类型
@@ -141,7 +141,7 @@ namespace Suyaa.Gui.Drawing
         /// <typeparam name="T"></typeparam>
         /// <param name="style"></param>
         /// <returns></returns>
-        public T Get<T>(StyleType style, T value)
+        public T Get<T>(Enums.Styles style, T value)
         {
             if (!this.ContainsKey(style)) return value;
             // 检测值类型
@@ -171,7 +171,7 @@ namespace Suyaa.Gui.Drawing
         /// </summary>
         /// <param name="widget">所属组件</param>
         /// <param name="hasStandardStyles">是否拥有标准样式</param>
-        public Styles(IWidget widget, bool hasStandardStyles)
+        public StyleCollection(IWidget widget, bool hasStandardStyles)
         {
             // 所属组件
             _widget = widget;
@@ -179,27 +179,27 @@ namespace Suyaa.Gui.Drawing
             if (hasStandardStyles)
             {
                 // 可见性
-                Set(StyleType.Visible, false);
+                Set(Enums.Styles.Visible, false);
                 // 是否启用缓存
-                Set(StyleType.UseCache, false);
+                Set(Enums.Styles.UseCache, false);
                 // 是否启用抗锯齿
-                Set(StyleType.Antialias, true);
+                Set(Enums.Styles.Antialias, true);
                 // 对齐方式
-                Set(StyleType.XAlign, AlignType.Normal);
-                Set(StyleType.YAlign, AlignType.Normal);
+                Set(Enums.Styles.XAlign, AlignType.Normal);
+                Set(Enums.Styles.YAlign, AlignType.Normal);
                 // 显示单位
-                Set(StyleType.WidthUnit, UnitType.Pixel);
-                Set(StyleType.HeightUnit, UnitType.Pixel);
+                Set(Enums.Styles.WidthUnit, UnitType.Pixel);
+                Set(Enums.Styles.HeightUnit, UnitType.Pixel);
                 // 设置定位模式为浮动
-                Set(StyleType.Position, PositionType.Float);
+                Set(Enums.Styles.Position, Positions.Float);
                 //// 上边距
                 //Set<float>(StyleType.X, 0);
                 //// 左边距
                 //Set<float>(StyleType.Y, 0);
                 // 宽度
-                Set<float>(StyleType.Width, 0);
+                Set(Enums.Styles.Width, (float)0);
                 // 高度
-                Set<float>(StyleType.Height, 0);
+                Set(Enums.Styles.Height, (float)0);
             }
         }
     }

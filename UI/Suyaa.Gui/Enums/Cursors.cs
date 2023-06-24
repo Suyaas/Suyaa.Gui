@@ -9,15 +9,19 @@ namespace Suyaa.Gui.Enums
     /// <summary>
     /// 光标类型
     /// </summary>
-    public enum CursorType : int
+    public enum Cursors : int
     {
         /// <summary>
         /// 默认
         /// </summary>
-        Default = 0,
+        Default = 0x00,
         /// <summary>
         /// 手形
         /// </summary>
-        Hand = 1,
+        Hand = 0x10,
+        /// <summary>
+        /// 编辑
+        /// </summary>
+        Edit = 0x20,
     }
 }

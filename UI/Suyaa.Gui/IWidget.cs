@@ -24,7 +24,7 @@ namespace Suyaa.Gui
         /// <summary>
         /// 样式列表
         /// </summary>
-        Styles Styles { get; }
+        Drawing.StyleCollection Style { get; }
 
         /// <summary>
         /// 缓存图像
@@ -44,7 +44,7 @@ namespace Suyaa.Gui
         /// <typeparam name="T"></typeparam>
         /// <param name="style"></param>
         /// <returns></returns>
-        T GetStyle<T>(StyleType style);
+        T GetStyle<T>(Enums.Styles style);
 
         /// <summary>
         /// 获取样式
@@ -53,14 +53,14 @@ namespace Suyaa.Gui
         /// <param name="style"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        T GetStyle<T>(StyleType style, T defaultValue);
+        T GetStyle<T>(Enums.Styles style, T defaultValue);
 
         /// <summary>
         /// 设置样式
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        IWidget UseStyles(Action<Styles> action);
+        IWidget UseStyles(Action<Drawing.StyleCollection> action);
 
         /// <summary>
         /// 设置样式

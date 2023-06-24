@@ -12,7 +12,7 @@ namespace Suyaa.Gui.Messages
     /// <summary>
     /// 绘制消息
     /// </summary>
-    public class MouseMoveMessage : Message
+    public sealed class MouseMoveMessage : Message
     {
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Suyaa.Gui.Messages
         /// 消息
         /// </summary>
         /// <param name="handle"></param>
-        public MouseMoveMessage(long handle, Point point) : base(GuiMessageType.MouseMove, handle)
+        public MouseMoveMessage(long handle, Point point) : base(GuiMessages.MouseMove, handle)
         {
             this.Point = point;
         }

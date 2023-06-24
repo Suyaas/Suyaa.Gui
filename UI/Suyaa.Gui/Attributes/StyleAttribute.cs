@@ -17,13 +17,13 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 样式类型
         /// </summary>
-        public StyleType Style { get; }
+        public Enums.Styles Style { get; }
 
         /// <summary>
         /// 样式基础特性
         /// </summary>
         /// <param name="style"></param>
-        public StyleAttribute(StyleType style)
+        public StyleAttribute(Enums.Styles style)
         {
             this.Style = style;
         }
@@ -32,12 +32,12 @@ namespace Suyaa.Gui.Attributes
         /// 特性生效事件
         /// </summary>
         /// <param name="styles"></param>
-        protected abstract void OnApply(Styles styles);
+        protected abstract void OnApply(Drawing.StyleCollection styles);
 
         /// <summary>
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        public void Apply(Styles styles) => this.OnApply(styles);
+        public void Apply(Drawing.StyleCollection styles) => this.OnApply(styles);
     }
 }

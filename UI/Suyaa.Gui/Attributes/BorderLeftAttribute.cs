@@ -17,7 +17,7 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 左边框样式设置
         /// </summary>
-        public BorderLeftAttribute(float size, uint color, BorderStyleType style = BorderStyleType.Solid) : base(size, color, style)
+        public BorderLeftAttribute(float size, uint color, BorderStyles style = BorderStyles.Solid) : base(size, color, style)
         {
         }
 
@@ -25,12 +25,12 @@ namespace Suyaa.Gui.Attributes
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        protected override void OnApply(Styles styles)
+        protected override void OnApply(Drawing.StyleCollection styles)
         {
             styles
-                .Set(StyleType.BorderLeftSize, this.Size)
-                .Set(StyleType.BorderLeftStyle, this.BorderStyle)
-                .Set(StyleType.BorderLeftColor, this.Color);
+                .Set(Enums.Styles.BorderLeftSize, this.Size)
+                .Set(Enums.Styles.BorderLeftStyle, this.BorderStyle)
+                .Set(Enums.Styles.BorderLeftColor, this.Color);
         }
     }
 }

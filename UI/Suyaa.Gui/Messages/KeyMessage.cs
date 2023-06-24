@@ -1,5 +1,4 @@
 ﻿using SkiaSharp;
-using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Enums;
 using System;
 using System.Collections.Generic;
@@ -10,22 +9,22 @@ using System.Threading.Tasks;
 namespace Suyaa.Gui.Messages
 {
     /// <summary>
-    /// 非工作区鼠标移动消息
+    /// 关闭消息
     /// </summary>
-    public sealed class NCMouseMoveMessage : Message
+    public abstract class KeyMessage : Message
     {
         /// <summary>
-        /// 坐标
+        /// 键值
         /// </summary>
-        public Point Point { get; }
+        public Keys Key { get; }
 
         /// <summary>
-        /// 消息
+        /// 按键消息消息
         /// </summary>
         /// <param name="handle"></param>
-        public NCMouseMoveMessage(long handle, Point point) : base(GuiMessages.MouseMove, handle)
+        public KeyMessage(GuiMessages message, long handle, Keys key) : base(message, handle)
         {
-            this.Point = point;
+            Key = key;
         }
     }
 }

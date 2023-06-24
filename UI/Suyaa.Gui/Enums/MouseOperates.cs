@@ -11,7 +11,7 @@ namespace Suyaa.Gui.Enums
     /// <summary>
     /// 鼠标操作类型
     /// </summary>
-    public enum MouseOperateType : int
+    public enum MouseOperates : int
     {
         /// <summary>
         /// 无

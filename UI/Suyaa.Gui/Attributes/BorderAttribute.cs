@@ -27,12 +27,12 @@ namespace Suyaa.Gui.Attributes
         /// <summary>
         /// 样式
         /// </summary>
-        public BorderStyleType BorderStyle { get; set; }
+        public BorderStyles BorderStyle { get; set; }
 
         /// <summary>
         /// 边框样式设置
         /// </summary>
-        public BorderAttribute(float size, uint color, BorderStyleType style = BorderStyleType.Solid) : base(StyleType.None)
+        public BorderAttribute(float size, uint color, BorderStyles style = BorderStyles.Solid) : base(Enums.Styles.None)
         {
             this.Size = size;
             this.Color = new SKColor(color);
@@ -43,21 +43,21 @@ namespace Suyaa.Gui.Attributes
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        protected override void OnApply(Styles styles)
+        protected override void OnApply(Drawing.StyleCollection styles)
         {
             styles
-                .Set(StyleType.BorderTopSize, this.Size)
-                .Set(StyleType.BorderTopStyle, this.BorderStyle)
-                .Set(StyleType.BorderTopColor, this.Color)
-                .Set(StyleType.BorderRightSize, this.Size)
-                .Set(StyleType.BorderRightStyle, this.BorderStyle)
-                .Set(StyleType.BorderRightColor, this.Color)
-                .Set(StyleType.BorderBottomSize, this.Size)
-                .Set(StyleType.BorderBottomStyle, this.BorderStyle)
-                .Set(StyleType.BorderBottomColor, this.Color)
-                .Set(StyleType.BorderLeftSize, this.Size)
-                .Set(StyleType.BorderLeftStyle, this.BorderStyle)
-                .Set(StyleType.BorderLeftColor, this.Color);
+                .Set(Enums.Styles.BorderTopSize, this.Size)
+                .Set(Enums.Styles.BorderTopStyle, this.BorderStyle)
+                .Set(Enums.Styles.BorderTopColor, this.Color)
+                .Set(Enums.Styles.BorderRightSize, this.Size)
+                .Set(Enums.Styles.BorderRightStyle, this.BorderStyle)
+                .Set(Enums.Styles.BorderRightColor, this.Color)
+                .Set(Enums.Styles.BorderBottomSize, this.Size)
+                .Set(Enums.Styles.BorderBottomStyle, this.BorderStyle)
+                .Set(Enums.Styles.BorderBottomColor, this.Color)
+                .Set(Enums.Styles.BorderLeftSize, this.Size)
+                .Set(Enums.Styles.BorderLeftStyle, this.BorderStyle)
+                .Set(Enums.Styles.BorderLeftColor, this.Color);
         }
     }
 }

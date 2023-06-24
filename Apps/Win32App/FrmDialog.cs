@@ -18,8 +18,8 @@ namespace Win32App
         {
             this.Title = "提示";
             this.UseStyles(d => d
-                .Set(StyleType.XAlign, AlignType.Center)
-                .Set(StyleType.YAlign, AlignType.Center)
+                .Set(Suyaa.Gui.Enums.Styles.XAlign, AlignType.Center)
+                .Set(Suyaa.Gui.Enums.Styles.YAlign, AlignType.Center)
             );
         }
 

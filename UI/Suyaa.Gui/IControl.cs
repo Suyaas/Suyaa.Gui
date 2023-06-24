@@ -74,14 +74,14 @@ namespace Suyaa.Gui
         /// <typeparam name="T"></typeparam>
         /// <param name="style"></param>
         /// <returns></returns>
-        T GetInheritableStyle<T>(StyleType style);
+        T GetInheritableStyle<T>(Enums.Styles style);
 
         /// <summary>
         /// 设置样式
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        new IControl UseStyles(Action<Styles> action);
+        new IControl UseStyles(Action<Drawing.StyleCollection> action);
 
         /// <summary>
         /// 设置样式

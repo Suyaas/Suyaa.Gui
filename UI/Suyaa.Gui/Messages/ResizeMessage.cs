@@ -12,7 +12,7 @@ namespace Suyaa.Gui.Messages
     /// <summary>
     /// 重置大小消息
     /// </summary>
-    public class ResizeMessage : Message
+    public sealed class ResizeMessage : Message
     {
         /// <summary>
         /// 有效区域
@@ -28,7 +28,7 @@ namespace Suyaa.Gui.Messages
         /// 重置大小消息
         /// </summary>
         /// <param name="handle"></param>
-        public ResizeMessage(long handle, Size size, float scale) : base(GuiMessageType.Layout, handle)
+        public ResizeMessage(long handle, Size size, float scale) : base(GuiMessages.Layout, handle)
         {
             this.Size = size;
             this.Scale = scale;

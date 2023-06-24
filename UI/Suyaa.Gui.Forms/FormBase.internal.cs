@@ -20,7 +20,7 @@ namespace Forms
         internal void WorkareaRepaint(SKCanvas canvas)
         {
             // 绘制标准样式结果
-            using (PaintEventArgs e = new(canvas, this.Styles)
+            using (PaintEventArgs e = new(canvas, this.Style)
             {
                 Rectangle = this.Workarea.Rectangle,
                 Scale = Application.GetScale(),

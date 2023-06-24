@@ -16,14 +16,14 @@ namespace Suyaa.Gui.Attributes
         /// 是否使用缓存
         /// </summary>
         /// <param name="value"></param>
-        public UseCacheAttribute(bool value) : base(StyleType.UseCache, value)
+        public UseCacheAttribute(bool value) : base(Styles.UseCache, value)
         {
         }
 
         /// <summary>
         /// 使用缓存
         /// </summary>
-        public UseCacheAttribute() : base(StyleType.UseCache, true)
+        public UseCacheAttribute() : base(Styles.UseCache, true)
         {
         }
     }

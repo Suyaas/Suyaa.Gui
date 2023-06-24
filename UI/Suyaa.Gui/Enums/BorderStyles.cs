@@ -7,17 +7,17 @@ using System.Threading.Tasks;
 namespace Suyaa.Gui.Enums
 {
     /// <summary>
-    /// 定位类型
+    /// 边框类型
     /// </summary>
-    public enum PositionType : int
+    public enum BorderStyles : int
     {
         /// <summary>
-        /// 浮动
+        /// 实线
         /// </summary>
-        Float = 0,
+        Solid = 0,
         /// <summary>
-        /// 固定
+        /// 虚线
         /// </summary>
-        Fixed = 1,
+        Dashed = 1,
     }
 }

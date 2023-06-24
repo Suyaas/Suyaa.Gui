@@ -16,6 +16,6 @@ namespace Suyaa.Gui
         /// <summary>
         /// 停悬样式列表
         /// </summary>
-        Styles MouseHoverStyles { get; }
+        StyleCollection MouseHoverStyles { get; }
     }
 }

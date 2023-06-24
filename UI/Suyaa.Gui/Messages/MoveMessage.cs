@@ -12,7 +12,7 @@ namespace Suyaa.Gui.Messages
     /// <summary>
     /// 重置大小消息
     /// </summary>
-    public class MoveMessage : Message
+    public sealed class MoveMessage : Message
     {
         /// <summary>
         /// 有效区域
@@ -23,7 +23,7 @@ namespace Suyaa.Gui.Messages
         /// 重置大小消息
         /// </summary>
         /// <param name="handle"></param>
-        public MoveMessage(long handle, Point point) : base(GuiMessageType.Layout, handle)
+        public MoveMessage(long handle, Point point) : base(GuiMessages.Layout, handle)
         {
             this.Point = point;
         }

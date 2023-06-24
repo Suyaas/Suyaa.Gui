@@ -26,7 +26,7 @@ namespace Suyaa.Gui.Forms
     public class Workarea : Panel
     {
         // 最后一次鼠标点击
-        private CursorType? _lastCursor;
+        private Enums.Cursors? _lastCursor;
 
         /// <summary>
         /// 工作区域
@@ -35,7 +35,7 @@ namespace Suyaa.Gui.Forms
         public Workarea(FormBase form)
         {
             this.Form = form;
-            this.Styles.Set(StyleType.Visible, true);
+            this.Style.Set(Enums.Styles.Visible, true);
         }
 
         /// <summary>
@@ -51,13 +51,13 @@ namespace Suyaa.Gui.Forms
             // 获取窗体工作区域
             var rect = User32.GetClientRect(win32Form.Hwnd);
             // 设置 宽度 和 高度
-            this.Styles.Set(StyleType.Width, rect.Width / scale);
-            this.Styles.Set(StyleType.Height, rect.Height / scale);
+            this.Style.Set(Enums.Styles.Width, rect.Width / scale);
+            this.Style.Set(Enums.Styles.Height, rect.Height / scale);
             // 更新有效矩形区域
             bool isReduce = rect.Width < this.Width || rect.Height < this.Height;
             this.Resize(new Size(rect.Width, rect.Height), scale);
             // 计算内外边距
-            this.Padding = form.Styles.GetPadding(scale);
+            this.Padding = form.Style.GetPadding(scale);
             if (isReduce) this.Refresh();
         }
 
@@ -80,9 +80,9 @@ namespace Suyaa.Gui.Forms
             if (!this.IsVaild) return;
             // 兼容鼠标处理
             var form = (FormBase)this.Form;
-            if (!form.Styles.ContainsKey(StyleType.Cursor)) return;
+            if (!form.Style.ContainsKey(Enums.Styles.Cursor)) return;
             //_lastCursor = null;
-            var cur = form.Styles.Get<CursorType>(StyleType.Cursor);
+            var cur = form.Style.Get<Enums.Cursors>(Enums.Styles.Cursor);
             //if (this.Form.Cursor.Equals(cur)) return;
             _lastCursor = this.Form.Cursor;
             this.Form.Cursor = cur;

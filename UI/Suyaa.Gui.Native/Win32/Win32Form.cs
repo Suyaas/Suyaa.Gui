@@ -26,7 +26,7 @@ namespace Suyaa.Gui.Native.Win32
         // 默认线程操作对象
         private readonly User32.WNDPROC _windProc;
         // 光标
-        private CursorType? _cursor;
+        private Enums.Cursors? _cursor;
         // 是否绘制中
         private bool _isPainting = false;
 
@@ -40,7 +40,7 @@ namespace Suyaa.Gui.Native.Win32
             // 初始化委托
             _windProc = new User32.WNDPROC(Win32Message.Proc);
             // 初始化样式表
-            this.Styles = new Styles(this, true);
+            this.Style = new Drawing.StyleCollection(this, true);
             //this.Styles.Set<float>(StyleType.Width, 300);
             //this.Styles.Set<float>(StyleType.Height, 300);
         }
@@ -53,9 +53,9 @@ namespace Suyaa.Gui.Native.Win32
         /// 获取默认光标
         /// </summary>
         /// <returns></returns>
-        private CursorType OnGetDefaultCursor()
+        private Enums.Cursors OnGetDefaultCursor()
         {
-            CursorType cur = CursorType.Default;
+            Enums.Cursors cur = Enums.Cursors.Default;
             User32.SetCursor(cur.GetWin32Cursor());
             return cur;
         }
@@ -64,7 +64,7 @@ namespace Suyaa.Gui.Native.Win32
         /// 获取默认光标
         /// </summary>
         /// <returns></returns>
-        private void OnSetCursor(CursorType cursor)
+        private void OnSetCursor(Enums.Cursors cursor)
         {
             User32.SetCursor(cursor.GetWin32Cursor());
         }
@@ -86,7 +86,7 @@ namespace Suyaa.Gui.Native.Win32
         /// <summary>
         /// 样式列表
         /// </summary>
-        public Styles Styles { get; }
+        public Drawing.StyleCollection Style { get; }
 
         /// <summary>
         /// 缓存图像
@@ -108,7 +108,7 @@ namespace Suyaa.Gui.Native.Win32
         /// <summary>
         /// 光标
         /// </summary>
-        public CursorType Cursor
+        public Enums.Cursors Cursor
         {
             get => _cursor ??= OnGetDefaultCursor();
             set
@@ -138,10 +138,10 @@ namespace Suyaa.Gui.Native.Win32
             var rect = User32.GetSystemWorkarea();
 
             #region 处理尺寸
-            var width = this.Styles.Get<float>(StyleType.Width);
-            var height = this.Styles.Get<float>(StyleType.Height);
-            var widthUnit = this.Styles.Get<UnitType>(StyleType.WidthUnit);
-            var heightUnit = this.Styles.Get<UnitType>(StyleType.HeightUnit);
+            var width = this.Style.Get<float>(Enums.Styles.Width);
+            var height = this.Style.Get<float>(Enums.Styles.Height);
+            var widthUnit = this.Style.Get<UnitType>(Enums.Styles.WidthUnit);
+            var heightUnit = this.Style.Get<UnitType>(Enums.Styles.HeightUnit);
             if (widthUnit == UnitType.Percentage)
             {
                 width = rect.Width * (width / 100);
@@ -161,12 +161,12 @@ namespace Suyaa.Gui.Native.Win32
             #endregion
 
             #region 处理对齐
-            var x = this.Styles.Get<float>(StyleType.X);
-            var y = this.Styles.Get<float>(StyleType.Y);
+            var x = this.Style.Get<float>(Enums.Styles.X);
+            var y = this.Style.Get<float>(Enums.Styles.Y);
             var left = x;
             var top = y;
-            var xAlign = this.Styles.Get<AlignType>(StyleType.XAlign);
-            var yAlign = this.Styles.Get<AlignType>(StyleType.YAlign);
+            var xAlign = this.Style.Get<AlignType>(Enums.Styles.XAlign);
+            var yAlign = this.Style.Get<AlignType>(Enums.Styles.YAlign);
             switch (xAlign)
             {
                 case AlignType.Center:
@@ -285,7 +285,7 @@ namespace Suyaa.Gui.Native.Win32
             }
 
             // 显示
-            if (this.Styles.Get<bool>(StyleType.Visible))
+            if (this.Style.Get<bool>(Enums.Styles.Visible))
             {
                 this.Show();
             }
@@ -297,7 +297,7 @@ namespace Suyaa.Gui.Native.Win32
         public void Show()
         {
             // 显示窗体
-            this.Styles.Set(StyleType.Visible, true);
+            this.Style.Set(Enums.Styles.Visible, true);
             if (this.Hwnd == IntPtr.Zero)
             {
                 this.Initialize();
@@ -333,8 +333,8 @@ namespace Suyaa.Gui.Native.Win32
         /// <typeparam name="T"></typeparam>
         /// <param name="style"></param>
         /// <returns></returns>
-        public T GetStyle<T>(StyleType style)
-            => this.Styles.Get<T>(style);
+        public T GetStyle<T>(Enums.Styles style)
+            => this.Style.Get<T>(style);
 
         /// <summary>
         /// 获取样式值
@@ -343,17 +343,17 @@ namespace Suyaa.Gui.Native.Win32
         /// <param name="style"></param>
         /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public T GetStyle<T>(StyleType style, T defaultValue)
-            => this.Styles.Get(style, defaultValue);
+        public T GetStyle<T>(Enums.Styles style, T defaultValue)
+            => this.Style.Get<T>(style, defaultValue);
 
         /// <summary>
         /// 设置样式
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public IWidget UseStyles(Action<Styles> action)
+        public IWidget UseStyles(Action<Drawing.StyleCollection> action)
         {
-            action(this.Styles);
+            action(this.Style);
             return this;
         }
 
@@ -364,7 +364,7 @@ namespace Suyaa.Gui.Native.Win32
         /// <returns></returns>
         public IWidget UseStyles<T>()
         {
-            this.Styles.SetStyles<T>();
+            this.Style.SetStyles<T>();
             return this;
         }
 
@@ -391,13 +391,13 @@ namespace Suyaa.Gui.Native.Win32
             if (_isPainting) return;
             _isPainting = true;
             // 未显示状态则直接退出
-            if (!this.GetStyle(StyleType.Visible, false))
+            if (!this.GetStyle(Enums.Styles.Visible, false))
             {
                 _isPainting = false;
                 return;
             }
             // 获取是否使用缓存
-            var useCache = this.GetStyle(StyleType.UseCache, false);
+            var useCache = this.GetStyle(Enums.Styles.UseCache, false);
             // 获取窗口工作区
             var rect = User32.GetClientRect(this.Hwnd);
             if (rect.Width <= 0 || rect.Height <= 0)

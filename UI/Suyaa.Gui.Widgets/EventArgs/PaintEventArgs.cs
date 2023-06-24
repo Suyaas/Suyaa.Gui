@@ -20,7 +20,7 @@ namespace Suyaa.Gui.Controls.EventArgs
         /// <summary>
         /// 样式
         /// </summary>
-        public Styles Styles { get; set; }
+        public StyleCollection Styles { get; set; }
         /// <summary>
         /// 矩形
         /// </summary>
@@ -34,7 +34,7 @@ namespace Suyaa.Gui.Controls.EventArgs
         /// </summary>
         /// <param name="cvs"></param>
         /// <param name="styles"></param>
-        public PaintEventArgs(SKCanvas cvs, Styles styles)
+        public PaintEventArgs(SKCanvas cvs, StyleCollection styles)
         {
             this.Canvas = cvs;
             this.Styles = styles;

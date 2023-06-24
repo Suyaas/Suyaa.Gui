@@ -20,17 +20,17 @@ namespace Suyaa.Gui.Drawing
         /// </summary>
         /// <param name="styles"></param>
         /// <returns></returns>
-        public static Margin GetShadowMargin(this Styles styles, float scale)
+        public static Margin GetShadowMargin(this StyleCollection styles, float scale)
         {
             // 获取阴影大小
-            var size = (int)(styles.Get(StyleType.BorderShadowSize, 0) * scale);
+            var size = (int)(styles.Get(Enums.Styles.BorderShadowSize, 0) * scale);
             if (size <= 0) return new Margin(0, 0, 0, 0);
             // 获取横向偏移
             float x = 0;
-            if (styles.ContainsKey(StyleType.BorderShadowX)) x = styles.Get<float>(StyleType.BorderShadowX) * scale;
+            if (styles.ContainsKey(Enums.Styles.BorderShadowX)) x = styles.Get<float>(Enums.Styles.BorderShadowX) * scale;
             // 获取纵向偏移
             float y = 0;
-            if (styles.ContainsKey(StyleType.BorderShadowY)) y = styles.Get<float>(StyleType.BorderShadowY) * scale;
+            if (styles.ContainsKey(Enums.Styles.BorderShadowY)) y = styles.Get<float>(Enums.Styles.BorderShadowY) * scale;
             return new Margin(
                 (int)(size - y),
                 (int)(size + x),
@@ -44,12 +44,12 @@ namespace Suyaa.Gui.Drawing
         /// </summary>
         /// <param name="styles"></param>
         /// <returns></returns>
-        public static Margin GetPadding(this Styles styles, float scale)
+        public static Margin GetPadding(this StyleCollection styles, float scale)
         {
-            float top = styles.Get<float>(StyleType.PaddingTop, 0) * scale;
-            float right = styles.Get<float>(StyleType.PaddingRight, 0) * scale;
-            float bottom = styles.Get<float>(StyleType.PaddingBottom, 0) * scale;
-            float left = styles.Get<float>(StyleType.PaddingLeft, 0) * scale;
+            float top = styles.Get<float>(Enums.Styles.PaddingTop, 0) * scale;
+            float right = styles.Get<float>(Enums.Styles.PaddingRight, 0) * scale;
+            float bottom = styles.Get<float>(Enums.Styles.PaddingBottom, 0) * scale;
+            float left = styles.Get<float>(Enums.Styles.PaddingLeft, 0) * scale;
             return new Margin((int)top, (int)right, (int)bottom, (int)left);
         }
 
@@ -58,12 +58,12 @@ namespace Suyaa.Gui.Drawing
         /// </summary>
         /// <param name="styles"></param>
         /// <returns></returns>
-        public static Margin GetBorders(this Styles styles, float scale)
+        public static Margin GetBorders(this StyleCollection styles, float scale)
         {
-            float top = styles.Get<float>(StyleType.BorderTopSize, 0) * scale;
-            float right = styles.Get<float>(StyleType.BorderRightSize, 0) * scale;
-            float bottom = styles.Get<float>(StyleType.BorderBottomSize, 0) * scale;
-            float left = styles.Get<float>(StyleType.BorderLeftSize, 0) * scale;
+            float top = styles.Get<float>(Enums.Styles.BorderTopSize, 0) * scale;
+            float right = styles.Get<float>(Enums.Styles.BorderRightSize, 0) * scale;
+            float bottom = styles.Get<float>(Enums.Styles.BorderBottomSize, 0) * scale;
+            float left = styles.Get<float>(Enums.Styles.BorderLeftSize, 0) * scale;
             return new Margin((int)top, (int)right, (int)bottom, (int)left);
         }
 
@@ -72,12 +72,12 @@ namespace Suyaa.Gui.Drawing
         /// </summary>
         /// <param name="styles"></param>
         /// <returns></returns>
-        public static Margin GetMargin(this Styles styles, float scale)
+        public static Margin GetMargin(this StyleCollection styles, float scale)
         {
-            float top = styles.Get<float>(StyleType.MarginTop, 0) * scale;
-            float right = styles.Get<float>(StyleType.MarginRight, 0) * scale;
-            float bottom = styles.Get<float>(StyleType.MarginBottom, 0) * scale;
-            float left = styles.Get<float>(StyleType.MarginLeft, 0) * scale;
+            float top = styles.Get<float>(Enums.Styles.MarginTop, 0) * scale;
+            float right = styles.Get<float>(Enums.Styles.MarginRight, 0) * scale;
+            float bottom = styles.Get<float>(Enums.Styles.MarginBottom, 0) * scale;
+            float left = styles.Get<float>(Enums.Styles.MarginLeft, 0) * scale;
             return new Margin((int)top, (int)right, (int)bottom, (int)left);
         }
 
@@ -86,7 +86,7 @@ namespace Suyaa.Gui.Drawing
         /// </summary>
         /// <param name="styles"></param>
         /// <returns></returns>
-        public static Margin GetDisplayMargin(this Styles styles, float scale)
+        public static Margin GetDisplayMargin(this StyleCollection styles, float scale)
         {
             // 获取边框尺寸
             float top = 0;
@@ -107,12 +107,12 @@ namespace Suyaa.Gui.Drawing
         /// </summary>
         /// <param name="styles"></param>
         /// <returns></returns>
-        public static Size GetSize(this Styles styles, Size parentSize, float scale)
+        public static Size GetSize(this StyleCollection styles, Size parentSize, float scale)
         {
-            var width = styles.Get<float>(StyleType.Width) * scale;
-            var height = styles.Get<float>(StyleType.Height) * scale;
-            var widthUnit = styles.Get<UnitType>(StyleType.WidthUnit);
-            var heightUnit = styles.Get<UnitType>(StyleType.HeightUnit);
+            var width = styles.Get<float>(Enums.Styles.Width) * scale;
+            var height = styles.Get<float>(Enums.Styles.Height) * scale;
+            var widthUnit = styles.Get<UnitType>(Enums.Styles.WidthUnit);
+            var heightUnit = styles.Get<UnitType>(Enums.Styles.HeightUnit);
             if (widthUnit == UnitType.Percentage)
             {
                 width = parentSize.Width * (width / 100);
@@ -130,7 +130,7 @@ namespace Suyaa.Gui.Drawing
         /// <param name="styles"></param>
         /// <param name="color"></param>
         /// <returns></returns>
-        public static SKPaint? GetFillPaint(this Styles styles, StyleType color)
+        public static SKPaint? GetFillPaint(this StyleCollection styles, Enums.Styles color)
         {
             if (!styles.ContainsKey(color)) return null;
             SKPaint paint = new SKPaint()
@@ -148,16 +148,16 @@ namespace Suyaa.Gui.Drawing
         /// </summary>
         /// <param name="styles"></param>
         /// <returns></returns>
-        public static RectangleDashed[] GetDasheds(this Styles styles, Rectangle rect, int[] radiuses)
+        public static RectangleDashed[] GetDasheds(this StyleCollection styles, Rectangle rect, int[] radiuses)
         {
             // 定义虚线描述
             RectangleDashed[] dasheds = new RectangleDashed[12];
 
             // 获取边框样式
-            bool isTopDashed = styles.Get(StyleType.BorderTopStyle, BorderStyleType.Solid) == BorderStyleType.Dashed;
-            bool isRightDashed = styles.Get(StyleType.BorderRightStyle, BorderStyleType.Solid) == BorderStyleType.Dashed;
-            bool isBottomDashed = styles.Get(StyleType.BorderBottomStyle, BorderStyleType.Solid) == BorderStyleType.Dashed;
-            bool isLeftDashed = styles.Get(StyleType.BorderLeftStyle, BorderStyleType.Solid) == BorderStyleType.Dashed;
+            bool isTopDashed = styles.Get(Enums.Styles.BorderTopStyle, BorderStyles.Solid) == BorderStyles.Dashed;
+            bool isRightDashed = styles.Get(Enums.Styles.BorderRightStyle, BorderStyles.Solid) == BorderStyles.Dashed;
+            bool isBottomDashed = styles.Get(Enums.Styles.BorderBottomStyle, BorderStyles.Solid) == BorderStyles.Dashed;
+            bool isLeftDashed = styles.Get(Enums.Styles.BorderLeftStyle, BorderStyles.Solid) == BorderStyles.Dashed;
 
             // 计算左上角2/2
             float start = 0;
@@ -228,7 +228,7 @@ namespace Suyaa.Gui.Drawing
         /// </summary>
         /// <param name="styles"></param>
         /// <param name="target"></param>
-        public static Styles Cover(this Styles styles, Styles target)
+        public static StyleCollection Cover(this StyleCollection styles, StyleCollection target)
         {
             // 依次设置
             foreach (var style in styles)
@@ -236,7 +236,7 @@ namespace Suyaa.Gui.Drawing
                 target.Set(style.Key, style.Value);
             }
             // 获取不存在的样式
-            List<StyleType> styleTypes = new List<StyleType>();
+            List<Enums.Styles> styleTypes = new List<Enums.Styles>();
             foreach (var key in target.Keys)
             {
                 if (!styles.ContainsKey(key)) styleTypes.Add(key);

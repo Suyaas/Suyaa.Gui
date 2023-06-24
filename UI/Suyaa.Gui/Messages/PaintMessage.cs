@@ -12,7 +12,7 @@ namespace Suyaa.Gui.Messages
     /// <summary>
     /// 绘制消息
     /// </summary>
-    public class PaintMessage : Message
+    public sealed class PaintMessage : Message
     {
         /// <summary>
         /// 画板
@@ -36,7 +36,7 @@ namespace Suyaa.Gui.Messages
         /// <param name="canvas"></param>
         /// <param name="rectangle"></param>
         /// <param name="scale"></param>
-        public PaintMessage(long handle, SKCanvas canvas, Rectangle rectangle, float scale) : base(GuiMessageType.Close, handle)
+        public PaintMessage(long handle, SKCanvas canvas, Rectangle rectangle, float scale) : base(GuiMessages.Close, handle)
         {
             this.Canvas = canvas;
             this.Rectangle = rectangle;

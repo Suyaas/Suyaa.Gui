@@ -19,14 +19,14 @@ namespace Suyaa.Gui.Native.Helpers
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static Cursor GetWin32Cursor(this CursorType type)
+        public static Cursor GetWin32Cursor(this Enums.Cursors type)
         {
             return type switch
             {
-                CursorType.Hand =>
-                    Cursor.Create(User32.CursorResourceId.IDC_HAND),
+                Enums.Cursors.Hand => Cursor.Create(User32.CursorResourceId.IDC_HAND),
+                Enums.Cursors.Edit => Cursor.Create(User32.CursorResourceId.IDC_IBEAM),
                 _ =>
-                    Cursors.Default
+                    Win32.Cursors.Default
             };
         }
     }

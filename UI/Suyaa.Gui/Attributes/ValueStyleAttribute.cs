@@ -21,7 +21,7 @@ namespace Suyaa.Gui.Attributes
         /// </summary>
         /// <param name="style"></param>
         /// <param name="value"></param>
-        public ValueStyleAttribute(StyleType style, T value) : base(style)
+        public ValueStyleAttribute(Enums.Styles style, T value) : base(style)
         {
             this.Value = value;
         }
@@ -30,7 +30,7 @@ namespace Suyaa.Gui.Attributes
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        protected override void OnApply(Styles styles)
+        protected override void OnApply(Drawing.StyleCollection styles)
         {
             styles.Set(this.Style, this.Value);
         }

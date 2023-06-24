@@ -17,7 +17,7 @@ namespace Suyaa.Gui.Attributes
         /// 背景颜色
         /// </summary>
         /// <param name="value"></param>
-        public BackgroundColorAttribute(SKColor value) : base(StyleType.BackgroundColor, value)
+        public BackgroundColorAttribute(SKColor value) : base(Styles.BackgroundColor, value)
         {
         }
 
@@ -25,7 +25,7 @@ namespace Suyaa.Gui.Attributes
         /// 背景颜色
         /// </summary>
         /// <param name="value"></param>
-        public BackgroundColorAttribute(byte red, byte green, byte blue, byte alpha) : base(StyleType.BackgroundColor, new SKColor(red, green, blue, alpha))
+        public BackgroundColorAttribute(byte red, byte green, byte blue, byte alpha) : base(Styles.BackgroundColor, new SKColor(red, green, blue, alpha))
         {
         }
 
@@ -33,7 +33,7 @@ namespace Suyaa.Gui.Attributes
         /// 背景颜色
         /// </summary>
         /// <param name="value"></param>
-        public BackgroundColorAttribute(byte red, byte green, byte blue) : base(StyleType.BackgroundColor, new SKColor(red, green, blue))
+        public BackgroundColorAttribute(byte red, byte green, byte blue) : base(Styles.BackgroundColor, new SKColor(red, green, blue))
         {
         }
 
@@ -41,7 +41,7 @@ namespace Suyaa.Gui.Attributes
         /// 背景颜色
         /// </summary>
         /// <param name="value"></param>
-        public BackgroundColorAttribute(uint color) : base(StyleType.BackgroundColor, new SKColor(color))
+        public BackgroundColorAttribute(uint color) : base(Styles.BackgroundColor, new SKColor(color))
         {
         }
     }

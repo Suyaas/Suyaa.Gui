@@ -17,7 +17,7 @@ namespace Suyaa.Gui.Attributes
         private bool? _antialias;
         private string? _names;
         private float? _size;
-
+        private AlignType? _align;
 
         /// <summary>
         /// 字体名称
@@ -35,9 +35,14 @@ namespace Suyaa.Gui.Attributes
         public bool Antialias { get => _antialias ?? false; set => _antialias = value; }
 
         /// <summary>
+        /// 对齐方式
+        /// </summary>
+        public AlignType Align { get => _align ?? 0; set => _align = value; }
+
+        /// <summary>
         /// 字体
         /// </summary>
-        public FontAttribute() : base(StyleType.None)
+        public FontAttribute() : base(Enums.Styles.None)
         {
         }
 
@@ -45,11 +50,12 @@ namespace Suyaa.Gui.Attributes
         /// 特性生效
         /// </summary>
         /// <param name="styles"></param>
-        protected override void OnApply(Styles styles)
+        protected override void OnApply(Drawing.StyleCollection styles)
         {
-            if (_names != null) styles.Set(StyleType.TextFont, _names);
-            if (_size.HasValue) styles.Set(StyleType.TextSize, _size.Value);
-            if (_antialias.HasValue) styles.Set(StyleType.TextAntialias, _antialias.Value);
+            if (_names != null) styles.Set(Enums.Styles.TextFont, _names);
+            if (_size.HasValue) styles.Set(Enums.Styles.TextSize, _size.Value);
+            if (_antialias.HasValue) styles.Set(Enums.Styles.TextAntialias, _antialias.Value);
+            if (_align.HasValue) styles.Set(Enums.Styles.TextAlign, _align.Value);
         }
     }
 }

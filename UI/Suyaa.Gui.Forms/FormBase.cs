@@ -80,6 +80,42 @@ namespace Forms
         }
 
         /// <summary>
+        /// 当前控件
+        /// </summary>
+        public IControl? CurrentControl
+        {
+            get => this.NativeForm.CurrentControl;
+            set
+            {
+                // 值为空，当前控件不为空，则赋值
+                if (value is null)
+                {
+                    if (this.NativeForm.CurrentControl is not null)
+                    {
+                        this.NativeForm.CurrentControl = value;
+                        this.IsNeedRepaint = true;
+                        return;
+                    }
+                    return;
+                }
+                // 当前控件为空，无条件变更
+                if (this.NativeForm.CurrentControl is null)
+                {
+                    this.NativeForm.CurrentControl = value;
+                    this.IsNeedRepaint = true;
+                    return;
+                }
+                // 判断句柄是否一样，不同时触发变更
+                if (this.NativeForm.CurrentControl.Handle != value.Handle)
+                {
+                    this.NativeForm.CurrentControl = value;
+                    this.IsNeedRepaint = true;
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
         /// 窗体
         /// </summary>
         /// <param name="nativeForm"></param>
@@ -103,7 +139,7 @@ namespace Forms
             // 初始化工作区域
             this.Workarea = new Workarea(this);
             // 创建原生窗口
-            this.NativeForm = sy.Gui.CreateNativeForm();
+            this.NativeForm = sy.NativeGui.CreateNativeForm();
             // 注册窗体
             Application.RegForm(this);
         }

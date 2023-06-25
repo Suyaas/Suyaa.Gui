@@ -19,19 +19,14 @@ namespace Suyaa.Gui.Controls
         private SKFont? _font;
 
         /// <summary>
-        /// 是否响应鼠标事件
-        /// </summary>
-        public override bool IsMouseReply => false;
-
-        /// <summary>
         /// 字体
         /// </summary>
         public SKFont Font
         {
             get
             {
-                var fontNames = this.GetInheritableStyle<string>(Enums.Styles.TextFont);
-                if (fontNames.IsNullOrWhiteSpace()) throw new GuiException($"Font not set");
+                var fontNames = this.GetInheritableStyle(Enums.Styles.TextFont, string.Empty);
+                //if (fontNames.IsNullOrWhiteSpace()) throw new GuiException($"Font not set");
                 // 字体无变化时使用缓存
                 if (_fontNames == fontNames) return _font!;
                 // 清理原有的字体缓存
@@ -40,20 +35,8 @@ namespace Suyaa.Gui.Controls
                     _font.Dispose();
                     _font = null;
                 }
-                // 循环读取字体设定，取第一个存在的字体
-                var fonts = fontNames.Split(',');
-                foreach (var font in fonts)
-                {
-                    var name = font.Trim();
-                    if (name.IsNullOrWhiteSpace()) continue;
-                    if (name == "\"") continue;
-                    if (name.StartsWith("\"") && name.EndsWith("\"")) name = name.Substring(1, name.Length - 2);
-                    var type = SKTypeface.FromFamilyName(name);
-                    if (type is null) continue;
-                    _fontNames = fontNames;
-                    _font = new SKFont(type);
-                    break;
-                }
+                _font = sy.Gui.GetFont(fontNames);
+                _fontNames = fontNames;
                 if (_font is null) throw new GuiException($"Font not set");
                 return _font;
             }
@@ -74,7 +57,7 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public SKColor Color
         {
-            get => this.GetInheritableStyle<SKColor>(Enums.Styles.TextColor);
+            get => this.GetInheritableStyle(Enums.Styles.TextColor, SKColors.Black);
             set
             {
                 this.Style.Set(Enums.Styles.TextColor, value);
@@ -88,7 +71,7 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public bool IsAntialias
         {
-            get => this.GetInheritableStyle<bool>(Enums.Styles.TextAntialias);
+            get => this.GetInheritableStyle(Enums.Styles.TextAntialias, true);
             set
             {
                 this.Style.Set(Enums.Styles.TextAntialias, value);
@@ -103,7 +86,7 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public float FontSize
         {
-            get => this.GetInheritableStyle<float>(Enums.Styles.TextSize);
+            get => this.GetInheritableStyle(Enums.Styles.TextSize, 9f);
             set
             {
                 this.Style.Set(Enums.Styles.TextSize, value);

@@ -181,7 +181,7 @@ namespace Suyaa.Gui.Native.Win32
             var form = GetFormByHwnd(hwnd);
             // 获取坐标
             var point = GetPointByLParam(lParam);
-            Debug.WriteLine($"[Win32Message] MouseOperate - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, {mouseOperate.ToString()}({point.X}, {point.Y})");
+            //Debug.WriteLine($"[Win32Message] MouseOperate - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, {mouseOperate.ToString()}({point.X}, {point.Y})");
             using (MouseButtonMessage msg = new(form.Handle, mouseOperate, point))
             {
                 form.SendMessage(msg);
@@ -197,7 +197,7 @@ namespace Suyaa.Gui.Native.Win32
             // 获取窗体
             var form = GetFormByHwnd(hwnd);
             //var cursor = (Cursor)form.Cursor;
-            Debug.WriteLine($"[Win32Message] Cursor - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, Cursor: {form.Cursor})");
+            //Debug.WriteLine($"[Win32Message] Cursor - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, Cursor: {form.Cursor})");
             //form.Cursor = form.Cursor;
             using (CursorMessage msg = new(form.Handle))
             {
@@ -215,9 +215,25 @@ namespace Suyaa.Gui.Native.Win32
             // 获取窗体
             var form = GetFormByHwnd(hwnd);
             var key = (Keys)wParam;
-            Debug.WriteLine($"[Win32Message] KeyDown - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, Key: {key})");
-            //form.Cursor = form.Cursor;
+            //Debug.WriteLine($"[Win32Message] KeyDown - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, Key: {key})");
             using (KeyDownMessage msg = new(form.Handle, key))
+            {
+                form.SendMessage(msg);
+            }
+        }
+
+        /// <summary>
+        /// 处理键盘按下事件
+        /// </summary>
+        /// <param name="hwnd"></param>
+        /// <param name="wParam"></param>
+        public static void ProcKeyUp(IntPtr hwnd, IntPtr wParam)
+        {
+            // 获取窗体
+            var form = GetFormByHwnd(hwnd);
+            var key = (Keys)wParam;
+            //Debug.WriteLine($"[Win32Message] KeyUp - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, Key: {key})");
+            using (KeyUpMessage msg = new(form.Handle, key))
             {
                 form.SendMessage(msg);
             }
@@ -273,9 +289,13 @@ namespace Suyaa.Gui.Native.Win32
                 case User32.WM.SETCURSOR: ProcCursor(hwnd); break;
                 // 键盘操作
                 case User32.WM.KEYDOWN: ProcKeyDown(hwnd, wParam); break;
-                case User32.WM.KEYUP: break;
+                case User32.WM.KEYUP: ProcKeyUp(hwnd, wParam); break;
+                //case User32.WM.IME_NOTIFY: break;
+                //case User32.WM.IME_REQUEST: break;
+                //case User32.WM.IME_STARTCOMPOSITION: break;
+                //case User32.WM.IME_COMPOSITION: break;
                 default:
-                    //Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
+                    Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
                     break;
             }
             var res = User32.DefWindowProcW(hwnd, wm, wParam, lParam);

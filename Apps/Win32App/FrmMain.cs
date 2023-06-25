@@ -30,9 +30,9 @@ namespace Win32App
             this.UseStyles<FormStyle>();
 
             // 初始化全局控件
-            _labInfo = new Label("Hello World");
-            _txtHello = new Input("测试");
-            _btnHello = new Button("点击加1");
+            _labInfo = new Label("输入测试");
+            _txtHello = new Input("内容");
+            _btnHello = new Button("按钮");
             _btnHello.Click += btnHello_Click;
         }
 
@@ -45,7 +45,7 @@ namespace Win32App
 
             // 添加控件
             this.Controls.AddRange(
-                _labInfo,
+                _labInfo.UseStyles<LabHelloStyle>(),
                 _txtHello,
                 _btnHello.UseStyles<BtnHelloStyle>()
                 );
@@ -54,7 +54,7 @@ namespace Win32App
         // 按钮事件
         private void btnHello_Click(object sender, Suyaa.Gui.Controls.EventArgs.GuiEventArgs e)
         {
-            _labInfo.Content = $"{++num}";
+            //_labInfo.Content = $"{++num}";
         }
 
         protected override void OnMouseMove(Point point)

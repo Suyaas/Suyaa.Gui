@@ -244,7 +244,22 @@ namespace Suyaa.Gui.Controls
         /// <summary>
         /// 是否响应鼠标事件
         /// </summary>
-        public virtual bool IsMouseReply => true;
+        public virtual bool IsMouseReply => false;
+
+        /// <summary>
+        /// 是否响应键盘事件
+        /// </summary>
+        public virtual bool IsKeyReply => false;
+
+        /// <summary>
+        /// 是否支持输入
+        /// </summary>
+        public virtual bool IsEditable => false;
+
+        /// <summary>
+        /// 是否支持输入法
+        /// </summary>
+        public virtual bool IsImeReply => false;
 
         #endregion
 
@@ -599,6 +614,18 @@ namespace Suyaa.Gui.Controls
         }
 
         /// <summary>
+        /// 键盘按下事件
+        /// </summary>
+        /// <param name="key"></param>
+        protected virtual void OnKeyDown(Keys key) { }
+
+        /// <summary>
+        /// 键盘抬起事件
+        /// </summary>
+        /// <param name="key"></param>
+        protected virtual void OnKeyUp(Keys key) { }
+
+        /// <summary>
         /// 消息事件
         /// </summary>
         /// <param name="msg"></param>
@@ -648,6 +675,14 @@ namespace Suyaa.Gui.Controls
                 case MoveMessage move:
                     this.OnMove(move.Point);
                     return true;
+                // 键盘按下
+                case KeyDownMessage keyDown:
+                    this.OnKeyDown(keyDown.Key);
+                    return true;
+                // 键盘抬起
+                case KeyUpMessage keyUp:
+                    this.OnKeyUp(keyUp.Key);
+                    return true;
             }
             return true;
         }
@@ -692,12 +727,13 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="style"></param>
+        /// <param name="defaultValue"></param>
         /// <returns></returns>
-        public T GetInheritableStyle<T>(Enums.Styles style)
+        public T GetInheritableStyle<T>(Styles style, T defaultValue)
         {
             if (this.Style.ContainsKey(style)) return this.Style.Get<T>(style);
-            if (_parent is null) return this.Form.GetStyle<T>(style);
-            return _parent.GetInheritableStyle<T>(style);
+            if (_parent is null) return this.Form.GetStyle<T>(style, defaultValue);
+            return _parent.GetInheritableStyle<T>(style, defaultValue);
         }
 
         /// <summary>
@@ -816,6 +852,16 @@ namespace Suyaa.Gui.Controls
         /// <returns></returns>
         public T GetStyle<T>(Enums.Styles style, T defaultValue)
             => this.Style.Get<T>(style, defaultValue);
+
+        /// <summary>
+        /// 获取针对窗体的位移
+        /// </summary>
+        /// <returns></returns>
+        public Point GetFormOffset()
+        {
+            if (_parent is null) return this.Rectangle.Point;
+            return this.Rectangle.Point + _parent.GetFormOffset();
+        }
 
         #endregion
     }

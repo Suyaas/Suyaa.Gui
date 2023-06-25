@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using Suyaa.Gui.Native.Helpers;
 using Suyaa.Gui.Enums;
 using System.Runtime.ConstrainedExecution;
+using Suyaa.Gui.Helpers;
 
 namespace Suyaa.Gui.Native.Win32
 {
@@ -29,6 +30,8 @@ namespace Suyaa.Gui.Native.Win32
         private Enums.Cursors? _cursor;
         // 是否绘制中
         private bool _isPainting = false;
+        // 输入光标是否显示
+        private bool _isInputCursorShow = false;
 
         /// <summary>
         /// Win32窗体
@@ -117,6 +120,11 @@ namespace Suyaa.Gui.Native.Win32
                 OnSetCursor(value);
             }
         }
+
+        /// <summary>
+        /// 当前控件
+        /// </summary>
+        public IControl? CurrentControl { get; set; }
 
         #endregion
 
@@ -426,7 +434,17 @@ namespace Suyaa.Gui.Native.Win32
                         OnPaint(cvs, rect);
                     }
                 }
-                this.CacheBitmap.BitBltToHwnd(this.Hwnd);
+                // 绘制到窗口
+                using (SKBitmap bmp = new SKBitmap((int)rect.Width, (int)rect.Height))
+                {
+                    using (SKCanvas cvs = new SKCanvas(bmp))
+                    {
+                        cvs.DrawBitmap(this.CacheBitmap, 0, 0);
+                        // 绘制输入光标
+                        cvs.DrawInputCursor(this);
+                    }
+                    bmp.BitBltToHwnd(this.Hwnd);
+                }
             }
             else
             {
@@ -436,6 +454,8 @@ namespace Suyaa.Gui.Native.Win32
                     using (SKCanvas cvs = new SKCanvas(bmp))
                     {
                         OnPaint(cvs, rect);
+                        // 绘制输入光标
+                        cvs.DrawInputCursor(this);
                     }
                     bmp.BitBltToHwnd(this.Hwnd);
                 }

@@ -1,4 +1,5 @@
-﻿using SkiaSharp;
+﻿using Forms;
+using SkiaSharp;
 using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Enums;
 using System.Collections.Generic;
@@ -1146,6 +1147,8 @@ namespace Suyaa.Gui.Helpers
 
         #endregion
 
+        #region 绘制光标
+
         /// <summary>
         /// 绘制背景
         /// </summary>
@@ -1210,6 +1213,8 @@ namespace Suyaa.Gui.Helpers
                 }
             }
         }
+
+        #endregion
 
         #region 绘制阴影
 
@@ -1442,6 +1447,65 @@ namespace Suyaa.Gui.Helpers
                     }
                 }
             }
+        }
+
+        #endregion
+
+        #region 绘制输入光标
+
+        // 输入光标显示集合
+        private static Dictionary<long, bool> _inputCursorShows = new Dictionary<long, bool>();
+
+        // 判断光标是否显示
+        private static bool IsInputCursorShow(long handle)
+        {
+            if (_inputCursorShows.ContainsKey(handle)) return _inputCursorShows[handle];
+            return false;
+        }
+
+        /// <summary>
+        /// 绘制背景
+        /// </summary>
+        /// <param name="cvs"></param>
+        /// <param name="styles"></param>
+        /// <param name="rect"></param>
+        public static void DrawInputCursor(this SKCanvas cvs, INativeForm form)
+        {
+            var ctl = form.CurrentControl;
+            if (ctl is null) return;
+            if (!ctl.IsEditable) return;
+            if (ctl is not IWidgetTextContent textContent) return;
+            if (IsInputCursorShow(form.Handle))
+            {
+                _inputCursorShows[form.Handle] = false;
+                return;
+            }
+            // 获取光标位置
+            Point p = ctl.GetFormOffset();
+            // 获取放大比例
+            var scale = Application.GetScale();
+            // 获取边框尺寸
+            var borders = ctl.Style.GetBorders(scale);
+            // 获取字体设置
+            var fontNames = ctl.GetInheritableStyle(Styles.TextFont, string.Empty);
+            // 获取字体高度
+            using (SKPaint paint = new SKPaint(sy.Gui.GetFont(fontNames))
+            {
+                Color = ctl.GetInheritableStyle(Styles.TextColor, SKColors.Black),
+                TextSize = ctl.GetInheritableStyle(Styles.TextSize, 9f) * scale,
+                IsAntialias = ctl.GetInheritableStyle(Styles.Antialias, true),
+                Style = SKPaintStyle.Fill,
+            })
+            {
+                paint.GetFontMetrics(out SKFontMetrics metrics);
+                var width = paint.MeasureText(textContent.Content);
+                var height = metrics.Bottom - metrics.Top - 2;
+                var ctlHeight = ctl.Rectangle.Height - borders.Top - borders.Bottom - ctl.Padding.Top - ctl.Padding.Bottom;
+                float left = p.X + borders.Left + ctl.Padding.Left - 1 + width;
+                float top = p.Y + borders.Top + ctl.Padding.Top + (ctlHeight - height) / 2;
+                cvs.DrawRect(new SKRect(left, top, left + 1, top + height), paint);
+            }
+            _inputCursorShows[form.Handle] = true;
         }
 
         #endregion

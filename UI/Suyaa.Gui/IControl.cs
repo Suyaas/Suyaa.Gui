@@ -24,6 +24,21 @@ namespace Suyaa.Gui
         bool IsMouseReply { get; }
 
         /// <summary>
+        /// 是否响应键盘事件
+        /// </summary>
+        bool IsKeyReply { get; }
+
+        /// <summary>
+        /// 是否可编辑
+        /// </summary>
+        bool IsEditable { get; }
+
+        /// <summary>
+        /// 是否响应输入法事件
+        /// </summary>
+        bool IsImeReply { get; }
+
+        /// <summary>
         /// 是否有效
         /// </summary>
         bool IsVaild { get; }
@@ -74,7 +89,7 @@ namespace Suyaa.Gui
         /// <typeparam name="T"></typeparam>
         /// <param name="style"></param>
         /// <returns></returns>
-        T GetInheritableStyle<T>(Enums.Styles style);
+        T GetInheritableStyle<T>(Styles style, T defaultValue);
 
         /// <summary>
         /// 设置样式
@@ -88,5 +103,11 @@ namespace Suyaa.Gui
         /// </summary>
         /// <returns></returns>
         new IControl UseStyles<T>();
+
+        /// <summary>
+        /// 获取针对窗口的偏移坐标
+        /// </summary>
+        /// <returns></returns>
+        Point GetFormOffset();
     }
 }

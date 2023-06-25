@@ -72,6 +72,11 @@ namespace Suyaa.Gui.Native.Linux
         public Cursors Cursor { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         /// <summary>
+        /// 当前控件
+        /// </summary>
+        public IControl? CurrentControl { get; set; }
+
+        /// <summary>
         /// 释放资源
         /// </summary>
         public void Dispose()

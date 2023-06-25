@@ -32,5 +32,10 @@ namespace Forms
         /// 处理系统绘制消息
         /// </summary>
         public void Repaint(bool force);
+
+        /// <summary>
+        /// 当前控件
+        /// </summary>
+        IControl? CurrentControl { get; set; }
     }
 }

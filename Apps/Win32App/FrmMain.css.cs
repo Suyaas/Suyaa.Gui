@@ -64,6 +64,10 @@ namespace Win32App
             }
         }
 
+        // Hello 文本
+        [Margin(1, 5, 0, 0)]
+        class LabHelloStyle { }
+
         // Hello 按钮
         [Position(10, 40)]
         class BtnHelloStyle { }

@@ -22,6 +22,11 @@ namespace Suyaa.Gui.Controls
         public override bool IsMouseReply => true;
 
         /// <summary>
+        /// 是否响应键盘事件
+        /// </summary>
+        public override bool IsKeyReply => true;
+
+        /// <summary>
         /// 子控件集合
         /// </summary>
         public IControlCollection<IControl> Controls { get; }

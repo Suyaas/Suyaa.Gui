@@ -26,7 +26,7 @@ namespace Suyaa.Gui
         private static float _scale = 1;
         private static bool _scaleble = false;
         // 更新时间
-        private static int _frameUpdateTime = 0;
+        private static int _frameUpdateTime = 0; 
 
         /// <summary>
         /// 设置应用实现类

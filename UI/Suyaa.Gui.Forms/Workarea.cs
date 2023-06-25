@@ -73,6 +73,20 @@ namespace Suyaa.Gui.Forms
         }
 
         /// <summary>
+        /// 鼠标按下
+        /// </summary>
+        /// <param name="button"></param>
+        /// <param name="point"></param>
+        protected override void OnMouseDown(MouseOperates button, Drawing.Point point)
+        {
+            base.OnMouseDown(button, point);
+            if (button == MouseOperates.LButton)
+            {
+                this.Form.CurrentControl = this;
+            }
+        }
+
+        /// <summary>
         /// 鼠标移入
         /// </summary>
         protected override void OnMouseHover()

@@ -22,8 +22,11 @@ namespace Suyaa.Gui.Controls
     [BackgroundColor(0xffffffff)]
     [BorderRadius(2)]
     [Cursor(Cursors.Edit)]
-    public class Input : Block
+    public class Input : Block, IWidgetTextContent, IWidgetOffset
     {
+        // 大小写转化数值差
+        private const byte CASE_DIFF = 'a' - 'A';
+
         // 内容
         private string _content;
 
@@ -31,6 +34,21 @@ namespace Suyaa.Gui.Controls
         /// 是否响应鼠标事件
         /// </summary>
         public override bool IsMouseReply => true;
+
+        /// <summary>
+        /// 是否响应键盘事件
+        /// </summary>
+        public override bool IsKeyReply => true;
+
+        /// <summary>
+        /// 是否可编辑
+        /// </summary>
+        public override bool IsEditable => true;
+
+        /// <summary>
+        /// 是否响应输入法事件
+        /// </summary>
+        public override bool IsImeReply => true;
 
         /// <summary>
         /// 内容
@@ -45,10 +63,51 @@ namespace Suyaa.Gui.Controls
                 if (_content == strValue) return;
                 // 设置内容
                 _content = strValue;
+                // 设置选择位置
+                this.SetSelection(_content.Length, 0);
                 // 刷新显示
                 this.Refresh();
             }
         }
+
+        #region 文本选择相关
+
+        /// <summary>
+        /// 水品偏移
+        /// </summary>
+        public int OffsetX { get; internal protected set; }
+
+        /// <summary>
+        /// 垂直偏移
+        /// </summary>
+        public int OffsetY { get; internal protected set; }
+
+        #endregion
+
+        #region 文本选择相关
+
+        /// <summary>
+        /// 文本选择开始位置
+        /// </summary>
+        public int SelectionStart { get; private set; }
+
+        /// <summary>
+        /// 文本选择结束位置
+        /// </summary>
+        public int SelectionEnd { get; private set; }
+
+        /// <summary>
+        /// 设置文本选择范围
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="len"></param>
+        public void SetSelection(int start, int len)
+        {
+            this.SelectionStart = start;
+            this.SelectionEnd = start + len;
+        }
+
+        #endregion
 
         /// <summary>
         /// 输入框
@@ -82,12 +141,30 @@ namespace Suyaa.Gui.Controls
             this.Style.SetStyles(this.GetType());
         }
 
+        // 鼠标按下
         protected override void OnMouseDown(MouseOperates button, Point point)
         {
             base.OnMouseDown(button, point);
             if (button == MouseOperates.LButton)
             {
-                Debug.WriteLine($"[Input] OnMouseDown {point.X},{point.Y}");
+                // 设置窗体当前控件
+                this.Form.CurrentControl = this;
+                //Debug.WriteLine($"[Input] OnMouseDown {point.X},{point.Y}");
+            }
+        }
+
+        // 键盘按下
+        protected override void OnKeyDown(Keys key)
+        {
+            base.OnKeyDown(key);
+            if (key >= Keys.A && key <= Keys.Z)
+            {
+                // 添加内容
+                _content += (char)(key + CASE_DIFF);
+                // 设置选择
+                this.SetSelection(_content.Length, 0);
+                // 刷新显示
+                this.Refresh();
             }
         }
 

@@ -15,15 +15,10 @@ namespace Suyaa.Gui.Controls
     /// <summary>
     /// 文本
     /// </summary>
-    public class Label : Block
+    public class Label : Block, IWidgetContent<string>
     {
         // 内容
         private string _content;
-
-        /// <summary>
-        /// 是否响应鼠标事件
-        /// </summary>
-        public override bool IsMouseReply => false;
 
         // 重新设置显示尺寸
         private void Resize(float scale)

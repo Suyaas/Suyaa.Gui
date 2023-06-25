@@ -6,6 +6,7 @@ using Suyaa.Gui.Enums;
 using Suyaa.Gui.Messages;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -21,7 +22,8 @@ namespace Suyaa.Gui.Forms
         // 是否鼠标在区域内
         private bool _mouseOn;
         // 计时器
-        private readonly Timer? _timer;
+        private readonly Timer? _timerPaint;
+        private readonly Timer _timerInput;
 
         /// <summary>
         /// 窗体状态
@@ -167,20 +169,57 @@ namespace Suyaa.Gui.Forms
                         this.Workarea.PostMessage(msgSink);
                     }
                     break;
+                // 键盘按下事件
+                case KeyDownMessage keyDown:
+                    if (this.CurrentControl is null) return false;
+                    using (KeyDownMessage msgSink = new(this.CurrentControl.Handle, keyDown.Key))
+                    {
+                        this.CurrentControl.SendMessage(msgSink);
+                    }
+                    break;
+                // 键盘抬起事件
+                case KeyUpMessage keyUp:
+                    if (this.CurrentControl is null) return false;
+                    using (KeyUpMessage msgSink = new(this.CurrentControl.Handle, keyUp.Key))
+                    {
+                        this.CurrentControl.SendMessage(msgSink);
+                    }
+                    break;
             }
             return true;
         }
 
-        // 计时器事件
-        private void OnTimer(object? state)
+        #region 计时器
+
+        // 绘制计时器事件
+        private void OnPaintTimer(object? state)
         {
             if (this.IsNeedRepaint)
             {
                 this.NativeForm.Repaint(true);
                 this.IsNeedRepaint = false;
             }
-            _timer!.Change(Application.UpdateFrameTime, Timeout.Infinite);
+            _timerPaint!.Change(Application.UpdateFrameTime, Timeout.Infinite);
         }
+
+        // 输入光标重绘
+        private void OnInputRepaint()
+        {
+            //Debug.WriteLine("[OnInputRepaint]");
+            var ctl = this.CurrentControl;
+            if (ctl is null) return;
+            if (!ctl.IsEditable) return;
+            this.NativeForm.Repaint(false);
+        }
+
+        // 输入计时器事件
+        private void OnInputTimer(object? state)
+        {
+            OnInputRepaint();
+            _timerInput.Change(500, Timeout.Infinite);
+        }
+
+        #endregion
 
         /// <summary>
         /// 标准窗体
@@ -196,8 +235,10 @@ namespace Suyaa.Gui.Forms
             // 建立计时器
             if (Application.UpdateFrameTime > 0)
             {
-                _timer = new Timer(OnTimer, 1, 0, Timeout.Infinite);
+                _timerPaint = new Timer(OnPaintTimer, 1, 0, Timeout.Infinite);
             }
+            // 建立输入计时器
+            _timerInput = new Timer(OnInputTimer, 1, 0, Timeout.Infinite);
         }
     }
 }

@@ -1453,16 +1453,6 @@ namespace Suyaa.Gui.Helpers
 
         #region 绘制输入光标
 
-        // 输入光标显示集合
-        private static Dictionary<long, bool> _inputCursorShows = new Dictionary<long, bool>();
-
-        // 判断光标是否显示
-        private static bool IsInputCursorShow(long handle)
-        {
-            if (_inputCursorShows.ContainsKey(handle)) return _inputCursorShows[handle];
-            return false;
-        }
-
         /// <summary>
         /// 绘制背景
         /// </summary>
@@ -1475,9 +1465,10 @@ namespace Suyaa.Gui.Helpers
             if (ctl is null) return;
             if (!ctl.IsEditable) return;
             if (ctl is not IWidgetTextContent textContent) return;
-            if (IsInputCursorShow(form.Handle))
+            if (!Application.GetInputCursorShow(form.Handle))
             {
-                _inputCursorShows[form.Handle] = false;
+                // 设置下一次为显示
+                Application.SetInputCursorShow(form.Handle, true);
                 return;
             }
             // 获取光标位置
@@ -1498,14 +1489,16 @@ namespace Suyaa.Gui.Helpers
             })
             {
                 paint.GetFontMetrics(out SKFontMetrics metrics);
-                var width = paint.MeasureText(textContent.Content);
+                var width = paint.MeasureText(textContent.GetContent(0, textContent.SelectionStart));
                 var height = metrics.Bottom - metrics.Top - 2;
-                var ctlHeight = ctl.Rectangle.Height - borders.Top - borders.Bottom - ctl.Padding.Top - ctl.Padding.Bottom;
-                float left = p.X + borders.Left + ctl.Padding.Left - 1 + width;
-                float top = p.Y + borders.Top + ctl.Padding.Top + (ctlHeight - height) / 2;
-                cvs.DrawRect(new SKRect(left, top, left + 1, top + height), paint);
+                var icRect = textContent.InputCursorRectangle;
+                //var ctlHeight = ctl.Rectangle.Height - borders.Top - borders.Bottom - ctl.Padding.Top - ctl.Padding.Bottom;
+                float left = p.X + icRect.Left;
+                float top = p.Y + icRect.Top;
+                cvs.DrawRect(new SKRect(left, top, left + icRect.Width, top + icRect.Height), paint);
             }
-            _inputCursorShows[form.Handle] = true;
+            // 设置下一次为不显示
+            Application.SetInputCursorShow(form.Handle, false);
         }
 
         #endregion

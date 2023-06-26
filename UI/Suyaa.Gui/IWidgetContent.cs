@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Suyaa.Gui.Drawing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,10 +35,23 @@ namespace Suyaa.Gui
         int SelectionEnd { get; }
 
         /// <summary>
+        /// 输入光标矩形
+        /// </summary>
+        Rectangle InputCursorRectangle { get; }
+
+        /// <summary>
         /// 设置选择范围
         /// </summary>
         /// <param name="start"></param>
         /// <param name="len"></param>
         void SetSelection(int start, int len);
+
+        /// <summary>
+        /// 获取部分内容
+        /// </summary>
+        /// <param name="start"></param>
+        /// <param name="len"></param>
+        /// <returns></returns>
+        string GetContent(int start, int len);
     }
 }

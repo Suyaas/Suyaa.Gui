@@ -94,6 +94,13 @@ namespace Suyaa.Gui.Native.Linux
         public T GetStyle<T>(Enums.Styles style)
             => this.Style.Get<T>(style);
 
+        /// <summary>
+        /// 获取样式
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="style"></param>
+        /// <param name="defaultValue"></param>
+        /// <returns></returns>
         public T GetStyle<T>(Enums.Styles style, T defaultValue)
         {
             throw new NotImplementedException();
@@ -293,11 +300,6 @@ namespace Suyaa.Gui.Native.Linux
 
 
             }
-        }
-
-        public void OnProcPaint()
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>

@@ -26,7 +26,31 @@ namespace Suyaa.Gui
         private static float _scale = 1;
         private static bool _scaleble = false;
         // 更新时间
-        private static int _frameUpdateTime = 0; 
+        private static int _frameUpdateTime = 0;
+        // 输入光标显示集合
+        private static Dictionary<long, bool> _inputCursorShows = new Dictionary<long, bool>();
+
+        /// <summary>
+        /// 获取光标显示状态
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <returns></returns>
+        public static bool GetInputCursorShow(long handle)
+        {
+            if (_inputCursorShows.ContainsKey(handle)) return _inputCursorShows[handle];
+            return false;
+        }
+
+        /// <summary>
+        /// 设置光标显示状态
+        /// </summary>
+        /// <param name="handle"></param>
+        /// <param name="isShow"></param>
+        /// <returns></returns>
+        public static void SetInputCursorShow(long handle, bool isShow)
+        {
+            _inputCursorShows[handle] = isShow;
+        }
 
         /// <summary>
         /// 设置应用实现类

@@ -106,5 +106,14 @@ namespace Suyaa.Gui.Drawing
         {
             return new Point(p1.X - p2.X, p1.Y - p2.Y);
         }
+
+        /// <summary>
+        /// 获取哈希值
+        /// </summary>
+        /// <returns></returns>
+        public override int GetHashCode()
+        {
+            return this.X.GetHashCode() + this.Y.GetHashCode();
+        }
     }
 }

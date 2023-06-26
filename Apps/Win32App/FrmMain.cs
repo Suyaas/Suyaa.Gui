@@ -19,7 +19,7 @@ namespace Win32App
         private readonly Label _labInfo;
         private readonly Input _txtHello;
         private readonly Button _btnHello;
-        private int num = 0;
+        //private int num = 0;
 
         /// <summary>
         /// 主窗体

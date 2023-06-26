@@ -30,8 +30,6 @@ namespace Suyaa.Gui.Native.Win32
         private Enums.Cursors? _cursor;
         // 是否绘制中
         private bool _isPainting = false;
-        // 输入光标是否显示
-        private bool _isInputCursorShow = false;
 
         /// <summary>
         /// Win32窗体

@@ -139,7 +139,7 @@ namespace Forms
             // 初始化工作区域
             this.Workarea = new Workarea(this);
             // 创建原生窗口
-            this.NativeForm = sy.NativeGui.CreateNativeForm();
+            this.NativeForm = sy.Form.CreateNativeForm();
             // 注册窗体
             Application.RegForm(this);
         }

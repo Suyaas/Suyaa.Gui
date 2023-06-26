@@ -13,7 +13,7 @@ namespace sy
     /// <summary>
     /// 界面
     /// </summary>
-    public static class NativeGui
+    public static class Form
     {
         /// <summary>
         /// 获取原生窗口类型

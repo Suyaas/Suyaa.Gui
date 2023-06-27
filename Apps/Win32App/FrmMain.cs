@@ -26,7 +26,8 @@ namespace Win32App
         /// </summary>
         public FrmMain()
         {
-            this.Title = "Win32App 测试";
+            //this.Title = "Win32App 测试";
+            this.Title = sy.Assembly.FullName;
             this.UseStyles<FormStyle>();
 
             // 初始化全局控件

@@ -1,9 +1,11 @@
-﻿using SkiaSharp;
+﻿using Forms.Helpers;
+using SkiaSharp;
 using Suyaa.Gui.Attributes;
 using Suyaa.Gui.Controls.EventArgs;
 using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Enums;
 using Suyaa.Gui.Helpers;
+using Suyaa.Gui.Native.Helpers;
 using Suyaa.Gui.Native.Win32.Apis;
 using sy;
 using System;
@@ -85,6 +87,10 @@ namespace Suyaa.Gui.Controls
                 if (_content.ToString() == strValue) return;
                 // 设置内容
                 _content.Clear();
+                //for (int i = 0; i < strValue.Length; i++)
+                //{
+                //    _content.Add(strValue[i]);
+                //}
                 _content.Append(strValue);
                 // 设置选择位置
                 this.SetSelection(_content.Length, 0);
@@ -144,10 +150,18 @@ namespace Suyaa.Gui.Controls
                     if (width < OffsetX) this.OffsetX = width;
                     // 判断是否超出右边界
                     if (width > OffsetX + rect.Width) this.OffsetX = (int)(width - rect.Width);
+                    // 判断是否多出空白
+                    if (width - OffsetX < rect.Width && OffsetX > 0)
+                    {
+                        this.OffsetX = (int)(width - rect.Width);
+                        if (this.OffsetX < 0) this.OffsetX = 0;
+                    }
                     // 计算位置
                     float left = borders.Left + this.Padding.Left - this.OffsetX + width;
                     float top = borders.Top + this.Padding.Top + (rect.Height - height) / 2;
                     this.InputCursorRectangle = new Rectangle(left, top, 1, height);
+                    // 更新Ime位置
+                    this.Form.UpdateImePosition();
                 }
             }
         }
@@ -180,7 +194,10 @@ namespace Suyaa.Gui.Controls
         public Input(string? content)
         {
             _content = new StringBuilder();
-            if (content is not null) _content.Append(content);
+            if (content is not null)
+            {
+                _content.Append(content);
+            }
             this.SetSelection(_content.Length, 0);
         }
 
@@ -302,14 +319,92 @@ namespace Suyaa.Gui.Controls
                 if (_isShift) isCaps = !isCaps;
                 Debug.WriteLine($"[Input] OnKeyDown isCaps:{isCaps}, IsCapital:{keyboard.IsCapital}, _isShift:{_isShift}");
                 char chr = (char)(isCaps ? key : key + CASE_DIFF);
+                OnCharKeyDown(chr);
+            }
+        }
+
+        // 按下字符键
+        private void OnCharKeyDown(char chr)
+        {
+            // 添加内容
+            _content.Insert(this.SelectionStart, chr);
+            // 设置选择
+            this.SetSelection(this.SelectionStart + 1, 0);
+            // 刷新显示
+            Application.SetInputCursorShow(this.Form.Handle, true);
+            this.Refresh();
+        }
+
+        // 按下字符键 (兼容Shift)
+        private void OnCharKeyDown(char chr, char chrShift)
+        {
+            Debug.WriteLine($"[Input] OnCharKeyDown {chr} - {chrShift}  _isShift:{_isShift}");
+            if (_isShift)
+            {
+                // 添加内容
+                _content.Insert(this.SelectionStart, chrShift);
+            }
+            else
+            {
                 // 添加内容
                 _content.Insert(this.SelectionStart, chr);
-                // 设置选择
-                this.SetSelection(this.SelectionStart + 1, 0);
-                // 刷新显示
-                Application.SetInputCursorShow(this.Form.Handle, true);
-                this.Refresh();
             }
+            // 设置选择
+            this.SetSelection(this.SelectionStart + 1, 0);
+            // 刷新显示
+            Application.SetInputCursorShow(this.Form.Handle, true);
+            this.Refresh();
+        }
+
+        // 按下回退键
+        private void OnBackKeyDown()
+        {
+            // 带选择时，删除选择内容
+            if (this.SelectionEnd > this.SelectionStart)
+            {
+                _content.Remove(this.SelectionStart, this.SelectionEnd - this.SelectionStart);
+                this.SetSelection(this.SelectionStart, 0);
+                return;
+            }
+            if (this.SelectionEnd < this.SelectionStart)
+            {
+                _content.Remove(this.SelectionEnd, this.SelectionStart - this.SelectionEnd);
+                this.SetSelection(this.SelectionEnd, 0);
+                return;
+            }
+            // 当光标在最前，则不处理
+            if (this.SelectionStart <= 0) return;
+            // 删除一个内容
+            _content.Remove(this.SelectionStart - 1, 1);
+            this.SetSelection(this.SelectionStart - 1, 0);
+            // 刷新显示
+            Application.SetInputCursorShow(this.Form.Handle, true);
+            this.Refresh();
+        }
+
+        // 按下回退键
+        private void OnDeleteKeyDown()
+        {
+            // 带选择时，删除选择内容
+            if (this.SelectionEnd > this.SelectionStart)
+            {
+                _content.Remove(this.SelectionStart, this.SelectionEnd - this.SelectionStart);
+                this.SetSelection(this.SelectionStart, 0);
+                return;
+            }
+            if (this.SelectionEnd < this.SelectionStart)
+            {
+                _content.Remove(this.SelectionEnd, this.SelectionStart - this.SelectionEnd);
+                this.SetSelection(this.SelectionEnd, 0);
+                return;
+            }
+            // 当光标在最前，则不处理
+            if (this.SelectionStart >= _content.Length) return;
+            // 删除一个内容
+            _content.Remove(this.SelectionStart, 1);
+            // 刷新显示
+            Application.SetInputCursorShow(this.Form.Handle, true);
+            this.Refresh();
         }
 
         // 键盘按下
@@ -323,6 +418,13 @@ namespace Suyaa.Gui.Controls
                 OnLetterKeyDown(key);
                 return;
             }
+            // 数字键
+            if (key >= Keys.NumPad0 && key <= Keys.NumPad9)
+            {
+                if (_isShift) return;
+                OnCharKeyDown((char)(key - Keys.NumPad0 + '0'));
+                return;
+            }
             switch (key)
             {
                 // 左键
@@ -331,6 +433,35 @@ namespace Suyaa.Gui.Controls
                 case Keys.Right: OnRightKeyDown(); return;
                 // Shift键
                 case Keys.ShiftKey: _isShift = true; return;
+                // 回退键
+                case Keys.Back: OnBackKeyDown(); return;
+                // 删除键
+                case Keys.Delete: OnDeleteKeyDown(); return;
+                // 键盘第一行 `1-0-=
+                case Keys.Oemtilde: OnCharKeyDown('`', '~'); return;
+                case Keys.D1: OnCharKeyDown('1', '!'); return;
+                case Keys.D2: OnCharKeyDown('2', '@'); return;
+                case Keys.D3: OnCharKeyDown('3', '#'); return;
+                case Keys.D4: OnCharKeyDown('4', '$'); return;
+                case Keys.D5: OnCharKeyDown('5', '%'); return;
+                case Keys.D6: OnCharKeyDown('6', '^'); return;
+                case Keys.D7: OnCharKeyDown('7', '&'); return;
+                case Keys.D8: OnCharKeyDown('8', '*'); return;
+                case Keys.D9: OnCharKeyDown('9', '('); return;
+                case Keys.D0: OnCharKeyDown('0', ')'); return;
+                case Keys.OemMinus: OnCharKeyDown('-', '_'); return;
+                case Keys.Oemplus: OnCharKeyDown('=', '+'); return;
+                // 键盘第二行
+                case Keys.Oem4: OnCharKeyDown('[', '{'); return;
+                case Keys.Oem6: OnCharKeyDown(']', '}'); return;
+                case Keys.OemPipe: OnCharKeyDown('\\', '|'); return;
+                // 键盘第三行
+                case Keys.OemSemicolon: OnCharKeyDown(';', ':'); return;
+                case Keys.OemQuotes: OnCharKeyDown('\'', '"'); return;
+                // 键盘第四行
+                case Keys.Oemcomma: OnCharKeyDown(',', '<'); return;
+                case Keys.OemPeriod: OnCharKeyDown('.', '>'); return;
+                case Keys.Oem2: OnCharKeyDown('/', '?'); return;
             }
         }
 
@@ -342,6 +473,23 @@ namespace Suyaa.Gui.Controls
             {
                 // Shift键
                 case Keys.ShiftKey: _isShift = false; return;
+            }
+        }
+
+        // IME输入
+        protected override void OnImeChar(char chr)
+        {
+            base.OnImeChar(chr);
+            if (chr > 256)
+            {
+                OnCharKeyDown(chr);
+            }
+            else
+            {
+                // 兼容字母
+                if (chr >= 'a' && chr <= 'z') OnCharKeyDown(chr);
+                if (chr >= 'A' && chr <= 'Z') OnCharKeyDown(chr);
+                //OnKeyDown((Keys)chr);
             }
         }
 

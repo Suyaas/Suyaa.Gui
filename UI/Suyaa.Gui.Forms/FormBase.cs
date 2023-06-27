@@ -8,6 +8,7 @@ using Suyaa.Gui.Drawing;
 using Suyaa.Gui.Enums;
 using Suyaa.Gui.Forms;
 using Suyaa.Gui.Messages;
+using Suyaa.Gui.Native.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -80,6 +81,26 @@ namespace Forms
         }
 
         /// <summary>
+        /// 更改Ime状态
+        /// </summary>
+        protected void ImeChangeStatus()
+        {
+            if (this.NativeForm.CurrentControl is null)
+            {
+                this.SetImeDisabled();
+                return;
+            }
+            if (this.NativeForm.CurrentControl.IsEditable)
+            {
+                this.SetImeEnable();
+            }
+            else
+            {
+                this.SetImeDisabled();
+            }
+        }
+
+        /// <summary>
         /// 当前控件
         /// </summary>
         public IControl? CurrentControl
@@ -94,6 +115,8 @@ namespace Forms
                     {
                         this.NativeForm.CurrentControl = value;
                         this.IsNeedRepaint = true;
+                        // 变更Ime状态
+                        this.ImeChangeStatus();
                         return;
                     }
                     return;
@@ -103,6 +126,8 @@ namespace Forms
                 {
                     this.NativeForm.CurrentControl = value;
                     this.IsNeedRepaint = true;
+                    // 变更Ime状态
+                    this.ImeChangeStatus();
                     return;
                 }
                 // 判断句柄是否一样，不同时触发变更
@@ -110,6 +135,8 @@ namespace Forms
                 {
                     this.NativeForm.CurrentControl = value;
                     this.IsNeedRepaint = true;
+                    // 变更Ime状态
+                    this.ImeChangeStatus();
                     return;
                 }
             }
@@ -127,6 +154,8 @@ namespace Forms
             NativeForm = nativeForm;
             // 注册窗体
             Application.RegForm(this);
+            // 设置Ime不可用
+            this.SetImeDisabled();
         }
 
         /// <summary>
@@ -216,7 +245,9 @@ namespace Forms
         /// 刷新显示
         /// </summary>
         public void Refresh()
-            => this.NativeForm.Refresh();
+        {
+            this.NativeForm.Refresh();
+        }
 
         /// <summary>
         /// 获取样式
@@ -253,15 +284,16 @@ namespace Forms
         /// 界面重绘
         /// </summary>
         /// <param name="force"></param>
-        public void Repaint(bool force)
+        public bool Repaint(bool force)
         {
             if (Application.UpdateFrameTime > 0)
             {
                 _refresh = true;
+                return true;
             }
             else
             {
-                this.NativeForm.Repaint(force);
+                return this.NativeForm.Repaint(force);
             }
         }
 

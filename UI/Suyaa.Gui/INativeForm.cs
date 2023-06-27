@@ -31,7 +31,7 @@ namespace Forms
         /// <summary>
         /// 处理系统绘制消息
         /// </summary>
-        public void Repaint(bool force);
+        public bool Repaint(bool force);
 
         /// <summary>
         /// 当前控件

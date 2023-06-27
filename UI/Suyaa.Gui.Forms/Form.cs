@@ -185,6 +185,18 @@ namespace Suyaa.Gui.Forms
                         this.CurrentControl.SendMessage(msgSink);
                     }
                     break;
+                // IME通知
+                case ImeNotifyMessage imeNotify:
+                    this.ImeChangeStatus();
+                    break;
+                // IME输入
+                case ImeCharMessage imeChar:
+                    if (this.CurrentControl is null) return false;
+                    using (ImeCharMessage msgSink = new(this.CurrentControl.Handle, imeChar.Char))
+                    {
+                        this.CurrentControl.SendMessage(msgSink);
+                    }
+                    break;
             }
             return true;
         }
@@ -196,8 +208,7 @@ namespace Suyaa.Gui.Forms
         {
             if (this.IsNeedRepaint)
             {
-                this.NativeForm.Repaint(true);
-                this.IsNeedRepaint = false;
+                if (this.NativeForm.Repaint(true)) this.IsNeedRepaint = false;
             }
             _timerPaint!.Change(Application.UpdateFrameTime, Timeout.Infinite);
         }

@@ -241,6 +241,47 @@ namespace Suyaa.Gui.Native.Win32
 
         #endregion
 
+        #region 输入法相关
+
+        /// <summary>
+        /// Ime通知事件
+        /// </summary>
+        /// <param name="hwnd"></param>
+        /// <param name="wParam"></param>
+        public static void ProcImeNotify(IntPtr hwnd, IntPtr wParam)
+        {
+            // 获取窗体
+            var form = GetFormByHwnd(hwnd);
+            var imn = (Imm32.IMN)wParam;
+            Debug.WriteLine($"[Win32Message] ImeNotify - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, imn: {imn})");
+            if (imn == Imm32.IMN.SETCONVERSIONMODE)
+            {
+                using (ImeNotifyMessage msg = new(form.Handle))
+                {
+                    form.SendMessage(msg);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 处理键盘按下事件
+        /// </summary>
+        /// <param name="hwnd"></param>
+        /// <param name="wParam"></param>
+        public static void ProcChar(IntPtr hwnd, IntPtr wParam)
+        {
+            // 获取窗体
+            var form = GetFormByHwnd(hwnd);
+            var chr = (char)wParam;
+            //Debug.WriteLine($"[Win32Message] KeyDown - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, Key: {key})");
+            using (ImeCharMessage msg = new(form.Handle, chr))
+            {
+                form.SendMessage(msg);
+            }
+        }
+
+        #endregion
+
         /// <summary>
         /// 处理消息
         /// </summary>
@@ -290,7 +331,9 @@ namespace Suyaa.Gui.Native.Win32
                 // 键盘操作
                 case User32.WM.KEYDOWN: ProcKeyDown(hwnd, wParam); break;
                 case User32.WM.KEYUP: ProcKeyUp(hwnd, wParam); break;
-                //case User32.WM.IME_NOTIFY: break;
+                case WM.CHAR: ProcChar(hwnd, wParam); break;
+                // Ime相关
+                case User32.WM.IME_NOTIFY: ProcImeNotify(hwnd, wParam); break;
                 //case User32.WM.IME_REQUEST: break;
                 //case User32.WM.IME_STARTCOMPOSITION: break;
                 //case User32.WM.IME_COMPOSITION: break;

@@ -391,16 +391,16 @@ namespace Suyaa.Gui.Native.Win32
         /// <summary>
         /// 处理绘制消息
         /// </summary>
-        public void Repaint(bool force)
+        public bool Repaint(bool force)
         {
             // 绘制中则退出
-            if (_isPainting) return;
+            if (_isPainting) return false;
             _isPainting = true;
             // 未显示状态则直接退出
             if (!this.GetStyle(Enums.Styles.Visible, false))
             {
                 _isPainting = false;
-                return;
+                return false;
             }
             // 获取是否使用缓存
             var useCache = this.GetStyle(Enums.Styles.UseCache, false);
@@ -409,8 +409,10 @@ namespace Suyaa.Gui.Native.Win32
             if (rect.Width <= 0 || rect.Height <= 0)
             {
                 _isPainting = false;
-                return;
+                return false;
             }
+            // 输出调试信息
+            Debug.WriteLine($"[Win32Form] Repaint force:{force}");
             // 判断是否使用缓存
             if (useCache)
             {
@@ -459,6 +461,7 @@ namespace Suyaa.Gui.Native.Win32
                 }
             }
             _isPainting = false;
+            return true;
         }
 
         #endregion

@@ -323,9 +323,10 @@ namespace Suyaa.Gui.Native.Linux
         /// 界面重绘
         /// </summary>
         /// <param name="force"></param>
-        public void Repaint(bool force)
+        public bool Repaint(bool force)
         {
             //throw new NotImplementedException();
+            return true;
         }
 
         /// <summary>

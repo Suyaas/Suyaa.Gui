@@ -55,5 +55,13 @@ namespace Suyaa.Gui.Enums
         /// 鼠标抬起
         /// </summary>
         KeyUp = 0x402,
+        /// <summary>
+        /// Ime通知
+        /// </summary>
+        ImeNotify = 0x411,
+        /// <summary>
+        /// Ime字符
+        /// </summary>
+        ImeChar = 0x412,
     }
 }

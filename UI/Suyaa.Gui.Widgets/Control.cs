@@ -626,6 +626,12 @@ namespace Suyaa.Gui.Controls
         protected virtual void OnKeyUp(Keys key) { }
 
         /// <summary>
+        /// IME输入事件
+        /// </summary>
+        /// <param name="chr"></param>
+        protected virtual void OnImeChar(char chr) { }
+
+        /// <summary>
         /// 消息事件
         /// </summary>
         /// <param name="msg"></param>
@@ -682,6 +688,10 @@ namespace Suyaa.Gui.Controls
                 // 键盘抬起
                 case KeyUpMessage keyUp:
                     this.OnKeyUp(keyUp.Key);
+                    return true;
+                // IME输入
+                case ImeCharMessage imeChar:
+                    this.OnImeChar(imeChar.Char);
                     return true;
             }
             return true;

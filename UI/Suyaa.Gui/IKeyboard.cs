@@ -21,6 +21,10 @@ namespace Suyaa.Gui
         /// </summary>
         byte GetKeyState(Keys key);
         /// <summary>
+        /// 判断键是否被按下
+        /// </summary>
+        bool IsKeyDown(Keys key);
+        /// <summary>
         /// 是否开启大写
         /// </summary>
         bool IsCapital { get; }

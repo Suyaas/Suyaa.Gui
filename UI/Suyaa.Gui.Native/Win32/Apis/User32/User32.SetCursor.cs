@@ -18,7 +18,7 @@ namespace Suyaa.Gui.Native.Win32.Apis
         public static IntPtr SetCursor(IHandle? hCursor)
         {
             IntPtr handle = hCursor?.Handle ?? IntPtr.Zero;
-            Debug.WriteLine($"[User32] SetCursor 0x{handle.ToString("x").PadLeft(12, '0')}");
+            //Debug.WriteLine($"[User32] SetCursor 0x{handle.ToString("x").PadLeft(12, '0')}");
             IntPtr result = SetCursor(handle);
             GC.KeepAlive(hCursor);
             return result;

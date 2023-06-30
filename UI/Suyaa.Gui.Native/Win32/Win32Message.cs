@@ -181,7 +181,13 @@ namespace Suyaa.Gui.Native.Win32
             var form = GetFormByHwnd(hwnd);
             // 获取坐标
             var point = GetPointByLParam(lParam);
-            //Debug.WriteLine($"[Win32Message] MouseOperate - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, {mouseOperate.ToString()}({point.X}, {point.Y})");
+            using (IKeyboard keyboard = sy.Keyboard.Create())
+            {
+                Debug.WriteLine($"[Win32Message] MouseOperate - " +
+                    $"Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, " +
+                    $"{mouseOperate.ToString()}({point.X}, {point.Y}), " +
+                    $"{keyboard.GetKeyState(Keys.LButton)}/{keyboard.IsKeyDown(Keys.LButton)}");
+            }
             using (MouseButtonMessage msg = new(form.Handle, mouseOperate, point))
             {
                 form.SendMessage(msg);
@@ -204,6 +210,10 @@ namespace Suyaa.Gui.Native.Win32
                 form.SendMessage(msg);
             }
         }
+
+        #endregion
+
+        #region 键盘相关
 
         /// <summary>
         /// 处理键盘按下事件
@@ -253,7 +263,7 @@ namespace Suyaa.Gui.Native.Win32
             // 获取窗体
             var form = GetFormByHwnd(hwnd);
             var imn = (Imm32.IMN)wParam;
-            Debug.WriteLine($"[Win32Message] ImeNotify - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, imn: {imn})");
+            //Debug.WriteLine($"[Win32Message] ImeNotify - Hwnd: 0x{hwnd.ToString("x").PadLeft(12, '0')}, imn: {imn})");
             if (imn == Imm32.IMN.SETCONVERSIONMODE)
             {
                 using (ImeNotifyMessage msg = new(form.Handle))
@@ -338,7 +348,7 @@ namespace Suyaa.Gui.Native.Win32
                 //case User32.WM.IME_STARTCOMPOSITION: break;
                 //case User32.WM.IME_COMPOSITION: break;
                 default:
-                    Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
+                    //Debug.WriteLine($"[WinProc] Hwnd: 0x{hwnd.ToString("X2")}, Message: {wm.ToString()}(0x{msg.ToString("X2")})");
                     break;
             }
             var res = User32.DefWindowProcW(hwnd, wm, wParam, lParam);

@@ -412,7 +412,7 @@ namespace Suyaa.Gui.Native.Win32
                 return false;
             }
             // 输出调试信息
-            Debug.WriteLine($"[Win32Form] Repaint force:{force}");
+            //Debug.WriteLine($"[Win32Form] Repaint force:{force}");
             // 判断是否使用缓存
             if (useCache)
             {

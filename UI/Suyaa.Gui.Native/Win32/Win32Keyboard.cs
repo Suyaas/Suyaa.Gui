@@ -18,22 +18,22 @@ namespace Suyaa.Gui.Native.Win32
         /// <summary>
         /// 是否开启大写锁定
         /// </summary>
-        public bool IsCapital => GetKeyState(Keys.Capital) == 1;
+        public bool IsCapital => GetKeyState(Keys.Capital) > 0;
 
         /// <summary>
         /// 是否按下Ctrl键
         /// </summary>
-        public bool IsControl => GetKeyState(Keys.ControlKey) == 1;
+        public bool IsControl => IsKeyDown(Keys.ControlKey);
 
         /// <summary>
         /// 是否按下Alt键
         /// </summary>
-        public bool IsAlt => GetKeyState(Keys.Menu) == 1;
+        public bool IsAlt => IsKeyDown(Keys.Menu);
 
         /// <summary>
         /// 是否按下了Alt键
         /// </summary>
-        public bool IsShift => GetKeyState(Keys.ShiftKey) == 1;
+        public bool IsShift => IsKeyDown(Keys.ShiftKey);
 
         /// <summary>
         /// 释放资源
@@ -53,6 +53,27 @@ namespace Suyaa.Gui.Native.Win32
             if (_keyStates is null) _keyStates = User32.GetKeyboardStates();
             return _keyStates[(int)key];
         }
+
+        /// <summary>
+        /// 判断按键是否被按下
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public bool IsKeyDown(Keys key)
+        {
+            return User32.CheckKeyDown(key);
+            //return (GetKeyState(key) & 0x80) > 0;
+        }
+
+        ///// <summary>
+        ///// 实时判断按键是否被按下
+        ///// </summary>
+        ///// <param name="key"></param>
+        ///// <returns></returns>
+        //public bool IsKeyDownAsync(Keys key)
+        //{
+        //    return User32.CheckKeyDown(key);
+        //}
 
         /// <summary>
         /// 扫描键盘状态

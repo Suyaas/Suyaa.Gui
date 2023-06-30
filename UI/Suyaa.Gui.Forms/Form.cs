@@ -21,9 +21,11 @@ namespace Suyaa.Gui.Forms
     {
         // 是否鼠标在区域内
         private bool _mouseOn;
+        private bool _mouseLeftDown;
         // 计时器
         private readonly Timer? _timerPaint;
         private readonly Timer _timerInput;
+        private readonly Timer _timerMouse;
 
         /// <summary>
         /// 窗体状态
@@ -160,10 +162,14 @@ namespace Suyaa.Gui.Forms
                         {
                             this.Workarea.PostMessage(msgSink);
                         }
+                        // 触发鼠标计时器
+                        if (_mouseLeftDown) _timerMouse.Change(10, Timeout.Infinite);
                     }
                     break;
                 // 鼠标操作事件
                 case MouseButtonMessage mouseButton:
+                    if (mouseButton.OperateType == MouseOperates.LButtonDown) _mouseLeftDown = true;
+                    if (mouseButton.OperateType == MouseOperates.LButtonUp) _mouseLeftDown = false;
                     using (MouseButtonMessage msgSink = new(this.Workarea.Handle, mouseButton.OperateType, mouseButton.Point))
                     {
                         this.Workarea.PostMessage(msgSink);
@@ -204,6 +210,30 @@ namespace Suyaa.Gui.Forms
         #region 计时器
 
         // 绘制计时器事件
+        private void OnMouseTimer(object? state)
+        {
+            if (_mouseLeftDown && !_mouseOn)
+            {
+                using (IKeyboard keyboard = sy.Keyboard.Create())
+                {
+                    if (!keyboard.IsKeyDown(Keys.LButton))
+                    {
+                        // 设置左键抬起
+                        _mouseLeftDown = false;
+                        // 触发事件
+                        using (MouseButtonMessage msgSink = new(this.Workarea.Handle, MouseOperates.LButtonUp, new Point()))
+                        {
+                            this.Workarea.PostMessage(msgSink);
+                        }
+                        return;
+                    }
+                }
+                _timerMouse.Change(10, Timeout.Infinite);
+            }
+            //_timerPaint!.Change(10, Timeout.Infinite);
+        }
+
+        // 绘制计时器事件
         private void OnPaintTimer(object? state)
         {
             if (this.IsNeedRepaint)
@@ -239,6 +269,7 @@ namespace Suyaa.Gui.Forms
         {
             // 设置默认值
             _mouseOn = false;
+            _mouseLeftDown = false;
             // 设置初始状态
             this.FormStatus = FormStatuses.Normal;
             // 应用反射特性
@@ -250,6 +281,8 @@ namespace Suyaa.Gui.Forms
             }
             // 建立输入计时器
             _timerInput = new Timer(OnInputTimer, 1, 0, Timeout.Infinite);
+            // 建立鼠标计时器
+            _timerMouse = new Timer(OnMouseTimer, 1, 0, Timeout.Infinite);
         }
     }
 }

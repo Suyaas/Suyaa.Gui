@@ -35,8 +35,8 @@ namespace Suyaa.Gui.Controls
 
         // 内容
         private StringBuilder _content;
-        // Shift是否按下
-        private bool _isShift;
+        // 鼠标是否按下
+        private bool _mouseDown;
 
         /// <summary>
         /// 是否响应鼠标事件
@@ -166,6 +166,26 @@ namespace Suyaa.Gui.Controls
             }
         }
 
+        // 变更选区并申请重绘
+        private void ChangeSelectionAndRepaint(int start, int len)
+        {
+            // 设置选择范围
+            this.SetSelection(start, len);
+            // 申请窗体重绘
+            Application.SetInputCursorShow(this.Form.Handle, true);
+            this.Form.Repaint(false);
+        }
+
+        // 变更选区并直接刷新元素
+        private void ChangeSelectionAndRefresh(int start, int len)
+        {
+            // 设置选择范围
+            this.SetSelection(start, len);
+            // 刷新元素
+            Application.SetInputCursorShow(this.Form.Handle, true);
+            this.Refresh();
+        }
+
         /// <summary>
         /// 获取部分内容
         /// </summary>
@@ -208,11 +228,17 @@ namespace Suyaa.Gui.Controls
         {
             base.OnInitialize();
             // 初始化字段
-            _isShift = false;
+            _mouseDown = false;
             // 设置需要重绘
             this.IsNeedRepaint = true;
             // 设置样式
             this.Style.SetStyles(this.GetType());
+        }
+
+        // 鼠标抬起
+        protected override void OnMouseUp(MouseOperates button, Point point)
+        {
+            base.OnMouseUp(button, point);
         }
 
         // 鼠标按下
@@ -221,6 +247,8 @@ namespace Suyaa.Gui.Controls
             base.OnMouseDown(button, point);
             if (button == MouseOperates.LButton)
             {
+                // 鼠标按下
+                _mouseDown = true;
                 // 设置窗体当前控件
                 this.Form.CurrentControl = this;
                 // 获取放大比例
@@ -262,50 +290,84 @@ namespace Suyaa.Gui.Controls
 
         #region 键盘处理
 
-        // 按下向左键
-        private void OnLeftKeyDown()
+        // 向右方向变更
+        private void OnRightArrowChange()
         {
             // 带选择时，取消选择
             if (this.SelectionEnd > this.SelectionStart)
             {
-                this.SetSelection(this.SelectionStart, 0);
+                ChangeSelectionAndRepaint(this.SelectionEnd, 0);
                 return;
             }
             if (this.SelectionEnd < this.SelectionStart)
             {
-                this.SetSelection(this.SelectionEnd, 0);
-                return;
-            }
-            // 当光标处于最最左边时不处理
-            if (this.SelectionStart <= 0) return;
-            // 光标左移
-            this.SetSelection(this.SelectionStart - 1, 0);
-            // 申请窗体重绘
-            Application.SetInputCursorShow(this.Form.Handle, true);
-            this.Form.Repaint(false);
-        }
-
-        // 按下向右键
-        private void OnRightKeyDown()
-        {
-            // 带选择时，取消选择
-            if (this.SelectionEnd > this.SelectionStart)
-            {
-                this.SetSelection(this.SelectionEnd, 0);
-                return;
-            }
-            if (this.SelectionEnd < this.SelectionStart)
-            {
-                this.SetSelection(this.SelectionStart, 0);
+                ChangeSelectionAndRepaint(this.SelectionStart, 0);
                 return;
             }
             // 当光标处于最最左边时不处理
             if (this.SelectionStart >= _content.Length) return;
             // 光标左移
-            this.SetSelection(this.SelectionStart + 1, 0);
-            // 申请窗体重绘
-            Application.SetInputCursorShow(this.Form.Handle, true);
-            this.Form.Repaint(false);
+            ChangeSelectionAndRepaint(this.SelectionStart + 1, 0);
+        }
+
+        // 向左方向变更
+        private void OnLeftArrowChange()
+        {
+            // 带选择时，取消选择
+            if (this.SelectionEnd > this.SelectionStart)
+            {
+                ChangeSelectionAndRepaint(this.SelectionStart, 0);
+                return;
+            }
+            if (this.SelectionEnd < this.SelectionStart)
+            {
+                ChangeSelectionAndRepaint(this.SelectionEnd, 0);
+                return;
+            }
+            // 当光标处于最最左边时不处理
+            if (this.SelectionStart <= 0) return;
+            // 光标左移
+            ChangeSelectionAndRepaint(this.SelectionStart - 1, 0);
+        }
+
+        // 按下向左键
+        private void OnLeftKeyDown()
+        {
+            // 创建一个键盘处理器
+            using (var keyboard = sy.Keyboard.Create())
+            {
+                if (keyboard.IsShift)
+                {
+                    // 已经选择最第一个，则跳过
+                    if (this.SelectionEnd <= 0) return;
+                    // 变更选择
+                    ChangeSelectionAndRefresh(this.SelectionStart, this.SelectionEnd - 1 - this.SelectionStart);
+                }
+                else
+                {
+                    OnLeftArrowChange();
+                }
+            }
+        }
+
+        // 按下向右键
+        private void OnRightKeyDown()
+        {
+            // 创建一个键盘处理器
+            using (var keyboard = sy.Keyboard.Create())
+            {
+                if (keyboard.IsShift)
+                {
+                    // 已经选择最后，则跳过
+                    if (this.SelectionEnd >= _content.Length) return;
+                    // 变更选择
+                    ChangeSelectionAndRefresh(this.SelectionStart, this.SelectionEnd + 1 - this.SelectionStart);
+                }
+                else
+                {
+                    OnRightArrowChange();
+                }
+            }
         }
 
         // 按下字母键
@@ -314,12 +376,33 @@ namespace Suyaa.Gui.Controls
             // 创建一个键盘处理器
             using (var keyboard = sy.Keyboard.Create())
             {
-                // 是否大写
-                bool isCaps = keyboard.IsCapital;
-                if (_isShift) isCaps = !isCaps;
-                Debug.WriteLine($"[Input] OnKeyDown isCaps:{isCaps}, IsCapital:{keyboard.IsCapital}, _isShift:{_isShift}");
-                char chr = (char)(isCaps ? key : key + CASE_DIFF);
-                OnCharKeyDown(chr);
+                #region 由ImeChar处理
+                //// 是否大写
+                //bool isCaps = keyboard.IsCapital;
+                //if (keyboard.IsShift) isCaps = !isCaps;
+                //Debug.WriteLine($"[Input] OnKeyDown " +
+                //    $"isCaps:{isCaps}/{keyboard.GetKeyState(Keys.Capital)}, " +
+                //    $"IsCapital:{keyboard.IsCapital}, " +
+                //    $"_isShift:{keyboard.IsKeyDown(Keys.ShiftKey)}/{keyboard.IsKeyDown(Keys.LShiftKey)}/{keyboard.IsKeyDown(Keys.RShiftKey)}/{keyboard.IsShift}, " +
+                //    $"_isCtrl:{keyboard.IsKeyDown(Keys.ControlKey)}/{keyboard.IsKeyDown(Keys.LControlKey)}/{keyboard.IsKeyDown(Keys.RControlKey)}/{keyboard.IsControl}, " +
+                //    $"_isAlt:{keyboard.IsKeyDown(Keys.Menu)}/{keyboard.IsAlt}, ");
+                //char chr = (char)(isCaps ? key : key + CASE_DIFF);
+                //OnCharKeyDown(chr);
+                #endregion
+                if (keyboard.IsControl)
+                {
+                    switch (key)
+                    {
+                        // 剪切
+                        case Keys.X: break;
+                        // 复制
+                        case Keys.C: break;
+                        // 粘贴
+                        case Keys.V: break;
+                        // 撤销
+                        case Keys.Z: break;
+                    }
+                }
             }
         }
 
@@ -335,25 +418,35 @@ namespace Suyaa.Gui.Controls
             this.Refresh();
         }
 
+        // 按下字符键
+        private void OnCharKeyDown(char chr, IKeyboard keyboard)
+        {
+            // 添加内容
+            _content.Insert(this.SelectionStart, chr);
+            // 设置选择
+            ChangeSelectionAndRefresh(this.SelectionStart + 1, 0);
+        }
+
         // 按下字符键 (兼容Shift)
         private void OnCharKeyDown(char chr, char chrShift)
         {
-            Debug.WriteLine($"[Input] OnCharKeyDown {chr} - {chrShift}  _isShift:{_isShift}");
-            if (_isShift)
+            // 创建一个键盘处理器
+            using (var keyboard = sy.Keyboard.Create())
             {
-                // 添加内容
-                _content.Insert(this.SelectionStart, chrShift);
+                Debug.WriteLine($"[Input] OnCharKeyDown {chr} - {chrShift}  _isShift:{keyboard.IsShift}");
+                if (keyboard.IsShift)
+                {
+                    // 添加内容
+                    _content.Insert(this.SelectionStart, chrShift);
+                }
+                else
+                {
+                    // 添加内容
+                    _content.Insert(this.SelectionStart, chr);
+                }
+                // 设置选择
+                ChangeSelectionAndRefresh(this.SelectionStart + 1, 0);
             }
-            else
-            {
-                // 添加内容
-                _content.Insert(this.SelectionStart, chr);
-            }
-            // 设置选择
-            this.SetSelection(this.SelectionStart + 1, 0);
-            // 刷新显示
-            Application.SetInputCursorShow(this.Form.Handle, true);
-            this.Refresh();
         }
 
         // 按下回退键
@@ -363,23 +456,20 @@ namespace Suyaa.Gui.Controls
             if (this.SelectionEnd > this.SelectionStart)
             {
                 _content.Remove(this.SelectionStart, this.SelectionEnd - this.SelectionStart);
-                this.SetSelection(this.SelectionStart, 0);
+                ChangeSelectionAndRefresh(this.SelectionStart, 0);
                 return;
             }
             if (this.SelectionEnd < this.SelectionStart)
             {
                 _content.Remove(this.SelectionEnd, this.SelectionStart - this.SelectionEnd);
-                this.SetSelection(this.SelectionEnd, 0);
+                ChangeSelectionAndRefresh(this.SelectionEnd, 0);
                 return;
             }
             // 当光标在最前，则不处理
             if (this.SelectionStart <= 0) return;
             // 删除一个内容
             _content.Remove(this.SelectionStart - 1, 1);
-            this.SetSelection(this.SelectionStart - 1, 0);
-            // 刷新显示
-            Application.SetInputCursorShow(this.Form.Handle, true);
-            this.Refresh();
+            ChangeSelectionAndRefresh(this.SelectionStart - 1, 0);
         }
 
         // 按下回退键
@@ -389,13 +479,13 @@ namespace Suyaa.Gui.Controls
             if (this.SelectionEnd > this.SelectionStart)
             {
                 _content.Remove(this.SelectionStart, this.SelectionEnd - this.SelectionStart);
-                this.SetSelection(this.SelectionStart, 0);
+                ChangeSelectionAndRefresh(this.SelectionStart, 0);
                 return;
             }
             if (this.SelectionEnd < this.SelectionStart)
             {
                 _content.Remove(this.SelectionEnd, this.SelectionStart - this.SelectionEnd);
-                this.SetSelection(this.SelectionEnd, 0);
+                ChangeSelectionAndRefresh(this.SelectionEnd, 0);
                 return;
             }
             // 当光标在最前，则不处理
@@ -403,8 +493,7 @@ namespace Suyaa.Gui.Controls
             // 删除一个内容
             _content.Remove(this.SelectionStart, 1);
             // 刷新显示
-            Application.SetInputCursorShow(this.Form.Handle, true);
-            this.Refresh();
+            ChangeSelectionAndRefresh(this.SelectionStart - 1, 0);
         }
 
         // 键盘按下
@@ -421,7 +510,6 @@ namespace Suyaa.Gui.Controls
             // 数字键
             if (key >= Keys.NumPad0 && key <= Keys.NumPad9)
             {
-                if (_isShift) return;
                 OnCharKeyDown((char)(key - Keys.NumPad0 + '0'));
                 return;
             }
@@ -431,8 +519,6 @@ namespace Suyaa.Gui.Controls
                 case Keys.Left: OnLeftKeyDown(); return;
                 // 右键
                 case Keys.Right: OnRightKeyDown(); return;
-                // Shift键
-                case Keys.ShiftKey: _isShift = true; return;
                 // 回退键
                 case Keys.Back: OnBackKeyDown(); return;
                 // 删除键
@@ -469,11 +555,6 @@ namespace Suyaa.Gui.Controls
         protected override void OnKeyUp(Keys key)
         {
             base.OnKeyUp(key);
-            switch (key)
-            {
-                // Shift键
-                case Keys.ShiftKey: _isShift = false; return;
-            }
         }
 
         // IME输入
@@ -524,14 +605,48 @@ namespace Suyaa.Gui.Controls
             // 计算实际尺寸
             var borders = this.Style.GetBorders(e.Scale);
             var rect = e.Rectangle.Padding(borders).Padding(this.Padding);
+            // 建立前景色画笔
             using (SKPaint paint = new SKPaint(this.Font)
             {
                 Color = this.Color,
                 TextSize = this.FontSize * e.Scale,
                 IsAntialias = this.IsAntialias,
             })
+            // 建立选中文本颜色
+            using (SKPaint paintSelect = new SKPaint(this.Font)
+            {
+                Color = SKColors.White,
+                TextSize = this.FontSize * e.Scale,
+                IsAntialias = this.IsAntialias,
+            })
+            // 建立选中文本背景色
+            using (SKPaint paintSelectBg = new SKPaint()
+            {
+                Color = SKColors.Blue,
+                Style = SKPaintStyle.Fill,
+            })
             {
                 paint.GetFontMetrics(out SKFontMetrics metrics);
+                List<string> contents = new List<string>() { string.Empty, string.Empty, string.Empty };
+                // 自右到左选择
+                if (this.SelectionStart > this.SelectionEnd)
+                {
+                    if (this.SelectionEnd > 0) contents[0] = _content.ToString(0, this.SelectionEnd);
+                    contents[1] = _content.ToString(this.SelectionEnd, this.SelectionStart - this.SelectionEnd);
+                    if (this.SelectionStart < _content.Length) contents[2] = _content.ToString(this.SelectionStart, _content.Length - this.SelectionStart);
+                }
+                // 自左到右选择
+                else if (this.SelectionStart < this.SelectionEnd)
+                {
+                    if (this.SelectionStart > 0) contents[0] = _content.ToString(0, this.SelectionStart);
+                    contents[1] = _content.ToString(this.SelectionStart, this.SelectionEnd - this.SelectionStart);
+                    if (this.SelectionEnd < _content.Length) contents[2] = _content.ToString(this.SelectionEnd, _content.Length - this.SelectionEnd);
+                }
+                else
+                {
+                    if (this.SelectionStart > 0) contents[0] = _content.ToString(0, this.SelectionStart);
+                    if (this.SelectionEnd < _content.Length) contents[2] = _content.ToString(this.SelectionEnd, _content.Length - this.SelectionEnd);
+                }
                 //var width = paint.MeasureText(_content.ToString());
                 var height = metrics.Bottom - metrics.Top;
                 // 计算定位
@@ -542,8 +657,26 @@ namespace Suyaa.Gui.Controls
                 {
                     using (SKCanvas cvs = new SKCanvas(bmp))
                     {
-                        // 绘制文本
-                        cvs.DrawText(content, left, top, paint);
+                        // 绘制选择前文本
+                        if (!contents[0].IsNullOrWhiteSpace())
+                        {
+                            float width = paint.MeasureText(contents[0]);
+                            if (left + width > 0) cvs.DrawText(contents[0], left, top, paint);
+                            left += width;
+                        }
+                        // 绘制选择中文本
+                        if (!contents[1].IsNullOrWhiteSpace())
+                        {
+                            float width = paint.MeasureText(contents[1]);
+                            cvs.DrawRect(new SKRect(left, top + metrics.Top, left + width, top + height + metrics.Top), paintSelectBg);
+                            cvs.DrawText(contents[1], left, top, paintSelect);
+                            left += width;
+                        }
+                        // 绘制选择后文本
+                        if (!contents[2].IsNullOrWhiteSpace() && left < rect.Height)
+                        {
+                            cvs.DrawText(contents[2], left, top, paint);
+                        }
                     }
                     // 绘制缓存图像
                     e.Canvas.DrawBitmap(bmp, rect.Left, rect.Top);

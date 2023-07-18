@@ -92,7 +92,7 @@ namespace Suyaa.Gui.Controls
                 // 优先使用父对象的窗体，无父对象则以获取设置窗体
                 if (_parent is null)
                 {
-                    return _form.Fixed();
+                    return _form.Fixed<IForm>();
                 }
                 return _parent.Form;
             }
@@ -117,7 +117,7 @@ namespace Suyaa.Gui.Controls
         /// </summary>
         public IContainerControl Parent
         {
-            get => _parent.Fixed();
+            get => _parent.Fixed<IContainerControl>();
             internal protected set
             {
                 _parent = value;
